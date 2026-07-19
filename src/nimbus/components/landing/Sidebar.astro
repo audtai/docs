@@ -3,20 +3,55 @@
 // primitives (SidebarGroup + SidebarLink).
 import { SidebarGroup, SidebarLink } from "@/components/ui/sidebar";
 import { sidebarSections, type SidebarNode } from "./sidebar-data";
+import { sidebarHash } from "nimbus-docs";
 import type { SidebarItem } from "nimbus-docs/types";
 
 interface Props {
 	currentPath: string;
+	expandedProduct?: {
+		mount: string;
+		items: SidebarItem[];
+	};
+	persist?: boolean;
 	class?: string;
 }
 
-const { currentPath, class: className = "" } = Astro.props;
+const {
+	currentPath,
+	expandedProduct,
+	persist = false,
+	class: className = "",
+} = Astro.props;
 
 const normalize = (p: string) => (p.length > 1 ? p.replace(/\/$/, "") : p);
 const current = normalize(currentPath);
 const isActive = (href: string) => normalize(href) === current;
 
 function toItem(node: SidebarNode, order: number): SidebarItem {
+	if (expandedProduct && node.mount === expandedProduct.mount) {
+		const indexHref =
+			node.type === "link"
+				? node.href
+				: (node.nodes.find(
+						(child) =>
+							child.type === "link" &&
+							normalize(child.href) === normalize(`/${expandedProduct.mount}/`),
+					)?.href ?? `/${expandedProduct.mount}/`);
+
+		return {
+			type: "group",
+			label: node.label,
+			collapsed: false,
+			children: structuredClone(expandedProduct.items).filter(
+				(item) =>
+					item.type !== "link" || normalize(item.href) !== normalize(indexHref),
+			),
+			indexHref,
+			indexIsCurrent: isActive(indexHref),
+			order,
+		};
+	}
+
 	if (node.type === "link") {
 		return {
 			type: "link",
@@ -34,12 +69,28 @@ function toItem(node: SidebarNode, order: number): SidebarItem {
 		order,
 	};
 }
+
+const resolvedSections = sidebarSections.map((section) => ({
+	...section,
+	nodes: section.nodes.map((node, order) => ({
+		node,
+		item: toItem(node, order),
+	})),
+}));
+const hash = sidebarHash(
+	resolvedSections.flatMap((section) => section.nodes.map(({ item }) => item)),
+);
 ---
 
-<div data-nb-sidebar class:list={["flex flex-col gap-0.5", className]}>
+<div
+	data-nb-sidebar
+	data-nb-sidebar-hash={hash}
+	data-nb-sidebar-persist={persist ? "" : undefined}
+	class:list={["flex flex-col gap-0.5", className]}
+>
 	{
-		sidebarSections.map((section, i) => (
-			<div data-nb-sidebar-group class:list={[i > 0 && "mt-3"]}>
+		resolvedSections.map((section, i) => (
+			<div data-nb-sidebar-section class:list={[i > 0 && "mt-3"]}>
 				<p
 					data-nb-sidebar-group-label
 					class="text-foreground mb-1 px-3 text-[0.6875rem] font-medium tracking-[0.05em] uppercase opacity-45"
@@ -47,20 +98,30 @@ function toItem(node: SidebarNode, order: number): SidebarItem {
 					{section.heading}
 				</p>
 				<ul class="flex list-none flex-col gap-0.5 p-0">
-					{section.nodes.map((node) => (
+					{section.nodes.map(({ node, item }) => (
 						<li>
-							{node.type === "link" ? (
+							{item.type === "link" ? (
 								<SidebarLink
-									label={node.label}
-									href={node.href}
-									isCurrent={isActive(node.href)}
+									label={item.label}
+									href={item.href}
+									isCurrent={item.isCurrent}
+								/>
+							) : item.type === "external" ? (
+								<SidebarLink
+									label={item.label}
+									href={item.href}
+									target="_blank"
+									rel="noopener"
 								/>
 							) : (
 								<SidebarGroup
-									label={node.label}
-									icon={node.icon}
-									items={node.nodes.map(toItem)}
-									collapsed={node.collapsed ?? true}
+									label={item.label}
+									icon={node.type === "group" ? node.icon : undefined}
+									items={item.children}
+									collapsed={item.collapsed}
+									badge={item.badge}
+									indexHref={item.indexHref}
+									indexIsCurrent={item.indexIsCurrent}
 								/>
 							)}
 						</li>

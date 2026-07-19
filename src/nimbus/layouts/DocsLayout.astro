@@ -9,6 +9,7 @@ import { Icon } from "astro-icon/components";
 import BaseLayout from "./BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import SiteSidebar from "@/components/landing/Sidebar.astro";
 import AudtLogo from "../../components/AudtLogo.astro";
 import { Banner } from "@/components/ui/banner";
 import {
@@ -33,6 +34,7 @@ import {
 	getSectionTitle,
 } from "nimbus-docs";
 import { sectionTitleResolver } from "@/util/sidebar";
+import { isSiteSidebarProduct } from "../../config/site-sidebar";
 import type { PageMeta } from "@/components/PageHead.astro";
 
 type Props = DocsPageProps & {
@@ -78,6 +80,7 @@ const isCustom = mode === "custom";
 // from the route as literal `false` (not coerced to `[]`). They drive
 // per-column suppression — rail, mobile dialog, header menu button.
 const showSidebar = sidebar !== false;
+const sidebarItems = sidebar === false ? [] : sidebar;
 
 // Per-page status drives the deprecation banner and version alternates below.
 const versionStatus = collection ? await getVersionStatus(collection) : null;
@@ -87,11 +90,12 @@ const versionAlternates =
 		: null;
 const currentSiblingUrl = versionAlternates?.canonical?.url ?? null;
 
-// Sidebar header above the filter — an "all products" button plus the
-// current product title. The rail title can diverge from the breadcrumb
-// (learning paths suffix the module title with "(Learning Paths)"), so it
-// comes from `getSectionTitle`; the breadcrumb labels come from the nav tree.
+// Products represented in the customer taxonomy expand in place. Unmounted
+// collections retain Nimbus's product title + product-only rail as a fallback.
+// The fallback rail title can diverge from the breadcrumb (learning paths
+// suffix it with "(Learning Paths)"), so it comes from `getSectionTitle`.
 const productSlug = Astro.url.pathname.split("/").filter(Boolean)[0] ?? null;
+const usesSiteSidebar = productSlug ? isSiteSidebarProduct(productSlug) : false;
 const sectionTitle = await getSectionTitle(
 	Astro.url.pathname,
 	sectionTitleResolver,
@@ -180,7 +184,7 @@ const showFeedback = feedback !== false && !isCustom;
 											class="flex-1 pb-12 max-lg:pb-8"
 										>
 											<div class="bg-background z-10 px-4 pb-3 lg:sticky lg:top-0">
-												{product && (
+												{!usesSiteSidebar && product && (
 													<SidebarProductNav
 														title={product.title}
 														href={product.href}
@@ -190,7 +194,18 @@ const showFeedback = feedback !== false && !isCustom;
 												<SidebarFilter class="mb-0" />
 											</div>
 											<div class="px-4 pt-2">
-												<Sidebar items={sidebar} persist />
+												{usesSiteSidebar && productSlug ? (
+													<SiteSidebar
+														currentPath={Astro.url.pathname}
+														expandedProduct={{
+															mount: productSlug,
+															items: sidebarItems,
+														}}
+														persist
+													/>
+												) : (
+													<Sidebar items={sidebarItems} persist />
+												)}
 											</div>
 										</nav>
 									</div>

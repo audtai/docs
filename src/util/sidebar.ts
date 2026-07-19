@@ -3,6 +3,11 @@ import type { StarlightRouteData } from "@astrojs/starlight/route-data";
 
 import { getEntry, getCollection } from "astro:content";
 import { externalLinkArrow } from "~/plugins/rehype/external-links";
+import {
+	getSiteSidebarMountCount,
+	siteSidebarSections,
+	type SiteSidebarNode,
+} from "~/config/site-sidebar";
 
 type Link = Extract<StarlightRouteData["sidebar"][0], { type: "link" }> & {
 	order?: number;
@@ -87,6 +92,103 @@ export async function getSidebar(context: AstroGlobal) {
 	setSidebarCurrentEntry(sidebar.entries, pathname);
 
 	return sidebar;
+}
+
+function normalizeSidebarPath(href: string): string {
+	const pathname = new URL(href, "https://docs.audt.work").pathname;
+	return pathname === "/" ? pathname : pathname.replace(/\/$/, "");
+}
+
+function nodeHasCurrentPage(entries: SidebarEntry[]): boolean {
+	return entries.some((entry) =>
+		entry.type === "link"
+			? entry.isCurrent
+			: entry.hasActivePage || nodeHasCurrentPage(entry.entries),
+	);
+}
+
+/**
+ * Graft one generated product tree into the small customer-facing taxonomy.
+ * Returns `null` when a product has no unique explicit mount, allowing callers
+ * to retain the existing product-only navigation as a safe fallback.
+ */
+export function composeSiteSidebar({
+	product,
+	pathname,
+	productEntries,
+}: {
+	product: string;
+	pathname: string;
+	productEntries: SidebarEntry[];
+}): SidebarEntry[] | null {
+	if (getSiteSidebarMountCount(product) !== 1) return null;
+
+	const currentPath = normalizeSidebarPath(pathname);
+
+	function convertNode(node: SiteSidebarNode): SidebarEntry {
+		if (node.mount === product) {
+			return {
+				type: "group",
+				label: node.label,
+				entries: structuredClone(productEntries),
+				collapsed: false,
+				badge:
+					node.type === "group" && node.icon
+						? {
+								text: node.icon,
+								variant: "default",
+								class: "sidebar-group-icon",
+							}
+						: undefined,
+				hasActivePage: true,
+			};
+		}
+
+		if (node.type === "link") {
+			return {
+				type: "link",
+				label: node.label,
+				href: node.href,
+				isCurrent: normalizeSidebarPath(node.href) === currentPath,
+				badge: undefined,
+				attrs: {},
+			};
+		}
+
+		const entries = node.nodes.map(convertNode);
+		const hasActivePage = nodeHasCurrentPage(entries);
+
+		return {
+			type: "group",
+			label: node.label,
+			entries,
+			collapsed: hasActivePage ? false : (node.collapsed ?? true),
+			badge: node.icon
+				? {
+						text: node.icon,
+						variant: "default",
+						class: "sidebar-group-icon",
+					}
+				: undefined,
+			hasActivePage,
+		};
+	}
+
+	return siteSidebarSections.map((section) => {
+		const entries = section.nodes.map(convertNode);
+		return {
+			type: "group",
+			label: section.heading,
+			entries,
+			collapsed: false,
+			badge: {
+				text: section.headingIcon,
+				variant: "default",
+				class: "sidebar-heading",
+			},
+			hasActivePage: nodeHasCurrentPage(entries),
+		};
+	});
 }
 
 export async function generateSidebar(group: Group) {

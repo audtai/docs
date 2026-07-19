@@ -3,10 +3,12 @@ import Default from "@astrojs/starlight/components/Sidebar.astro";
 
 import { Icon as AstroIcon } from "astro-icon/components";
 import { lookupProductTitle } from "~/util/sidebar";
+import { isSiteSidebarProduct } from "~/config/site-sidebar";
 
 const [product, module] = Astro.url.pathname.split("/").filter(Boolean);
 const isHomepage = !product;
-const productTitle = isHomepage
+const usesSiteSidebar = isHomepage || isSiteSidebarProduct(product);
+const productTitle = usesSiteSidebar
 	? null
 	: await lookupProductTitle(product, module);
 ---
@@ -15,7 +17,7 @@ const productTitle = isHomepage
 	class="sidebar-header sticky top-0 z-[1] flex flex-col gap-2 bg-[var(--sl-color-black)] pt-3.5 pb-2 min-[50rem]:bg-[var(--sl-color-bg-sidebar)]"
 >
 	{
-		!isHomepage && (
+		!usesSiteSidebar && (
 			<div class="sidebar-product-title">
 				<a
 					href={"/" + product + "/"}
@@ -35,7 +37,7 @@ const productTitle = isHomepage
 		<input
 			type="search"
 			id="sidebar-search"
-			placeholder={isHomepage ? "Search products..." : "Search sidebar..."}
+			placeholder={usesSiteSidebar ? "Search products..." : "Search sidebar..."}
 			aria-label="Search sidebar navigation"
 			autocomplete="off"
 			spellcheck="false"
@@ -49,15 +51,11 @@ const productTitle = isHomepage
 		id="sidebar-no-results"
 		class="hidden p-4 text-center text-sm text-gray-500 dark:text-gray-400"
 	>
-		No results found. Try a different search term, or use our <button
-			id="global-search-link"
-			class="font-inherit cursor-pointer border-none bg-transparent p-0 text-blue-500 underline hover:no-underline dark:text-orange-500"
-			>global search</button
-		>.
+		No results found. Try a different search term.
 	</div>
 
 	{
-		!isHomepage && (
+		!usesSiteSidebar && (
 			<a
 				href="/"
 				class="flex min-h-[2.125rem] items-start gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-[var(--sidebar-text)] no-underline outline-2 outline-offset-[-2px] outline-transparent transition-colors duration-150 hover:bg-[color:var(--sidebar-hover-bg)]/80 hover:text-[var(--sidebar-hover-text)] focus-visible:outline-blue-500 dark:focus-visible:outline-blue-400"
@@ -82,7 +80,6 @@ const productTitle = isHomepage
 
 <script>
 	import { track } from "~/util/zaraz";
-	import { openGlobalSearch } from "~/util/search";
 
 	function initSidebarSearch() {
 		const searchInput = document.getElementById(
@@ -91,18 +88,9 @@ const productTitle = isHomepage
 		const noResultsMessage = document.getElementById(
 			"sidebar-no-results",
 		) as HTMLElement;
-		const globalSearchLink = document.getElementById(
-			"global-search-link",
-		) as HTMLButtonElement;
 		const sidebarContent = document.querySelector(".sidebar-content");
 
-		if (
-			!searchInput ||
-			!sidebarContent ||
-			!noResultsMessage ||
-			!globalSearchLink
-		)
-			return;
+		if (!searchInput || !sidebarContent || !noResultsMessage) return;
 
 		// ── Animated <details> toggle ──
 		const animating = new WeakSet<HTMLDetailsElement>();
@@ -354,14 +342,6 @@ const productTitle = isHomepage
 			}
 		});
 
-		// Global search link click handler
-		globalSearchLink.addEventListener("click", () => {
-			const currentQuery = searchInput.value.trim();
-			if (currentQuery) {
-				openGlobalSearch(currentQuery);
-			}
-		});
-
 		// On link click during search, clear persisted open[] so the next page
 		// uses its server-rendered state instead of the search-modified state.
 		sidebarContent.addEventListener("click", (e) => {
@@ -402,6 +382,24 @@ const productTitle = isHomepage
 			},
 		);
 	}
+
+	function openActiveSidebarChain() {
+		const active = document.querySelector(
+			".sidebar-content [aria-current='page']",
+		);
+		let group = active?.closest("details") as HTMLDetailsElement | null;
+		while (group) {
+			group.open = true;
+			group = group.parentElement?.closest("details") ?? null;
+		}
+	}
+
+	function restoreActiveSidebarChain() {
+		requestAnimationFrame(openActiveSidebarChain);
+	}
+
+	document.addEventListener("astro:page-load", restoreActiveSidebarChain);
+	restoreActiveSidebarChain();
 
 	// Initialize when DOM is loaded
 	if (document.readyState === "loading") {
