@@ -99,26 +99,12 @@ describe("AUDT Docs", () => {
 		});
 	});
 
-	describe("rss endpoints", () => {
-		describe("changelog", () => {
-			it("global", async () => {
-				const request = new Request("http://fakehost/changelog/rss/index.xml");
-				const response = await SELF.fetch(request);
+	describe("removed rss endpoints", () => {
+		it("responds with 404 for the global changelog feed", async () => {
+			const request = new Request("http://fakehost/changelog/rss/index.xml");
+			const response = await SELF.fetch(request);
 
-				expect(response.status).toBe(200);
-
-				const xml = await response.text();
-
-				expect(xml).toContain("<title>Cloudflare changelogs</title>");
-				expect(xml).toContain(
-					"<title>Access - New SAML and OIDC Fields and SAML transforms for Access for SaaS</title>",
-				);
-				expect(xml).toContain("<product>Access</product>");
-				expect(xml).toContain("<category>Access</category>");
-				expect(xml).toContain(
-					"<pubDate>Mon, 03 Mar 2025 00:00:00 GMT</pubDate>",
-				);
-			});
+			expect(response.status).toBe(404);
 		});
 	});
 
