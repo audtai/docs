@@ -1,16 +1,26 @@
-name: Publish
+name: Publish AUDT Docs
 on:
   push:
     branches:
       - production
+  workflow_dispatch:
+
+concurrency:
+  group: audt-docs-production
+  cancel-in-progress: false
 
 jobs:
   publish:
-    if: github.repository == 'cloudflare/cloudflare-docs'
+    if: github.ref == 'refs/heads/production'
     name: Production
     runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    environment:
+      name: production
+      url: https://docs.audt.work
     permissions:
       contents: read
+      deployments: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
@@ -46,9 +56,23 @@ jobs:
           restore-keys: |
             astro-assets-
 
+      - name: Restore licensed AUDT webfonts
+        env:
+          AUDT_FONT_ARCHIVE_KEY: ${{ secrets.AUDT_FONT_ARCHIVE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "${AUDT_FONT_ARCHIVE_KEY:-}"
+          mkdir -p public/audt-fonts
+          gpg --batch --quiet --yes --pinentry-mode loopback \
+            --passphrase "$AUDT_FONT_ARCHIVE_KEY" \
+            --output "$RUNNER_TEMP/audt-fonts.tar.gz" \
+            --decrypt .github/assets/audt-fonts.tar.gz.gpg
+          tar -xzf "$RUNNER_TEMP/audt-fonts.tar.gz" -C public/audt-fonts
+
       - name: Build
         run: pnpm run build
         env:
+          AUDT_TWK_WEBFONT_LICENSE_CONFIRMED: "1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
@@ -59,22 +83,6 @@ jobs:
           path: dist
 
       - name: Deploy to Cloudflare Workers
-        run: pnpm exec wrangler deploy
+        run: pnpm exec wrangler deploy --env production
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-
-      - name: Notify Google Chat on failure
-        if: failure()
-        env:
-          WEBHOOK_URL: ${{ secrets.CED_TEAM_ALERTS_CHANNEL_WEBHOOK }}
-          ACTOR: ${{ github.actor }}
-          REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          # Use jq to safely construct JSON payload
-          MESSAGE="❌ *Publish Production* workflow failed.\nActor: $ACTOR\n<https://github.com/$REPO/actions/runs/$RUN_ID|View run>"
-          JSON_PAYLOAD=$(jq -n --arg text "$MESSAGE" '{text: $text}')
-
-          curl -X POST "$WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            -d "$JSON_PAYLOAD"
