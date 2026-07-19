@@ -179,38 +179,6 @@ export const siteSidebarSections: SiteSidebarSection[] = [
 				nodes: [
 					link("Tunnel", "/tunnel/", "tunnel"),
 					link("Mesh", "/mesh/", "mesh"),
-					link("Magic Transit", "/magic-transit/", "magic-transit"),
-					link("Cloudflare WAN", "/cloudflare-wan/", "cloudflare-wan"),
-					link(
-						"Cloudflare Network Firewall",
-						"/cloudflare-network-firewall/",
-						"cloudflare-network-firewall",
-					),
-					link(
-						"Network Interconnect",
-						"/network-interconnect/",
-						"network-interconnect",
-					),
-					link("Spectrum", "/spectrum/", "spectrum"),
-					link("BYOIP", "/byoip/", "byoip"),
-				],
-			},
-			{
-				type: "group",
-				label: "Delivery & Performance",
-				icon: "speed",
-				collapsed: true,
-				nodes: [
-					link("Cache", "/cache/", "cache"),
-					link("Speed", "/speed/", "speed"),
-					link("Load Balancing", "/load-balancing/", "load-balancing"),
-					link("Waiting Room", "/waiting-room/", "waiting-room"),
-					link(
-						"Argo Smart Routing",
-						"/argo-smart-routing/",
-						"argo-smart-routing",
-					),
-					link("Zaraz", "/zaraz/", "zaraz"),
 				],
 			},
 		],
