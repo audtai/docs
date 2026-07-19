@@ -13,8 +13,7 @@ import AccelerateSection from "../components/landing/AccelerateSection.astro";
 import CommunityGrid from "../components/landing/CommunityGrid.astro";
 import StructuralGrid from "../components/landing/StructuralGrid.astro";
 import FullPageLines from "../components/landing/FullPageLines.astro";
-import { config } from "virtual:nimbus/config";
-import logo from "~/assets/logo.svg";
+import AudtLogo from "../../components/AudtLogo.astro";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -78,19 +77,12 @@ const currentPath = Astro.url.pathname;
 			<div
 				class="border-border bg-card sticky top-0 z-[1] flex items-center justify-between border-b px-4 py-3"
 			>
-				<a href="/" class="group flex items-center gap-2 no-underline">
-					<img
-						src={logo.src}
-						alt=""
-						width="51"
-						height="23"
-						class="h-[20px] w-auto"
-					/>
-					<span
-						class="text-foreground group-hover:text-primary text-lg font-semibold tracking-tight transition-colors"
-					>
-						{config.title}
-					</span>
+				<a
+					href="/"
+					class="flex items-center no-underline"
+					aria-label="AUDT Docs home"
+				>
+					<AudtLogo label="" />
 				</a>
 				<button
 					data-close-sidebar

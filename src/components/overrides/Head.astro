@@ -9,6 +9,16 @@ import { getOgImage } from "~/util/og";
 import { formatContentType } from "~/util/content-type";
 import type { CollectionEntry } from "astro:content";
 
+declare const __AUDT_FONT_ENABLED__: boolean;
+declare const __AUDT_FONT_LABEL__: string;
+
+const audtFontEnabled =
+	typeof __AUDT_FONT_ENABLED__ !== "undefined" ? __AUDT_FONT_ENABLED__ : false;
+const audtFontLabel =
+	typeof __AUDT_FONT_LABEL__ !== "undefined"
+		? __AUDT_FONT_LABEL__
+		: "System UI";
+
 const DEFAULT_TITLE_DELIMITER = "|";
 const NOINDEX_PRODUCTS = ["email-security"];
 
@@ -337,6 +347,33 @@ const _jsonLd: Record<string, unknown> = {
 };
 ---
 
+<meta name="audt-font" content={audtFontLabel} />
+<script is:inline define:vars={{ audtFontEnabled }}>
+	document.documentElement.dataset.audtFont = audtFontEnabled
+		? "twk-lausanne-pan"
+		: "system";
+</script>
+{
+	audtFontEnabled && (
+		<>
+			<link rel="stylesheet" href="/audt-fonts/audt-fonts.css" />
+			<link
+				rel="preload"
+				href="/audt-fonts/audt-400-normal.woff"
+				as="font"
+				type="font/woff"
+				crossorigin
+			/>
+			<link
+				rel="preload"
+				href="/audt-fonts/audt-500-normal.woff"
+				as="font"
+				type="font/woff"
+				crossorigin
+			/>
+		</>
+	)
+}
 <script src="src/scripts/footnotes.ts"></script>
 <script src="src/scripts/mermaid.ts"></script>
 <script src="src/scripts/analytics.ts"></script>

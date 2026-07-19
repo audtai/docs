@@ -6,7 +6,7 @@ import { ThemeToggle } from "./ui/theme-toggle";
 import { DocSearch } from "./ui/search";
 import { config } from "virtual:nimbus/config";
 import { getSidebarSections } from "nimbus-docs";
-import logo from "~/assets/logo.svg";
+import AudtLogo from "../../components/AudtLogo.astro";
 
 interface Props {
 	/** Astro collection id for the current page, forwarded from DocsLayout. */
@@ -55,19 +55,12 @@ const navLinks = [
 >
 	<div class="mx-auto flex h-14 items-center justify-between px-4 lg:px-6">
 		<div class="flex items-center gap-3">
-			<a href="/" class="group flex items-center gap-2">
-				<img
-					src={logo.src}
-					alt=""
-					width="51"
-					height="23"
-					class="h-[20px] w-auto"
-				/>
-				<span
-					class="text-foreground group-hover:text-primary text-lg font-semibold tracking-tight transition-colors"
-				>
-					{config.title}
-				</span>
+			<a
+				href="/"
+				class="flex items-center no-underline"
+				aria-label="AUDT Docs home"
+			>
+				<AudtLogo label="" />
 			</a>
 
 			{

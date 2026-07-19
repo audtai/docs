@@ -185,7 +185,7 @@
 	--l-section-pad: max(2rem, 4vw);
 	--l-pad-top: var(--l-section-pad);
 	overflow-x: clip;
-	line-height: normal;
+	line-height: var(--audt-leading-body, 1.5);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: var(--color-foreground);

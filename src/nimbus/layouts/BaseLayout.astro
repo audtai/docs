@@ -1,7 +1,7 @@
 ---
-import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
 import "../styles/globals.css";
+import "../../styles/audt-typography.css";
 import "../styles/prose.css";
 import "../styles/markdown-pipeline.css";
 import "tippy.js/dist/tippy.css";
@@ -21,6 +21,16 @@ type Props = BasePageProps & {
 	footer?: boolean;
 	meta?: PageMeta;
 };
+
+declare const __AUDT_FONT_ENABLED__: boolean;
+declare const __AUDT_FONT_LABEL__: string;
+
+const audtFontEnabled =
+	typeof __AUDT_FONT_ENABLED__ !== "undefined" ? __AUDT_FONT_ENABLED__ : false;
+const audtFontLabel =
+	typeof __AUDT_FONT_LABEL__ !== "undefined"
+		? __AUDT_FONT_LABEL__
+		: "System UI";
 
 const {
 	title,
@@ -60,10 +70,35 @@ const llmsUrl = Astro.site
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html
+	lang={lang}
+	data-audt-font={audtFontEnabled ? "twk-lausanne-pan" : "system"}
+>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="audt-font" content={audtFontLabel} />
+		{
+			audtFontEnabled && (
+				<>
+					<link rel="stylesheet" href="/audt-fonts/audt-fonts.css" />
+					<link
+						rel="preload"
+						href="/audt-fonts/audt-400-normal.woff"
+						as="font"
+						type="font/woff"
+						crossorigin
+					/>
+					<link
+						rel="preload"
+						href="/audt-fonts/audt-500-normal.woff"
+						as="font"
+						type="font/woff"
+						crossorigin
+					/>
+				</>
+			)
+		}
 
 		<script is:inline>
 			(() => {

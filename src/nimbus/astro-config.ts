@@ -72,9 +72,9 @@ const here = (p: string) =>
 const partialsRoot = here("../content/partials");
 
 const nimbusConfig = defineNimbusConfig({
-	site: "https://developers.cloudflare.com",
-	title: "Cloudflare Docs",
-	description: "Cloudflare's documentation.",
+	site: "https://docs.audt.work",
+	title: "AUDT Docs",
+	description: "AUDT documentation.",
 	locale: "en",
 	github: "https://github.com/cloudflare/cloudflare-docs",
 	editPattern:

@@ -37,4 +37,4 @@ Disallow: /constellation
 Disallow: /cdn-cgi/
 Disallow: /email-security/
 
-Sitemap: https://developers.cloudflare.com/sitemap-index.xml
+Sitemap: https://docs.audt.work/sitemap-index.xml

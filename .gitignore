@@ -4,6 +4,9 @@ dist-nimbus/
 distmd/
 distllms/
 
+# Locally generated commercial webfont assets
+/public/audt-fonts/
+
 # generated types
 .astro/
 

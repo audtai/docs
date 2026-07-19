@@ -79,10 +79,10 @@
 	--nb-grid-line: oklch(0 0 0 / 0.08);
 	--nb-grid-line-accent: oklch(0 0 0 / 0.12);
 
-	/* Typography — self-hosted via @fontsource-variable in BaseLayout.astro */
+	/* Typography — TWK Lausanne Pan is enabled by the licensed build. */
 	--nb-font-sans:
-		"Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
-		sans-serif;
+		ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+		"Segoe UI Symbol", "Noto Color Emoji";
 	--nb-font-mono:
 		"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "Cascadia Code",
 		"Source Code Pro", Menlo, Consolas, monospace;
@@ -91,16 +91,23 @@
 	--nb-h1-tracking: -0.025em;
 	--nb-h2-size: 1.3rem;
 	--nb-h2-weight: 600;
-	--nb-h2-tracking: -0.015em;
+	--nb-h2-tracking: -0.025em;
 	--nb-h3-size: 1.1rem;
 	--nb-h3-weight: 600;
-	--nb-h3-tracking: -0.01em;
+	--nb-h3-tracking: -0.025em;
 	--nb-h4-weight: 600;
+	--nb-h4-tracking: -0.025em;
 
 	/* Shadows */
 	--nb-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.04);
 	--nb-shadow: 0 1px 3px oklch(0 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.04);
 	--nb-shadow-lg: 0 4px 12px oklch(0 0 0 / 0.08), 0 2px 4px oklch(0 0 0 / 0.04);
+}
+
+html[data-audt-font="twk-lausanne-pan"] {
+	--nb-font-sans:
+		"audt.ai Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* Wider content area on large displays (e.g. MacBook Pro 16″) */
@@ -238,7 +245,6 @@
 /* ---- Minimal overrides the plugin doesn't cover ---- */
 html {
 	font-family: var(--nb-font-sans);
-	font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 body {

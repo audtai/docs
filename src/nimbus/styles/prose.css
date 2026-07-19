@@ -9,7 +9,7 @@
 @layer components {
 	.docs-content {
 		font-size: 1rem;
-		line-height: 1.75;
+		line-height: var(--audt-leading-prose);
 		color: var(--nb-foreground);
 		/* Break long unbreakable tokens (e.g. registry paths like
      HKLM\SOFTWARE\...\UseWebView2) so they wrap instead of overflowing on
@@ -107,6 +107,10 @@
 
 	.docs-content :where(h4:not([class]), h5:not([class]), h6:not([class])) {
 		font-weight: var(--nb-h4-weight);
+	}
+
+	.docs-content :where(h4:not([class])) {
+		letter-spacing: var(--nb-h4-tracking);
 	}
 
 	.docs-content

@@ -7,6 +7,13 @@
 @source "../**/*.{astro,html,js,jsx,ts,tsx,css}";
 @source not "../content/";
 
+:root[data-audt-font="twk-lausanne-pan"] {
+	--font-sans:
+		"audt.ai Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--sl-font: "audt.ai Sans";
+}
+
 @theme {
 	/*
 	 * Table semantic tokens — mirrors kumo-ui's table token names,

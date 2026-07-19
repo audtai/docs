@@ -1,0 +1,59 @@
+---
+import darkLogo from "~/assets/audt-dark-variant.svg";
+import lightLogo from "~/assets/audt-light-variant.svg";
+
+interface Props {
+	class?: string;
+	label?: string;
+}
+
+const { class: className, label = "audt" } = Astro.props;
+---
+
+<span class:list={["audt-logo", className]}>
+	<img
+		class="audt-logo__on-light"
+		src={darkLogo.src}
+		alt={label}
+		width="104"
+		height="34"
+	/>
+	<img
+		class="audt-logo__on-dark"
+		src={lightLogo.src}
+		alt=""
+		aria-hidden="true"
+		width="104"
+		height="34"
+	/>
+</span>
+
+<style>
+	.audt-logo {
+		display: inline-grid;
+		flex: none;
+		height: 1.625rem;
+		aspect-ratio: 104 / 34;
+	}
+
+	.audt-logo img {
+		grid-area: 1 / 1;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.audt-logo__on-dark {
+		display: none;
+	}
+
+	:global(:root[data-theme="dark"]) .audt-logo__on-light,
+	:global(:root[data-mode="dark"]) .audt-logo__on-light {
+		display: none;
+	}
+
+	:global(:root[data-theme="dark"]) .audt-logo__on-dark,
+	:global(:root[data-mode="dark"]) .audt-logo__on-dark {
+		display: block;
+	}
+</style>
