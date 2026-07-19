@@ -2,7 +2,7 @@
 import Default from "@astrojs/starlight/components/Page.astro";
 
 import { generateDescription, generateTableOfContents } from "~/util/props";
-import { getSidebar, flattenSidebar } from "~/util/sidebar";
+import { composeSiteSidebar, getSidebar, flattenSidebar } from "~/util/sidebar";
 
 const props = Astro.locals.starlightRoute;
 const data = props.entry.data;
@@ -32,10 +32,10 @@ if (props.hasSidebar) {
 	// Homepage provides its own sidebar via StarlightPage props — skip getSidebar
 	if (segments.length > 0) {
 		const group = await getSidebar(Astro);
-		props.sidebar = group.entries;
+		const productSidebar = group.entries;
 
 		if (props.pagination) {
-			const flattened = flattenSidebar(props.sidebar);
+			const flattened = flattenSidebar(productSidebar);
 
 			const idx = flattened.findIndex((entry) => entry.isCurrent);
 
@@ -64,6 +64,13 @@ if (props.hasSidebar) {
 				props.pagination.next = next;
 			}
 		}
+
+		props.sidebar =
+			composeSiteSidebar({
+				product: segments[0],
+				pathname,
+				productEntries: productSidebar,
+			}) ?? productSidebar;
 	}
 }
 

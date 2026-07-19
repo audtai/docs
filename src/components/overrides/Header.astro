@@ -6,6 +6,7 @@ import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 
 import HeaderDropdowns from "../HeaderDropdowns.tsx";
 import AgentDirective from "../AgentDirective.astro";
+import { DOCSEARCH_ENABLED } from "~/config/features";
 ---
 
 <AgentDirective />
@@ -15,9 +16,13 @@ import AgentDirective from "../AgentDirective.astro";
 		<SiteTitle />
 	</div>
 	<div class="header-end">
-		<div id="docsearch">
-			<DocSearch />
-		</div>
+		{
+			DOCSEARCH_ENABLED && (
+				<div id="docsearch">
+					<DocSearch />
+				</div>
+			)
+		}
 		<div id="right-group">
 			<HeaderDropdowns client:idle />
 			<div class="header-divider" role="separator"></div>
@@ -26,7 +31,7 @@ import AgentDirective from "../AgentDirective.astro";
 				href="https://dash.cloudflare.com/"
 				class="header-login"
 			>
-				Log in
+				Entrar
 			</a>
 			<ThemeSelect />
 			<LanguageSelect />
@@ -152,7 +157,7 @@ import AgentDirective from "../AgentDirective.astro";
 	}
 
 	:global(.site-title img) {
-		height: 1.25rem;
+		height: 1.625rem;
 	}
 
 	:global(starlight-theme-select > label > select) {

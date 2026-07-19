@@ -94,6 +94,9 @@ export default class extends WorkerEntrypoint<Env> {
 		}
 
 		if (pathname === "/.well-known/mcp/server-card.json") {
+			if (!this.env.MIDDLECACHE) {
+				return new Response("server-card.json not found", { status: 404 });
+			}
 			const object = await this.env.MIDDLECACHE.get(
 				"v1/cloudflare-mcps/server-card.json",
 			);
@@ -108,6 +111,9 @@ export default class extends WorkerEntrypoint<Env> {
 		}
 
 		if (pathname === "/openapi.json") {
+			if (!this.env.MIDDLECACHE) {
+				return new Response("openapi.json not found", { status: 404 });
+			}
 			const object = await this.env.MIDDLECACHE.get(
 				"v1/cloudflare-api-schemas/openapi.json",
 			);
@@ -122,6 +128,9 @@ export default class extends WorkerEntrypoint<Env> {
 		}
 
 		if (pathname.endsWith("/llms-full.txt")) {
+			if (!this.env.MIDDLECACHE) {
+				return new Response("llms-full.txt not found", { status: 404 });
+			}
 			// pathname is e.g. "/llms-full.txt" or "/workers/llms-full.txt"
 			// R2 key: "v1/cloudflare-docs-llms-full/llms-full.txt" or
 			//         "v1/cloudflare-docs-llms-full/workers/llms-full.txt"

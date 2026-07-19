@@ -1,0 +1,57 @@
+/* AUDT typography rhythm, translated from Judit's documentation site.
+ *
+ * The global values tune Lausanne Pan for interface text while the prose
+ * leading stays slightly more generous for long-form documentation. Explicit
+ * component tracking utilities still win; code keeps neutral spacing. */
+:root {
+	--audt-tracking-body: -0.01em;
+	--audt-tracking-heading: -0.025em;
+	--audt-leading-body: 1.5;
+	--audt-leading-prose: 1.625;
+	--sl-line-height: var(--audt-leading-body);
+}
+
+/* Keep Lausanne's character variants above Tailwind's later preflight imports.
+ * These declarations are intentionally unlayered; tracking and wrapping stay
+ * layered below so component utilities can still override them. */
+html {
+	font-feature-settings: "cv02", "cv03", "cv04", "calt";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+	html {
+		letter-spacing: var(--audt-tracking-body);
+		line-height: var(--audt-leading-body);
+	}
+
+	body {
+		line-height: var(--audt-leading-body);
+	}
+
+	:where(h1, h2, h3, h4) {
+		letter-spacing: var(--audt-tracking-heading);
+		text-wrap: balance;
+	}
+
+	:where(p, li, blockquote, figcaption) {
+		text-wrap: pretty;
+	}
+
+	:where(pre, code, kbd, samp) {
+		letter-spacing: normal;
+	}
+}
+
+/* Starlight markdown uses the same relaxed prose rhythm as Judit. Nimbus owns
+ * the equivalent rule in its target-specific prose stylesheet. */
+@layer components {
+	.sl-markdown-content {
+		line-height: var(--audt-leading-prose);
+	}
+
+	.sl-markdown-content :is(h1, h2, h3, h4):not(:where(.not-content *)) {
+		letter-spacing: var(--audt-tracking-heading);
+	}
+}

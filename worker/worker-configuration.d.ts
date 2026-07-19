@@ -2,7 +2,7 @@
 
 interface Env {
 	ASSETS: Fetcher;
-	MIDDLECACHE: R2Bucket;
+	MIDDLECACHE?: R2Bucket;
 }
 declare module "*/__redirects" {
 	const value: string;

@@ -2,13 +2,13 @@ import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
 import { parse } from "node-html-parser";
 
-describe("Cloudflare Docs", () => {
+describe("AUDT Docs", () => {
 	describe("html handling", () => {
 		it("responds with index.html at `/`", async () => {
 			const request = new Request("http://fakehost/");
 			const response = await SELF.fetch(request);
 			expect(response.status).toBe(200);
-			expect(await response.text()).toContain("Cloudflare Docs");
+			expect(await response.text()).toContain("AUDT Docs");
 		});
 
 		it("responds with 404.html at `/non-existent`", async () => {
@@ -191,18 +191,14 @@ describe("Cloudflare Docs", () => {
 					"link[rel='alternate'][type='text/markdown']",
 				)?.attributes.href;
 
-				expect(markdown).toBe(
-					"https://developers.cloudflare.com/workers/index.md",
-				);
+				expect(markdown).toBe("https://docs.audt.work/workers/index.md");
 			});
 
 			it("og:image tag", () => {
 				const image = dom.querySelector("meta[property='og:image']")?.attributes
 					.content;
 
-				expect(image).toBe(
-					"https://developers.cloudflare.com/dev-products-preview.png",
-				);
+				expect(image).toBe("https://docs.audt.work/dev-products-preview.png");
 			});
 		});
 

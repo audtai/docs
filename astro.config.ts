@@ -8,6 +8,7 @@ import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 
+import { existsSync } from "fs";
 import { readdir, readFile } from "fs/promises";
 import { join } from "path";
 import { fileURLToPath } from "url";
@@ -100,13 +101,53 @@ const RUN_LINK_CHECK =
 // Starlight stays at src; content/assets stay at src/content / src/assets.
 const isNimbus = process.env.BUILD_TARGET === "nimbus";
 
+const audtFontAssetNames = [
+	"audt-fonts.css",
+	...[300, 400, 500, 600, 700].flatMap((weight) => [
+		`audt-${weight}-normal.woff`,
+		`audt-${weight}-italic.woff`,
+	]),
+];
+const audtFontDirectory = fileURLToPath(
+	new URL("./public/audt-fonts/", import.meta.url),
+);
+const audtFontAssetsPresent = audtFontAssetNames.filter((asset) =>
+	existsSync(join(audtFontDirectory, asset)),
+);
+const audtFontLicenseConfirmed =
+	process.env.AUDT_TWK_WEBFONT_LICENSE_CONFIRMED === "1";
+
+if (!audtFontLicenseConfirmed && audtFontAssetsPresent.length > 0) {
+	throw new Error(
+		"Refusing to build while deployable TWK Lausanne Pan assets are present " +
+			"without AUDT_TWK_WEBFONT_LICENSE_CONFIRMED=1.",
+	);
+}
+
+if (
+	audtFontLicenseConfirmed &&
+	audtFontAssetsPresent.length !== audtFontAssetNames.length
+) {
+	const missing = audtFontAssetNames.filter(
+		(asset) => !audtFontAssetsPresent.includes(asset),
+	);
+	throw new Error(
+		`TWK Lausanne Pan was enabled, but the generated asset set is incomplete: ${missing.join(", ")}`,
+	);
+}
+
+const audtFontEnabled =
+	audtFontLicenseConfirmed &&
+	audtFontAssetsPresent.length === audtFontAssetNames.length;
+const audtFontLabel = audtFontEnabled ? "TWK Lausanne Pan" : "System UI";
+
 // Nimbus markdown/integrations/vite, loaded only when active so the default
 // Starlight build never pulls nimbus-docs or src/nimbus into its graph.
 const nimbus = isNimbus ? await import("./src/nimbus/astro-config.ts") : null;
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://developers.cloudflare.com",
+	site: "https://docs.audt.work",
 	prefetch: {
 		prefetchAll: true,
 		defaultStrategy: "hover",
@@ -152,9 +193,12 @@ export default defineConfig({
 		? nimbus.integrations
 		: [
 				starlight({
-					title: "Cloudflare Docs",
+					title: "AUDT Docs",
 					logo: {
-						src: "./src/assets/logo.svg",
+						dark: "./src/assets/audt-light-variant.svg",
+						light: "./src/assets/audt-dark-variant.svg",
+						alt: "",
+						replacesTitle: true,
 					},
 					favicon: "/favicon.png",
 					social: [
@@ -306,6 +350,10 @@ export default defineConfig({
 						},
 					},
 				}),
+		define: {
+			__AUDT_FONT_ENABLED__: JSON.stringify(audtFontEnabled),
+			__AUDT_FONT_LABEL__: JSON.stringify(audtFontLabel),
+		},
 		// Priming-only: both targets' outputs live in the repo root, so each
 		// target's dev watcher would otherwise enumerate the other's ~8.5k build
 		// files. Astro auto-ignores the active target's outDir; this adds the
