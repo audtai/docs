@@ -6,7 +6,7 @@ import SectionHeading from "./SectionHeading.astro";
 import CopyPromptButton from "./CopyPromptButton.astro";
 import Button from "./Button.astro";
 
-const ALL_GUIDES_HREF = "/agent-setup/";
+const CONTACT_HREF = "https://audt.ai/";
 ---
 
 <section
@@ -24,35 +24,31 @@ const ALL_GUIDES_HREF = "/agent-setup/";
 				class="bg-background/90 col-span-12 flex min-w-0 flex-col gap-3 p-5 sm:p-8 lg:col-span-8"
 			>
 				<SectionHeading id="agents-heading">
-					Build with your favorite AI agent
+					Conecte os principais provedores
 				</SectionHeading>
 
 				<p
 					class="text-foreground-muted mt-0 mb-2 max-w-[50ch] text-sm leading-relaxed text-pretty md:text-base"
 				>
-					Paste into any AI coding agent to install Cloudflare agent tooling:
+					Nossa plataforma é desenhada para conectar provedores líderes do
+					ecossistema e centralizar a tomada de decisões do seu e-commerce.
 				</p>
 				<CopyPromptButton class="mr-auto" />
 			</div>
 			<div
-				class="bg-background/90 focus-visible:outline-accent-100 relative col-span-12 flex min-w-0 flex-row items-center justify-between overflow-hidden p-5 no-underline transition-colors duration-150 focus-visible:bg-[#FCEDE0] focus-visible:outline-2 focus-visible:-outline-offset-2 sm:p-8 lg:col-span-4 lg:flex-col lg:items-stretch dark:focus-visible:bg-[#2A2118]"
+				class="bg-background/90 focus-visible:outline-accent-100 relative col-span-12 flex min-w-0 flex-col items-stretch justify-between gap-6 overflow-hidden p-5 no-underline transition-colors duration-150 focus-visible:bg-[#FCEDE0] focus-visible:outline-2 focus-visible:-outline-offset-2 sm:flex-row sm:items-center sm:gap-8 sm:p-8 lg:col-span-4 lg:flex-col lg:items-stretch dark:focus-visible:bg-[#2A2118]"
 			>
 				<HalftoneBackground />
 				<div class="relative z-[1] flex flex-col gap-2.5">
 					<span
 						class="text-foreground max-w-[14ch] text-lg leading-tight font-medium md:text-xl"
 					>
-						Browse all agent setup guides
+						Soluções sob medida para o seu ERP.
 					</span>
 				</div>
 
-				<Button
-					href={ALL_GUIDES_HREF}
-					variant="primary"
-					class="ml-auto"
-					size="md"
-				>
-					All agents
+				<Button href={CONTACT_HREF} variant="primary" class="ml-auto" size="md">
+					Falar com especialista
 					<Icon name="right-arrow" size="1rem" />
 				</Button>
 			</div>

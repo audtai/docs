@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<"div"> {
 
 const {
 	class: className,
-	placeholder = "Filter sidebar",
+	placeholder = "Filtrar opções",
 	...attrs
 } = Astro.props;
 ---
@@ -20,7 +20,7 @@ const {
 		type="search"
 		placeholder={placeholder}
 		class="peer border-border bg-card text-foreground placeholder:text-muted-foreground focus-visible:border-brand focus-visible:outline-ring w-full rounded-md border py-1.5 pr-9 pl-3 text-sm transition-colors focus-visible:outline-2 [&:not(:placeholder-shown)]:pr-2"
-		aria-label="Filter navigation"
+		aria-label="Filtrar navegação"
 		autocomplete="off"
 	/>
 	{

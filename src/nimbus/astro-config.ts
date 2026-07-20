@@ -74,13 +74,13 @@ const partialsRoot = here("../content/partials");
 
 const nimbusConfig = defineNimbusConfig({
 	site: "https://docs.audt.work",
-	title: "AUDT Docs",
-	description: "AUDT documentation.",
-	locale: "en",
-	github: "https://github.com/cloudflare/cloudflare-docs",
-	editPattern:
-		"https://github.com/cloudflare/cloudflare-docs/edit/production/{path}",
-	socialImageAlt: "Cloudflare documentation",
+	title: "Audt Platform Docs",
+	description:
+		"Explore guias, documentações e referências para integração com a plataforma Audt.",
+	locale: "pt-BR",
+	github: "https://github.com/audtai/docs",
+	editPattern: "https://github.com/audtai/docs/edit/production/{path}",
+	socialImageAlt: "Documentação da plataforma Audt",
 	// Keep the custom Algolia implementation available without running Pagefind.
 	// AUDT can restore the UI by enabling the shared feature switch.
 	search: DOCSEARCH_ENABLED ? { provider: "custom" } : false,

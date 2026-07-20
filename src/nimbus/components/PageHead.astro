@@ -130,6 +130,9 @@ const inPublic = (file: string) => existsSync(join(publicDir, file));
 
 const selectedFavicon = resolveFavicon(inPublic);
 const faviconHref = `${import.meta.env.BASE_URL}${selectedFavicon.file}`;
+const favicon96Href = `${import.meta.env.BASE_URL}favicon-96x96.png`;
+const appleTouchIconHref = `${import.meta.env.BASE_URL}apple-touch-icon.png`;
+const manifestHref = `${import.meta.env.BASE_URL}site.webmanifest`;
 
 const socialImagePath = resolveSocialImagePath({
 	socialImage,
@@ -213,7 +216,20 @@ const hasRssAlternate = headExtras.some(
 }
 {noindex && <meta name="robots" content="noindex" />}
 
-<link rel="shortcut icon" type={selectedFavicon.type} href={faviconHref} />
+<link rel="icon" type={selectedFavicon.type} href={faviconHref} />
+<link rel="icon" type="image/png" sizes="96x96" href={favicon96Href} />
+<link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconHref} />
+<link rel="manifest" href={manifestHref} />
+<meta
+	name="theme-color"
+	content="#ffffff"
+	media="(prefers-color-scheme: light)"
+/>
+<meta
+	name="theme-color"
+	content="#111111"
+	media="(prefers-color-scheme: dark)"
+/>
 <link rel="stylesheet" href={shikiCssHref} />
 {site && canonical && <link rel="canonical" href={canonical} />}
 {site && <link rel="sitemap" href="/sitemap-index.xml" />}
@@ -249,7 +265,6 @@ const hasRssAlternate = headExtras.some(
 {ogImage && <meta property="og:image" content={ogImage} />}
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@cloudflare" />
 {ogImage && <meta property="twitter:image" content={ogImage} />}
 
 {product && <meta name="pcx_product" content={product} />}

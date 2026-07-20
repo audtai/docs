@@ -7,9 +7,6 @@ import Sidebar from "../components/landing/Sidebar.astro";
 import Hero from "../components/landing/Hero.astro";
 import BuildFromScratch from "../components/landing/BuildFromScratch.astro";
 import AgentSetup from "../components/landing/AgentSetup.astro";
-import ChangelogSection from "../components/landing/ChangelogSection.astro";
-import SecureSection from "../components/landing/SecureSection.astro";
-import AccelerateSection from "../components/landing/AccelerateSection.astro";
 import CommunityGrid from "../components/landing/CommunityGrid.astro";
 import StructuralGrid from "../components/landing/StructuralGrid.astro";
 import FullPageLines from "../components/landing/FullPageLines.astro";
@@ -19,8 +16,8 @@ const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout
-	title="Cloudflare Developer Docs"
-	description="Connect, protect, and build everywhere."
+	title="Audt Platform Docs"
+	description="Explore guias, documentações e referências para integração com a plataforma Audt."
 >
 	<div class="flex h-full flex-col">
 		<Header showSidebar />
@@ -34,7 +31,7 @@ const currentPath = Astro.url.pathname;
 					class="border-border sticky top-14 hidden h-[calc(100vh-3.5rem)] w-(--nb-sidebar-width) shrink-0 flex-col overflow-y-auto border-r lg:flex"
 				>
 					<nav class="flex-1 px-4 pt-5 pb-12" aria-label="Documentation">
-						<SidebarFilter placeholder="Filter sidebar" />
+						<SidebarFilter placeholder="Filtrar opções" />
 						<Sidebar currentPath={currentPath} />
 					</nav>
 					<div
@@ -53,9 +50,6 @@ const currentPath = Astro.url.pathname;
 							<Hero />
 							<BuildFromScratch />
 							<AgentSetup />
-							<ChangelogSection />
-							<SecureSection />
-							<AccelerateSection />
 							<CommunityGrid />
 						</div>
 					</div>
@@ -80,7 +74,7 @@ const currentPath = Astro.url.pathname;
 				<a
 					href="/"
 					class="flex items-center no-underline"
-					aria-label="AUDT Docs home"
+					aria-label="Audt Platform Docs home"
 				>
 					<AudtLogo label="" />
 				</a>
@@ -93,7 +87,7 @@ const currentPath = Astro.url.pathname;
 				</button>
 			</div>
 			<nav class="px-4 pt-5 pb-8" aria-label="Documentation">
-				<SidebarFilter placeholder="Filter..." />
+				<SidebarFilter placeholder="Filtrar opções" />
 				<Sidebar currentPath={currentPath} />
 			</nav>
 		</div>

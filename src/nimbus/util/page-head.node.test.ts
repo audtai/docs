@@ -113,17 +113,16 @@ describe("inferContentType", () => {
 });
 
 describe("resolvePageTitle", () => {
-	test("no suffix, no override → `Title | Site` (unconditional, no dedup)", () => {
+	test("no suffix, no override → `Title | Site`, deduplicating the site title", () => {
 		expect(
 			resolvePageTitle({ title: "Workers", siteTitle: "Cloudflare Docs" }),
 		).toBe("Workers | Cloudflare Docs");
-		// No dedup even when title equals the site title.
 		expect(
 			resolvePageTitle({
 				title: "Cloudflare Docs",
 				siteTitle: "Cloudflare Docs",
 			}),
-		).toBe("Cloudflare Docs | Cloudflare Docs");
+		).toBe("Cloudflare Docs");
 	});
 
 	test("suffix present → `base · suffix`, base from raw title", () => {
@@ -281,7 +280,7 @@ describe("buildStructuredData", () => {
 			tags: ["t1"],
 		});
 		expect(out).toBe(
-			'{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://developers.cloudflare.com/changelog/x/#page","headline":"X · Changelog","description":"desc","url":"https://developers.cloudflare.com/changelog/x/","inLanguage":"en","image":"https://developers.cloudflare.com/og.png","dateModified":"2025-02-02","datePublished":"2025-01-01","publisher":{"@type":"Organization","name":"Cloudflare","url":"https://www.cloudflare.com/"},"isPartOf":{"@type":"WebSite","@id":"https://developers.cloudflare.com/#website","name":"Cloudflare Docs","url":"https://developers.cloudflare.com/"},"keywords":["t1"]}',
+			'{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://developers.cloudflare.com/changelog/x/#page","headline":"X · Changelog","description":"desc","url":"https://developers.cloudflare.com/changelog/x/","inLanguage":"en","image":"https://developers.cloudflare.com/og.png","dateModified":"2025-02-02","datePublished":"2025-01-01","publisher":{"@type":"Organization","name":"Audt","url":"https://audt.ai/"},"isPartOf":{"@type":"WebSite","@id":"https://docs.audt.work/#website","name":"Audt Platform Docs","url":"https://docs.audt.work/"},"keywords":["t1"]}',
 		);
 	});
 });

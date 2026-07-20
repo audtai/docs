@@ -7,6 +7,7 @@ import { DocSearch } from "./ui/search";
 import { config } from "virtual:nimbus/config";
 import { getSidebarSections } from "nimbus-docs";
 import AudtLogo from "../../components/AudtLogo.astro";
+import { GITHUB_LINK_ENABLED, HEADER_NAV_ENABLED } from "../../config/features";
 
 interface Props {
 	/** Astro collection id for the current page, forwarded from DocsLayout. */
@@ -27,7 +28,9 @@ const { collection, showSidebar = true } = Astro.props;
 const currentSlug = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 // Auto-derived section tabs — one per top-level docs sidebar group
-const sections = await getSidebarSections(currentSlug, { collection });
+const sections = HEADER_NAV_ENABLED
+	? await getSidebarSections(currentSlug, { collection })
+	: [];
 
 // Standalone, non-docs destinations. Nimbus has no header-nav config and
 // `getSidebarSections` only surfaces docs sidebar *groups*, so site-level
@@ -58,13 +61,13 @@ const navLinks = [
 			<a
 				href="/"
 				class="flex items-center no-underline"
-				aria-label="AUDT Docs home"
+				aria-label="Audt Platform Docs home"
 			>
 				<AudtLogo label="" />
 			</a>
 
 			{
-				navLinks.length > 0 && (
+				HEADER_NAV_ENABLED && navLinks.length > 0 && (
 					<nav
 						aria-label="Sections"
 						class="border-border ml-4 hidden h-6 items-center gap-1 border-l pl-4 md:flex"
@@ -91,7 +94,7 @@ const navLinks = [
 		<div class="flex items-center gap-2">
 			{config.search !== false && <DocSearch />}
 			{
-				config.github && (
+				GITHUB_LINK_ENABLED && config.github && (
 					<LinkButton
 						href={config.github}
 						variant="ghost"
@@ -111,14 +114,14 @@ const navLinks = [
 				role="separator"
 			>
 			</div>
-			{/* CTA → dash. Uses the brand `primary` variant (#ff4801). */}
+			{/* CTA → Audt. Uses the shared brand `primary` variant. */}
 			<LinkButton
-				href="https://dash.cloudflare.com/"
+				href="https://audt.ai/"
 				variant="primary"
 				class="hidden md:inline-flex"
 				id="header-login-button"
 			>
-				Entrar
+				Entrar em contato
 			</LinkButton>
 
 			{

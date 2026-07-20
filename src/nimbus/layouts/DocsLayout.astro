@@ -35,6 +35,10 @@ import {
 } from "nimbus-docs";
 import { sectionTitleResolver } from "@/util/sidebar";
 import { isSiteSidebarProduct } from "../../config/site-sidebar";
+import {
+	PAGE_ACTION_LINKS_ENABLED,
+	PAGE_FEEDBACK_ENABLED,
+} from "../../config/features";
 import type { PageMeta } from "@/components/PageHead.astro";
 
 type Props = DocsPageProps & {
@@ -117,12 +121,13 @@ const hasSidebar = Astro.slots.has("sidebar");
 const hasToc = Astro.slots.has("toc");
 const hasPageTitle = Astro.slots.has("page-title");
 const hasContentFooter = Astro.slots.has("content-footer");
-const showActions = !Astro.url.pathname.startsWith("/support/");
+const showActions =
+	PAGE_ACTION_LINKS_ENABLED && !Astro.url.pathname.startsWith("/support/");
 const hasPagination = Astro.slots.has("pagination");
 
 // Feedback: rail copy on wide screens, content-column fallback otherwise.
 const hasTocAside = headings !== false;
-const showFeedback = feedback !== false && !isCustom;
+const showFeedback = PAGE_FEEDBACK_ENABLED && feedback !== false && !isCustom;
 ---
 
 <BaseLayout
@@ -396,7 +401,7 @@ const showFeedback = feedback !== false && !isCustom;
 						<a
 							href="/"
 							class="flex items-center no-underline"
-							aria-label="AUDT Docs home"
+							aria-label="Audt Platform Docs home"
 						>
 							<AudtLogo label="" />
 						</a>

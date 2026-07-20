@@ -6,7 +6,7 @@ import SectionHeading from "./SectionHeading.astro";
 import CopyPromptButton from "@/components/CopyPromptButton.astro";
 import { LinkButton } from "@/components/ui/link-button";
 
-const ALL_GUIDES_HREF = "/agent-setup/";
+const CONTACT_HREF = "https://audt.ai/";
 ---
 
 <section
@@ -22,35 +22,36 @@ const ALL_GUIDES_HREF = "/agent-setup/";
 				class="bg-background/90 col-span-12 flex min-w-0 flex-col gap-3 p-5 sm:p-8 lg:col-span-8"
 			>
 				<SectionHeading id="agents-heading">
-					Build with your favorite AI agent
+					Conecte os principais provedores
 				</SectionHeading>
 
 				<p
 					class="text-muted-foreground mt-0 mb-2 max-w-[50ch] text-sm leading-relaxed text-pretty md:text-base"
 				>
-					Paste into any AI coding agent to install Cloudflare agent tooling:
+					Nossa plataforma é desenhada para conectar provedores líderes do
+					ecossistema e centralizar a tomada de decisões do seu e-commerce.
 				</p>
 				<CopyPromptButton class="mr-auto" />
 			</div>
 			<div
-				class="bg-background/90 focus-visible:outline-primary focus-visible:bg-muted relative col-span-12 flex min-w-0 flex-row items-center justify-between overflow-hidden p-5 no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 sm:p-8 lg:col-span-4 lg:flex-col lg:items-stretch"
+				class="bg-background/90 focus-visible:outline-primary focus-visible:bg-muted relative col-span-12 flex min-w-0 flex-col items-stretch justify-between gap-6 overflow-hidden p-5 no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 sm:flex-row sm:items-center sm:gap-8 sm:p-8 lg:col-span-4 lg:flex-col lg:items-stretch"
 			>
 				<HalftoneBackground />
 				<div class="relative z-[1] flex flex-col gap-2.5">
 					<span
 						class="text-foreground max-w-[14ch] text-lg leading-tight font-medium md:text-xl"
 					>
-						Browse all agent setup guides
+						Soluções sob medida para o seu ERP.
 					</span>
 				</div>
 
 				<LinkButton
-					href={ALL_GUIDES_HREF}
+					href={CONTACT_HREF}
 					variant="primary"
 					class="ml-auto"
 					size="lg"
 				>
-					All agents
+					Falar com especialista
 					<Icon name="ph:arrow-right" class="h-4 w-4" />
 				</LinkButton>
 			</div>

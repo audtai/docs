@@ -193,19 +193,19 @@ export default defineConfig({
 		? nimbus.integrations
 		: [
 				starlight({
-					title: "AUDT Docs",
+					title: "Audt Platform Docs",
 					logo: {
 						dark: "./src/assets/audt-light-variant.svg",
 						light: "./src/assets/audt-dark-variant.svg",
 						alt: "",
 						replacesTitle: true,
 					},
-					favicon: "/favicon.png",
+					favicon: "/favicon.svg",
 					social: [
 						{
 							label: "GitHub",
 							icon: "github",
-							href: "https://github.com/cloudflare/cloudflare-docs",
+							href: "https://github.com/audtai/docs",
 						},
 						{ label: "X.com", icon: "x.com", href: "https://x.com/cloudflare" },
 						{
@@ -215,8 +215,7 @@ export default defineConfig({
 						},
 					],
 					editLink: {
-						baseUrl:
-							"https://github.com/cloudflare/cloudflare-docs/edit/production/",
+						baseUrl: "https://github.com/audtai/docs/edit/production/",
 					},
 					components: {
 						Banner: "./src/components/overrides/Banner.astro",

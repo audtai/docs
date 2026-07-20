@@ -88,6 +88,76 @@ export const siteSidebarSections: SiteSidebarSection[] = [
 		],
 	},
 	{
+		heading: "Plataforma Audt",
+		headingIcon: "heading-audt-platform",
+		nodes: [
+			{
+				type: "group",
+				label: "E-commerce",
+				icon: "ph:shopping-cart",
+				mount: "e-commerce",
+				collapsed: true,
+				nodes: [
+					link("Catálogo de Produtos", "/e-commerce/catalogo-de-produtos/"),
+					link("Estoque de Produtos", "/e-commerce/estoque-de-produtos/"),
+					link("Pedidos", "/e-commerce/pedidos/"),
+				],
+			},
+			{
+				type: "group",
+				label: "Conectores",
+				icon: "ph:plugs-connected",
+				mount: "conectores",
+				collapsed: true,
+				nodes: [
+					{
+						type: "group",
+						label: "Google",
+						collapsed: true,
+						nodes: [
+							link("Overview", "/conectores/google/"),
+							link("Google Ads", "/conectores/google/google-ad/"),
+							link("Google Analytics", "/conectores/google/google-analytics/"),
+							link("BigQuery", "/conectores/google/bigquery/"),
+						],
+					},
+					{
+						type: "group",
+						label: "Meta Ads",
+						collapsed: true,
+						nodes: [
+							link("Overview", "/conectores/meta-ads/"),
+							link("Facebook Ads", "/conectores/meta-ads/facebook-ads/"),
+						],
+					},
+				],
+			},
+			{
+				type: "group",
+				label: "Governança e LGPD",
+				icon: "ph:shield-check",
+				mount: "governanca-e-lgpd",
+				collapsed: true,
+				nodes: [
+					link("Segurança", "/governanca-e-lgpd/seguranca/"),
+					link("Auditoria", "/governanca-e-lgpd/auditoria/"),
+				],
+			},
+			{
+				type: "group",
+				label: "MCP",
+				icon: "ph:robot",
+				mount: "mcp",
+				collapsed: true,
+				nodes: [
+					link("Overview", "/mcp/"),
+					link("Conecte com Claude", "/mcp/conecte-com-claude/"),
+					link("Conecte com ChatGPT", "/mcp/conecte-com-chatgpt/"),
+				],
+			},
+		],
+	},
+	{
 		heading: "Build",
 		headingIcon: "heading-build",
 		nodes: [

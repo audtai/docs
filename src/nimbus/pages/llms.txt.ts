@@ -83,9 +83,9 @@ export const GET: APIRoute = async ({ url }) => {
 		.join("\n");
 
 	const markdown = dedent(`
-		# Cloudflare Developer Documentation
+		# Audt Platform Docs
 
-		Explore guides and tutorials to start building on Cloudflare's platform.
+		Explore guias, documentações e referências para integração com a plataforma Audt.
 
 		> Each product below links to its own llms.txt, which contains a full index of that product's documentation pages and is the recommended way to explore a specific product's content.
 

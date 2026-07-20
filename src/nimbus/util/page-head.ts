@@ -5,7 +5,7 @@ import { formatContentType } from "./content-type";
 export type SchemaType = "BlogPosting" | "WebPage" | "TechArticle";
 
 /** `<title>`: `${base} · ${suffix}` when a suffix applies, else a raw
- *  head.title override or `${title} | ${siteTitle}`. */
+ *  head.title override, the site title itself, or `${title} | ${siteTitle}`. */
 export function resolvePageTitle({
 	title,
 	titleOverride,
@@ -20,7 +20,8 @@ export function resolvePageTitle({
 	const baseTitle = titleOverride ? titleOverride.split(" | ")[0] : title;
 	return titleSuffix
 		? `${baseTitle} · ${titleSuffix}`
-		: (titleOverride ?? `${title} | ${siteTitle}`);
+		: (titleOverride ??
+				(title === siteTitle ? siteTitle : `${title} | ${siteTitle}`));
 }
 
 /** Favicon link: first of svg > ico > png that exists, else svg. */
@@ -155,14 +156,14 @@ export function buildStructuredData({
 		...(isChangelog && datePublished ? { datePublished } : {}),
 		publisher: {
 			"@type": "Organization",
-			name: "Cloudflare",
-			url: "https://www.cloudflare.com/",
+			name: "Audt",
+			url: "https://audt.ai/",
 		},
 		isPartOf: {
 			"@type": "WebSite",
-			"@id": "https://developers.cloudflare.com/#website",
-			name: "Cloudflare Docs",
-			url: "https://developers.cloudflare.com/",
+			"@id": "https://docs.audt.work/#website",
+			name: "Audt Platform Docs",
+			url: "https://docs.audt.work/",
 		},
 		...(tags?.length ? { keywords: tags } : {}),
 	}).replace(/</g, "\\u003c");

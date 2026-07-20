@@ -2,13 +2,13 @@ import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
 import { parse } from "node-html-parser";
 
-describe("AUDT Docs", () => {
+describe("Audt Platform Docs", () => {
 	describe("html handling", () => {
 		it("responds with index.html at `/`", async () => {
 			const request = new Request("http://fakehost/");
 			const response = await SELF.fetch(request);
 			expect(response.status).toBe(200);
-			expect(await response.text()).toContain("AUDT Docs");
+			expect(await response.text()).toContain("Audt Platform Docs");
 		});
 
 		it("responds with 404.html at `/non-existent`", async () => {
@@ -116,7 +116,7 @@ describe("AUDT Docs", () => {
 			expect(response.status).toBe(200);
 
 			const text = await response.text();
-			expect(text).toContain("# Cloudflare Developer Documentation");
+			expect(text).toContain("# Audt Platform Docs");
 		});
 
 		it("agent setup prompt declares utf-8 charset", async () => {

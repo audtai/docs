@@ -95,9 +95,10 @@ const additionalProductNames = additionalProducts.flatMap((product) =>
 );
 // Parity: only enrich the title with ` · <suffix>` when the section is backed
 // by a `directory` entry (mirrors production Head.astro's `if (product)`).
-// Otherwise leave titleSuffix undefined so PageHead uses ` | Cloudflare Docs`.
+// Otherwise leave titleSuffix undefined so PageHead uses the configured Audt
+// site title as the suffix.
 const productMetaTitle = sectionProduct
-	? (sectionProduct.data.meta?.title ?? "Cloudflare Docs")
+	? (sectionProduct.data.meta?.title ?? config.title)
 	: undefined;
 const effectiveNoindex =
 	entry.data.noindex ||
