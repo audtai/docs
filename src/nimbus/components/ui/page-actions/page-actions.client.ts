@@ -2,7 +2,7 @@ import { mount } from "nimbus-docs/client";
 import tippy, { type Instance } from "tippy.js";
 import { track } from "~/util/zaraz";
 
-const COPY_LABEL = "Copy as Markdown";
+const COPY_LABEL = "Copiar como Markdown";
 
 /**
  * Wires the page-actions row. Matches production behavior (src/components/
@@ -43,9 +43,9 @@ function initPageActions(root: HTMLElement): () => void {
 			if (state === "copied") {
 				copyIcon?.classList.add("hidden");
 				checkIcon?.classList.remove("hidden");
-				if (label) label.textContent = "Copied!";
+				if (label) label.textContent = "Copiado!";
 			} else if (label) {
-				label.textContent = "Couldn't copy";
+				label.textContent = "Não foi possível copiar";
 			}
 			if (resetTimer) window.clearTimeout(resetTimer);
 			resetTimer = window.setTimeout(() => {

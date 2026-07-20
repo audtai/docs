@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import { LinkButton } from "@/components/ui/link-button";
-import CopyPromptButton from "@/components/CopyPromptButton.astro";
 ---
 
 <section id="hero" class="pb-12 md:pt-6 lg:pb-16">
@@ -24,6 +23,8 @@ import CopyPromptButton from "@/components/CopyPromptButton.astro";
 			<Icon name="ph:arrow-right" class="h-4 w-4" />
 		</LinkButton>
 
-		<CopyPromptButton tooltip="Sets up your AI agent for Cloudflare" />
+		<LinkButton href="/conectores/" variant="secondary" size="lg">
+			Conhecer os conectores
+		</LinkButton>
 	</div>
 </section>

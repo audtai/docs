@@ -60,14 +60,14 @@ describe("resolveSocialImagePath", () => {
 			"/logo.png",
 		);
 		expect(resolveSocialImagePath({ exists: none })).toBe(
-			"/cf-twitter-card.png",
+			"/audt-thumbnail.png",
 		);
 	});
 
 	test("unknown product group falls through to the file/card chain", () => {
 		expect(
 			resolveSocialImagePath({ productGroup: "not a group", exists: none }),
-		).toBe("/cf-twitter-card.png");
+		).toBe("/audt-thumbnail.png");
 	});
 
 	test("changelog card beats config/product-group/files, loses to explicit prop", () => {
@@ -87,7 +87,7 @@ describe("resolveSocialImagePath", () => {
 			}),
 		).toBe("/page.png");
 		expect(resolveSocialImagePath({ isChangelog: false, exists: none })).toBe(
-			"/cf-twitter-card.png",
+			"/audt-thumbnail.png",
 		);
 	});
 });

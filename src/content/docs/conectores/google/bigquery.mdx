@@ -1,9 +1,76 @@
 ---
 title: BigQuery
-description: Guia para configurar a integração do BigQuery com a plataforma Audt.
+description: Requisitos para a Audt consumir visões governadas ou eventos exportados do GA4 no BigQuery.
+summary: Publique somente os datasets necessários, com leitura e execução de consultas separadas.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 4
 ---
 
-Esta página reunirá os requisitos, as credenciais e as etapas de configuração da integração com o BigQuery.
+O BigQuery pode participar da integração de duas formas:
+
+1. **Produto de dados governado:** o cliente publica tabelas ou visões com os domínios necessários.
+2. **Exportação bruta do GA4:** a Audt lê as tabelas `events_*` criadas pelo vínculo oficial do Analytics.
+
+O caminho implementado para GA4 não deve ser interpretado como um conector genérico para qualquer tabela. Novos datasets passam por descoberta de schema, finalidade e custo.
+
+## Antes de conceder acesso
+
+Registre:
+
+- projeto, dataset e visões em escopo;
+- região de cada recurso;
+- projeto de execução e responsável pelo custo das consultas;
+- partição, clusterização e janela histórica;
+- frequência de publicação e política de correção;
+- classificação e retenção dos dados;
+- responsável pela revogação.
+
+## Permissões mínimas
+
+Leitura e execução são permissões diferentes.
+
+| Necessidade                 | Concessão esperada                                                  |
+| --------------------------- | ------------------------------------------------------------------- |
+| Ler dataset ou visão        | Acesso de visualização apenas no recurso aprovado                   |
+| Executar consulta           | Permissão de criação de jobs no projeto de execução definido        |
+| Expor subconjunto governado | Visão autorizada, preferencialmente sem acesso ao dataset de origem |
+
+Prefira federação de identidade ou impersonação. Não envie arquivos de chave JSON por e-mail ou chat. Permissões adicionais para Storage API ou exportação só devem ser concedidas quando o desenho realmente as utilizar.
+
+## Contrato da visão publicada
+
+Cada visão deve informar:
+
+- grão e chave estável;
+- descrição funcional de cada coluna;
+- tipos, nulos e enumerações;
+- fuso, moeda e regras de valor;
+- partição e campo incremental;
+- data inicial do histórico;
+- SLA de conclusão;
+- política para correção, exclusão e mudança de schema;
+- totais de controle e tolerância.
+
+Use os contratos de [E-commerce](/e-commerce/) para pedidos, catálogo e estoque. Não exponha datasets operacionais inteiros quando uma visão mínima atende a finalidade.
+
+## Exportação GA4
+
+Na exportação do Analytics, eventos são atualizados pelo provedor durante uma janela própria. A integração precisa aceitar reprocessamento de partições recentes e preservar a data de coleta.
+
+::::note[Relatórios e eventos não são a mesma superfície]
+Resultados agregados da Data API podem divergir do BigQuery por modelagem, identidade, consentimento, filtros e atualização. A Audt mantém a origem de cada número e documenta a comparação.
+::::
+
+## Validação
+
+- a identidade consegue consultar somente os recursos aprovados;
+- o projeto de cobrança está explícito;
+- partições evitam varreduras desnecessárias;
+- chaves e contagens são estáveis no grão declarado;
+- alterações de schema são detectadas antes da publicação;
+- uma amostra reconcilia com a fonte de autoridade;
+- não há campos pessoais fora da finalidade aprovada.
+
+Referências oficiais: [controle de acesso no BigQuery](https://cloud.google.com/bigquery/docs/control-access-to-resources-iam), [permissões para consultas](https://cloud.google.com/bigquery/docs/running-queries) e [visões autorizadas](https://cloud.google.com/bigquery/docs/authorized-views).

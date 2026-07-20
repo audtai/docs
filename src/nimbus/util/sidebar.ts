@@ -19,10 +19,20 @@ import type {
 	SidebarTransform,
 } from "nimbus-docs/types";
 
+const AUDT_SECTION_TITLES: Record<string, string> = {
+	"e-commerce": "E-commerce",
+	conectores: "Conectores",
+	"governanca-e-lgpd": "Governança e LGPD",
+	mcp: "MCP",
+};
+
 export const sectionTitleResolver: SectionTitleResolver = async ({
 	sectionSlug,
 	module,
 }) => {
+	if (AUDT_SECTION_TITLES[sectionSlug]) {
+		return { rail: AUDT_SECTION_TITLES[sectionSlug] };
+	}
 	if (sectionSlug === "learning-paths") {
 		if (!module) return undefined;
 		const entry = await getEntry("learning-paths", module);
@@ -38,6 +48,7 @@ export const sectionTitleResolver: SectionTitleResolver = async ({
 // once. (Not cleared by clearNavCaches, so dev edits to a title need a restart.)
 const sectionTitleCache = new Map<string, string | undefined>();
 async function directoryTitle(seg0: string): Promise<string | undefined> {
+	if (AUDT_SECTION_TITLES[seg0]) return AUDT_SECTION_TITLES[seg0];
 	if (sectionTitleCache.has(seg0)) return sectionTitleCache.get(seg0);
 	const entry = await getEntry("directory", seg0);
 	const title = entry?.data.entry.title;

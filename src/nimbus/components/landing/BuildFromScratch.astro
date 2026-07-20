@@ -1,6 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-import CommandBlock from "./CommandBlock.astro";
 import CornerMarks from "@/components/CornerMarks.astro";
 import { LinkButton } from "@/components/ui/link-button";
 import SectionHeading from "./SectionHeading.astro";
@@ -8,88 +7,85 @@ import TabBar from "./TabBar.astro";
 
 const primitives = [
 	{
-		id: "compute",
-		label: "Compute",
-		icon: "workers-vpc",
-		iconColor: "#0a95ff",
-		iconBg: "rgba(10, 149, 255, 0.1)",
-		iconBgDark: "rgba(10, 149, 255, 0.16)",
-		heading: "Deploy with one command",
+		id: "conectar",
+		label: "Conectar",
+		icon: "ph:plugs-connected",
+		iconColor: "#1447e6",
+		iconBg: "rgba(20, 71, 230, 0.08)",
+		iconBgDark: "rgba(75, 127, 255, 0.16)",
+		heading: "Conecte as fontes sem desmontar o seu stack",
 		description:
-			"Build and deploy serverless functions and full-stack apps on Cloudflare's global network. No servers to manage. No cold starts or region complexity.",
-		command: "npm create cloudflare@latest my-app",
+			"A Audt recebe dados por APIs, arquivos, armazenamento de objetos ou visões governadas. O formato de entrega é definido com o seu time e respeita a fonte de autoridade de cada domínio.",
+		input: "Comércio, catálogo, estoque, analytics e mídia",
+		output: "Fluxos versionados, observáveis e com menor privilégio",
 		cta: {
-			label: "Create your first Worker",
-			href: "/workers/get-started/guide/",
+			label: "Entenda os conectores",
+			href: "/conectores/",
 		},
 		tags: [
-			{ label: "Workers", href: "/workers/" },
-			{ label: "Containers", href: "/containers/" },
-			{ label: "Durable Objects", href: "/durable-objects/" },
-			{ label: "Queues", href: "/queues/" },
+			{ label: "APIs", href: "/conectores/" },
+			{ label: "CSV ou Parquet", href: "/conectores/" },
+			{ label: "BigQuery", href: "/conectores/google/bigquery/" },
 		],
 	},
 	{
-		id: "ai",
-		label: "AI",
-		icon: "workers-ai",
-		iconColor: "#19e306",
-		iconBg: "#f2f5e1",
-		iconBgDark: "rgba(25, 227, 6, 0.16)",
-		heading: "The AI inference platform",
+		id: "normalizar",
+		label: "Normalizar",
+		icon: "ph:arrows-merge",
+		iconColor: "#7c3aed",
+		iconBg: "rgba(124, 58, 237, 0.08)",
+		iconBgDark: "rgba(139, 92, 246, 0.18)",
+		heading: "Crie uma linguagem comum para a operação",
 		description:
-			"Run AI inference globally with one API call, build agents, and search across your data — no GPUs to manage, no capacity planning.",
-		command: "npx wrangler ai models",
-		cta: { label: "Browse available models", href: "/workers-ai/models/" },
+			"Mapeamos identificadores, status, datas, moedas e granularidade para um contrato lógico. A nomenclatura de origem pode continuar como está; a tradução fica explícita e rastreável.",
+		input: "Dicionários, amostras e regras de negócio",
+		output: "Chaves estáveis e métricas comparáveis entre fontes",
+		cta: { label: "Veja o contrato de dados", href: "/e-commerce/" },
 		tags: [
-			{ label: "Workers AI", href: "/workers-ai/" },
-			{ label: "AI Gateway", href: "/ai-gateway/" },
-			{ label: "AI Search", href: "/ai-search/" },
-			{ label: "Agents", href: "/agents/" },
-			{ label: "Vectorize", href: "/vectorize/" },
-			{ label: "Browser Run", href: "/browser-run/" },
+			{ label: "Pedidos", href: "/e-commerce/pedidos/" },
+			{ label: "Catálogo", href: "/e-commerce/catalogo-de-produtos/" },
+			{ label: "Estoque", href: "/e-commerce/estoque-de-produtos/" },
 		],
 	},
 	{
-		id: "storage",
-		label: "Storage & Databases",
-		icon: "d1",
-		iconColor: "#ee0ddb",
-		iconBg: "rgba(238, 13, 219, 0.1)",
-		iconBgDark: "rgba(238, 13, 219, 0.16)",
-		heading: "Make your database feel instant, everywhere",
+		id: "reconciliar",
+		label: "Reconciliar",
+		icon: "ph:circles-three-plus",
+		iconColor: "#db2777",
+		iconBg: "rgba(219, 39, 119, 0.08)",
+		iconBgDark: "rgba(236, 72, 153, 0.16)",
+		heading: "Explique as diferenças em vez de escondê-las",
 		description:
-			"Serverless SQL, globally distributed key-value, and global database acceleration — query directly from Workers with no connection management.",
-		command: "npx wrangler d1 create my-database",
-		cta: { label: "Get started with D1", href: "/d1/get-started/" },
+			"Receita financeira, conversões de mídia e eventos de analytics respondem a perguntas diferentes. A Audt preserva cada definição, documenta as divergências e produz uma visão reconciliada.",
+		input: "Totais por fonte, janela e regra de atribuição",
+		output: "Qualidade mensurável, cobertura e divergências conhecidas",
+		cta: { label: "Conheça a governança", href: "/governanca-e-lgpd/" },
 		tags: [
-			{ label: "R2", href: "/r2/" },
-			{ label: "Pipelines", href: "/pipelines/" },
-			{ label: "D1", href: "/d1/" },
-			{ label: "KV", href: "/kv/" },
-			{ label: "Hyperdrive", href: "/hyperdrive/" },
+			{ label: "Receita", href: "/e-commerce/pedidos/" },
+			{ label: "Mídia", href: "/conectores/" },
+			{ label: "Analytics", href: "/conectores/google/google-analytics/" },
 		],
 	},
 	{
-		id: "media",
-		label: "Media",
-		icon: "images",
-		iconColor: "#9616ff",
-		iconBg: "rgba(150, 22, 255, 0.1)",
-		iconBgDark: "rgba(150, 22, 255, 0.22)",
-		heading: "Build media pipelines without infrastructure headaches",
+		id: "decidir",
+		label: "Decidir",
+		icon: "ph:sparkle",
+		iconColor: "#6d00f5",
+		iconBg: "rgba(109, 0, 245, 0.08)",
+		iconBgDark: "rgba(139, 65, 255, 0.2)",
+		heading: "Leve contexto confiável para cada decisão",
 		description:
-			"Cloudflare Images helps teams build scalable, reliable media pipelines to store, optimize, and deliver images.",
-		command:
-			"curl --request POST https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/images/v1",
+			"Indicadores, diagnósticos e recomendações passam a compartilhar as mesmas regras de negócio. O contexto pode ser usado na Audt ou em assistentes compatíveis com MCP.",
+		input: "Dados reconciliados, metas e contexto comercial",
+		output: "Respostas rastreáveis, alertas e próximos passos",
 		cta: {
-			label: "Get started with Images",
-			href: "/images/get-started/introduction/",
+			label: "Explore o MCP",
+			href: "/mcp/",
 		},
 		tags: [
-			{ label: "Images", href: "/images/" },
-			{ label: "Stream", href: "/stream/" },
-			{ label: "Realtime", href: "/realtime/" },
+			{ label: "Diagnósticos", href: "/mcp/" },
+			{ label: "Alertas", href: "/mcp/" },
+			{ label: "Assistentes", href: "/mcp/" },
 		],
 	},
 ];
@@ -106,7 +102,7 @@ const primitives = [
 		<TabBar
 			name="build"
 			variant="underline"
-			aria-label="Build primitives"
+			aria-label="Etapas da inteligência Audt"
 			tabs={primitives.map((p) => ({ id: p.id, label: p.label }))}
 		/>
 
@@ -133,16 +129,28 @@ const primitives = [
 								{p.heading}
 							</h3>
 						</div>
-						<p class="text-muted-foreground mb-6 text-sm leading-relaxed md:text-base">
+						<p class="text-muted-foreground mb-6 max-w-[780px] text-sm leading-relaxed md:text-base">
 							{p.description}
 						</p>
 
-						<CommandBlock
-							id={`build-cmd-${p.id}`}
-							command={p.command}
-							rounded
-							class="mb-6 max-w-[680px]"
-						/>
+						<div class="border-border bg-border mb-6 grid max-w-[860px] gap-px overflow-hidden rounded-lg border sm:grid-cols-2">
+							<div class="bg-background p-4">
+								<span class="text-muted-foreground block text-xs font-medium tracking-wider uppercase">
+									O que entra
+								</span>
+								<p class="text-foreground mt-1.5 mb-0 text-sm leading-relaxed">
+									{p.input}
+								</p>
+							</div>
+							<div class="bg-background p-4">
+								<span class="text-muted-foreground block text-xs font-medium tracking-wider uppercase">
+									O que sai
+								</span>
+								<p class="text-foreground mt-1.5 mb-0 text-sm leading-relaxed">
+									{p.output}
+								</p>
+							</div>
+						</div>
 
 						<div class="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
 							<LinkButton href={p.cta.href} variant="secondary" size="base">

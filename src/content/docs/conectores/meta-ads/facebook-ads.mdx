@@ -1,9 +1,86 @@
 ---
-title: Facebook Ads
-description: Guia para configurar a integração do Facebook Ads com a plataforma Audt.
+title: Meta Ads
+description: Requisitos e contrato de dados para integrar relatórios da Meta à Audt.
+summary: Conceda acesso de leitura aos ativos aprovados e preserve as regras nativas de atribuição.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 2
 ---
 
-Esta página reunirá os requisitos, as credenciais e as etapas de configuração da integração com o Facebook Ads.
+**Status:** disponível com implantação assistida, sujeito à autorização do ativo e ao nível de acesso da aplicação Audt.
+
+## Pré-requisitos
+
+Separe:
+
+- ID do Business Portfolio;
+- IDs das contas de anúncio;
+- moeda e fuso de cada conta;
+- período histórico e campanhas em escopo;
+- configuração de atribuição usada pela organização;
+- administrador que pode atribuir o ativo a um usuário de sistema ou negócio parceiro.
+
+Para relatórios, a integração solicita `ads_read`. Não conceda `ads_management` quando o objetivo for somente leitura.
+
+## Concessão de acesso
+
+1. A Audt informa o principal ou negócio que receberá acesso.
+2. O administrador atribui somente as contas de anúncio aprovadas.
+3. A Audt confirma que a aplicação possui o nível de acesso necessário para o ativo do cliente.
+4. Uma coleta controlada é executada para validar escopo e totais.
+5. O cliente pode revogar o ativo a qualquer momento no Business Portfolio.
+
+Não envie token pessoal ou senha. A aplicação, o armazenamento do token e a renovação são responsabilidades técnicas da Audt.
+
+## Dados esperados
+
+| Conceito lógico                 | Obrigatório              | Observação                                                                      |
+| ------------------------------- | ------------------------ | ------------------------------------------------------------------------------- |
+| `date`                          | Sim                      | Data no fuso da conta                                                           |
+| `account_id`                    | Sim                      | Conta de anúncio em escopo                                                      |
+| `campaign_id` e `campaign_name` | Sim                      | Preserve o ID nativo mesmo após renomeação                                      |
+| `currency`                      | Sim no contrato          | Moeda da conta para gasto e valor                                               |
+| `spend`                         | Sim                      | Investimento no período                                                         |
+| `impressions` e `clicks`        | Sim                      | Métricas de entrega                                                             |
+| `reach` e `frequency`           | Recomendado              | Use os valores nativos da plataforma; não derive alcance a partir de impressões |
+| conversão e valor               | Condicional              | Precisam indicar ação, janela e configuração de atribuição                      |
+| `extracted_at`                  | Sim no produto publicado | Momento da coleta                                                               |
+
+Conversões podem ser fracionárias. Preserve a precisão informada pela origem.
+
+## Granularidade adicional
+
+Ad set, anúncio, criativo, placement, dispositivo, geografia e produto só entram no escopo depois de validar:
+
+- combinações aceitas pela versão da Marketing API;
+- volume e tempo de coleta;
+- retenção histórica;
+- estabilidade das chaves;
+- finalidade e necessidade real da quebra.
+
+## Atribuição e reconciliação
+
+Documente a janela, o tipo de conversão e a data de competência. O número da Meta representa atribuição da plataforma, não uma confirmação financeira.
+
+Compare separadamente:
+
+- gasto, impressões e cliques contra o Ads Manager;
+- conversões por ação e janela;
+- valor atribuído e moeda;
+- pedidos aprovados na fonte comercial;
+- cobertura de IDs e UTMs quando disponíveis.
+
+Diferenças podem vir de janela de atribuição, visualização versus clique, consentimento, fuso, cancelamento, devolução e atualização tardia.
+
+## Critérios de aceite
+
+- todas as contas e campanhas aprovadas aparecem;
+- gasto diário reconcilia dentro da tolerância;
+- moeda e fuso estão corretos;
+- os IDs nativos permanecem estáveis após renomeação;
+- alcance vem da métrica nativa;
+- conversões mantêm precisão e metadados de atribuição;
+- reprocessamentos não duplicam linhas.
+
+Referências oficiais: [autorização da Marketing API](https://developers.facebook.com/docs/marketing-api/overview/authorization/), [Insights API](https://developers.facebook.com/docs/marketing-api/insights/) e permissão [`ads_read`](https://developers.facebook.com/docs/permissions/reference/ads_read/).

@@ -1,9 +1,67 @@
 ---
 title: Conecte com Claude
-description: Guia para conectar o Claude ao servidor MCP da plataforma Audt.
+description: Configure o conector MCP privado da Audt no Claude.
+summary: Adicione a URL gerada pela Audt como conector personalizado e valide a loja vinculada.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 2
 ---
 
-Esta página reunirá os requisitos e as etapas de configuração para conectar o Claude ao servidor MCP da plataforma Audt.
+Use este fluxo somente quando conectores personalizados estiverem permitidos no seu plano e a organização tiver aprovado o beta privado da Audt.
+
+## Antes de começar
+
+- entre na Audt e selecione a loja correta;
+- confirme que sua conta Claude permite conectores personalizados;
+- em planos Team ou Enterprise, peça a um Owner para adicionar ou liberar o conector na organização;
+- não compartilhe a URL gerada com outros usuários.
+
+## Gere a URL na Audt
+
+1. Abra **Conectar IA** no portal Audt.
+2. Confirme a loja exibida.
+3. Selecione a opção para gerar a conexão.
+4. Copie a URL imediatamente; ela funciona como uma senha e pode não ser exibida novamente.
+
+## Adicione no Claude
+
+Para uma conta individual:
+
+1. Abra **Personalizar**.
+2. Entre em **Conectores**.
+3. Selecione **+** e **Adicionar conector personalizado**.
+4. Informe um nome como `Audt MCP`.
+5. Cole a URL completa gerada pela Audt.
+6. Conclua a adição.
+
+Para Team ou Enterprise, um Owner adiciona primeiro o conector web nas configurações da organização. Depois, cada membro autorizado conclui a conexão na própria conta.
+
+## Ative em uma conversa
+
+1. Inicie uma nova conversa.
+2. Abra **+** e depois **Conectores**.
+3. Ative **Audt MCP**.
+4. Peça: `Qual loja está vinculada e quais ferramentas estão disponíveis?`
+5. Confira o contexto antes de consultar indicadores.
+
+Exemplos:
+
+- `Resuma o desempenho aprovado no período disponível.`
+- `Separe evidências, inferências e hipóteses para a queda de receita.`
+- `Compare canais e campanhas, sem misturar conversão de mídia com receita aprovada.`
+- `Liste as categorias com maior venda aprovada e explique o recorte.`
+
+## Solução de problemas
+
+| Sintoma                            | Ação                                                                                     |
+| ---------------------------------- | ---------------------------------------------------------------------------------------- |
+| Conector personalizado não aparece | Verifique plano, política da organização e permissão do Owner                            |
+| Acesso não autorizado              | Confirme se usuário, tenant e loja continuam ativos; gere uma nova conexão se necessário |
+| Loja incorreta                     | Revogue, selecione a loja certa no portal e gere outra URL                               |
+| Ferramenta não aparece             | Remova e adicione novamente o conector; confirme que a URL foi copiada por inteiro       |
+| URL exposta ou perdida             | Rotacione imediatamente em **Conectar IA**                                               |
+
+Ao rotacionar ou revogar, todos os clientes que usam a URL anterior perdem acesso.
+
+Consulte também a documentação do Claude sobre [conectores personalizados por MCP remoto](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).

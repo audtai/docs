@@ -1,9 +1,88 @@
 ---
 title: Auditoria
-description: Referência de auditoria para operações e integrações da plataforma Audt.
+description: Eventos e evidências necessários para rastrear acessos, processamento e qualidade na Audt.
+summary: Conecte cada indicador à fonte, à versão da regra e à qualidade observada.
 pcx_content_type: reference
+lastUpdated: 2026-07-20
 sidebar:
   order: 3
 ---
 
-Esta página reunirá os registros, os eventos e os fluxos de auditoria disponíveis na plataforma Audt.
+Auditoria não é apenas um log de acesso. Para confiar em uma decisão, é necessário rastrear quem autorizou a fonte, qual versão foi processada, quais controles passaram e por que o resultado difere de outra plataforma.
+
+Esta página descreve o conjunto de evidências esperado. A cobertura e a retenção efetivamente disponíveis são validadas por fluxo; não presuma um histórico completo ou imutável sem teste.
+
+## Eventos de acesso
+
+Registre, quando aplicável:
+
+| Evento                      | Evidência mínima                                    |
+| --------------------------- | --------------------------------------------------- |
+| Concessão de acesso         | principal, ativo, escopo, aprovador e data          |
+| Rotação ou revogação        | conexão afetada, responsável, motivo e data         |
+| Autenticação administrativa | usuário, resultado e contexto de segurança aprovado |
+| Uso de conexão              | conexão, loja/tenant vinculado e último uso         |
+| Alteração de configuração   | valor anterior, novo valor, autor e versão          |
+
+Metadados de conexão MCP registram criação, revogação e último uso. “Último uso” pode representar handshake ou descoberta de ferramentas, não necessariamente uma consulta analítica; auditoria por chamada de ferramenta deve ser confirmada separadamente.
+
+## Eventos de dados
+
+Para cada execução, associe:
+
+- fonte, tenant e ativo em escopo;
+- identificador da execução e horário;
+- versão do extrator, regra e contrato;
+- partições lidas e publicadas;
+- contagem de entrada e saída;
+- checksum ou evidência equivalente quando disponível;
+- resultado dos controles de schema e qualidade;
+- status final e motivo da falha;
+- reprocessamentos e supersessões.
+
+Publicações em fotografia devem se tornar visíveis somente depois de a carga completa ser validada. Uma carga vazia ou incompleta não deve substituir a última versão aceita.
+
+## Lineage e definição
+
+Todo indicador importante precisa responder:
+
+1. qual sistema é a fonte de autoridade;
+2. qual conjunto e partição forneceram o dado;
+3. qual grão e chave foram usados;
+4. qual regra de status, fuso, moeda e valor foi aplicada;
+5. qual versão da transformação produziu o resultado;
+6. quais limitações ou diferenças conhecidas permanecem.
+
+Receita de pedidos, compra do GA4 e conversão de mídia devem manter labels de origem distintos mesmo quando são exibidas juntas.
+
+## Qualidade e reconciliação
+
+| Controle      | Evidência                                                 |
+| ------------- | --------------------------------------------------------- |
+| Completude    | registros esperados, presentes e ausentes por partição    |
+| Unicidade     | duplicidades no grão declarado                            |
+| Integridade   | chaves sem correspondência entre domínios                 |
+| Atualidade    | horário esperado, recebido e atraso                       |
+| Reconciliação | total da origem, total processado, diferença e tolerância |
+| Anomalia      | regra, severidade, período, responsável e decisão         |
+
+Falha de logging não deve ser confundida com sucesso de auditoria. Para processos críticos, defina se a ausência de evidência bloqueia ou não a publicação.
+
+## Mudanças de schema e regra
+
+Mudanças incompatíveis precisam de:
+
+- aviso e responsável;
+- nova versão do contrato;
+- período de coexistência quando necessário;
+- teste com amostra;
+- plano de rollback;
+- backfill ou decisão explícita de não recalcular o passado.
+
+Preserve a versão antiga o suficiente para explicar relatórios já publicados.
+
+## Retenção e acesso às evidências
+
+O projeto deve definir quais logs são mantidos, por quanto tempo, quem pode consultá-los e como a exclusão é comprovada. Não use um prazo sugerido como garantia até que a política e a automação tenham sido verificadas no ambiente.
+
+Consulte [Segurança](/governanca-e-lgpd/seguranca/) para os controles de identidade, segredo e retenção.

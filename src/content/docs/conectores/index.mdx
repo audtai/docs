@@ -1,9 +1,78 @@
 ---
 title: Conectores
-description: Guias para conectar serviços de dados e mídia à plataforma Audt.
+description: Formas de integrar fontes de comércio, dados, analytics e mídia à Audt.
+summary: Escolha entre um conector assistido e um produto de dados governado pelo cliente.
 pcx_content_type: overview
+lastUpdated: 2026-07-20
 sidebar:
   order: 1
 ---
 
-Encontre nesta seção os guias de configuração e as referências dos conectores disponíveis na plataforma Audt.
+Os conectores levam dados das fontes de autoridade para a camada de inteligência da Audt. A integração atual é **assistida**: nosso time confirma o caso de uso, configura a identidade técnica ou o canal de entrega, valida uma primeira carga e acompanha a ativação da recorrência.
+
+::::note[Marketplace em evolução]
+A experiência self-service — instalar um app, autorizar e começar a sincronizar — é a direção do produto, mas ainda não é o fluxo padrão. A presença de um provedor no ecossistema Audt não significa que todos os escopos estejam disponíveis sem configuração ou desenvolvimento.
+::::
+
+## Modelos de integração
+
+| Modelo                      | Melhor para                                                          | Como funciona                                                                                                  |
+| --------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Conector assistido          | APIs padronizadas de plataformas em que o acesso direto foi aprovado | O cliente concede acesso somente leitura à identidade autorizada da Audt; a Audt configura e monitora a coleta |
+| Produto de dados do cliente | Ambientes com lakehouse, warehouse ou governança centralizada        | O cliente publica visão, tabela ou arquivo aprovado e a Audt mapeia o contrato lógico                          |
+| API do cliente              | Regras de acesso e filtragem precisam ficar na origem                | A Audt consome um endpoint autenticado, paginado e versionado                                                  |
+| Transferência gerenciada    | Restrições específicas de rede, região ou operação                   | As partes definem canal, criptografia, frequência, retenção e observabilidade                                  |
+
+## Status que usamos
+
+| Status                               | Significado                                                                                                           |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| Disponível com implantação assistida | Há um caminho implementado, mas contas, escopos, histórico e qualidade são confirmados no onboarding                  |
+| Configuração sob medida              | O padrão existe, porém a origem ou o modelo do cliente exige mapeamento e validação adicionais                        |
+| Em descoberta                        | A interface, a licença, os campos ou a prioridade ainda precisam ser definidos; não é uma promessa de conector pronto |
+
+Google Ads, Google Analytics 4, Meta Ads e VTEX possuem caminhos implementados com implantação assistida. A execução recorrente e o SLA são ativados por projeto; não presuma sincronização automática ou em tempo real antes da confirmação operacional.
+
+## O que definimos no onboarding
+
+1. **Resultado esperado:** indicadores, decisões e período de análise.
+2. **Ativos em escopo:** contas, propriedades, lojas, sellers, datasets e ambientes.
+3. **Acesso:** identidade técnica, permissões, aprovação e revogação.
+4. **Contrato:** grão, chaves, campos, moeda, fuso, enums e atribuição.
+5. **Histórico:** backfill disponível e limitações da origem.
+6. **Recorrência:** frequência, janela de atualização e política de reprocessamento.
+7. **Qualidade:** totais de controle, tolerâncias e responsáveis pelo aceite.
+8. **Privacidade:** finalidade, minimização, pseudonimização e retenção.
+
+## Responsabilidades
+
+### Cliente
+
+- indicar donos funcional, técnico e de segurança;
+- conceder somente os ativos necessários;
+- confirmar definições de negócio e totais de controle;
+- comunicar mudanças de schema, conta, propriedade ou processo;
+- revogar acessos quando a integração for encerrada.
+
+### Audt
+
+- fornecer a identidade ou o canal técnico aprovado;
+- mapear a origem para o contrato lógico;
+- não solicitar senha pessoal, token de desenvolvedor do cliente ou segredo por documento;
+- registrar versão, escopo e regras da integração;
+- monitorar falhas e qualidade conforme o acordo do projeto;
+- separar limitações da origem de inferências produzidas pela plataforma.
+
+## Segurança de credenciais
+
+Nunca envie credenciais por e-mail, chat, planilha ou ticket. Prefira concessão de acesso à identidade da Audt, federação de identidade ou o mecanismo oficial do provedor. Quando um segredo for inevitável, o canal, a rotação e a revogação devem ser definidos antes da entrega.
+
+Consulte [Segurança](/governanca-e-lgpd/seguranca/) para a lista de decisões obrigatórias.
+
+## Conectores documentados
+
+- [Google](/conectores/google/): Google Ads, Google Analytics 4 e BigQuery.
+- [Meta Ads](/conectores/meta-ads/): relatórios de mídia e conversões da plataforma.
+- [VTEX](/conectores/vtex/): pedidos, catálogo e estoque por APIs ou produto de dados.
+
+Outros provedores podem ser avaliados como integração sob medida. Antes de confirmar disponibilidade, validamos interface, autenticação, licença, histórico, granularidade e esforço operacional.

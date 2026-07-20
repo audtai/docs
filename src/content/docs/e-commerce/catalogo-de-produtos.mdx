@@ -1,9 +1,83 @@
 ---
-title: Catálogo de Produtos
-description: Referência para integrar e manter o catálogo de produtos na plataforma Audt.
+title: Catálogo de produtos
+description: Contrato lógico para integrar produtos, SKUs, categorias e atributos à Audt.
+summary: Organize a dimensão de produto usada para explicar vendas, mídia, disponibilidade e sortimento.
 pcx_content_type: reference
+lastUpdated: 2026-07-20
 sidebar:
   order: 2
 ---
 
-Esta página reunirá os conceitos, campos e fluxos necessários para integrar o catálogo de produtos à plataforma Audt.
+O catálogo transforma identificadores transacionais em contexto comercial. A Audt diferencia **produto** — o agrupador conceitual — de **SKU ou variante**, que representa uma combinação vendável de atributos como cor e tamanho.
+
+## Grão recomendado
+
+Publique uma linha por **SKU e período de vigência** ou uma fotografia completa por SKU em cada `snapshot_at`. Se produto e SKU estiverem em conjuntos separados, mantenha a relação `product_id` → `sku_id` estável e documentada.
+
+::::caution[Não reutilize identificadores]
+Um `sku_id` não deve passar a representar outra variante. Quando um item for descontinuado, preserve o identificador e altere o estado de atividade; isso mantém o histórico de pedidos interpretável.
+::::
+
+## Campos mínimos
+
+Os nomes abaixo são uma referência semântica. Eles podem ser mapeados para campos equivalentes da sua fonte.
+
+| Conceito lógico             | Obrigatório | Descrição                                                   |
+| --------------------------- | ----------- | ----------------------------------------------------------- |
+| `product_id`                | Sim         | Identificador estável do produto agrupador                  |
+| `sku_id`                    | Sim         | Identificador estável da variante vendável                  |
+| `product_name`              | Sim         | Nome comercial legível do produto                           |
+| `brand`                     | Sim         | Marca normalizada ou identificador de marca                 |
+| `primary_category_id`       | Sim         | Categoria principal usada para agregação                    |
+| `is_active`                 | Sim         | Indica se o SKU pode participar do sortimento atual         |
+| `snapshot_at` ou vigência   | Sim         | Instante da fotografia ou intervalo de validade do registro |
+| `category_path`             | Recomendado | Caminho hierárquico completo da categoria                   |
+| `ean_gtin`                  | Recomendado | Código comercial quando disponível e validado               |
+| `variant_attributes`        | Recomendado | Pares de atributo e valor, como cor e tamanho               |
+| `list_price` e `sale_price` | Recomendado | Preços vigentes, com moeda e regra tributária documentadas  |
+| `image_url`                 | Opcional    | URL estável da imagem principal, sem credencial embutida    |
+
+## Taxonomia de categorias
+
+Quando possível, publique a hierarquia em um conjunto próprio:
+
+| Campo                | Finalidade                                 |
+| -------------------- | ------------------------------------------ |
+| `category_id`        | Chave estável da categoria                 |
+| `category_name`      | Nome apresentado aos usuários              |
+| `parent_category_id` | Relação com o nível imediatamente superior |
+| `category_path`      | Caminho completo e ordenado                |
+| `category_level`     | Profundidade na hierarquia                 |
+| `is_active`          | Estado atual sem apagar o histórico        |
+| vigência             | Período em que a classificação foi válida  |
+
+Um SKU pode participar de várias categorias. Identifique explicitamente a categoria principal para evitar dupla contagem em relatórios consolidados.
+
+## Atualizações e histórico
+
+- Para fotografias completas, inclua `snapshot_at` e publique todas as linhas da partição.
+- Para incrementais, inclua `updated_at` e uma forma explícita de representar inativação ou exclusão.
+- Preserve mudanças relevantes de marca, categoria, atributos e status quando análises históricas precisarem refletir o contexto da época.
+- Não substitua silenciosamente uma categoria antiga; informe a vigência ou uma tabela de relacionamento.
+
+## Controles de qualidade
+
+| Controle            | Aceite recomendado                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| Unicidade           | Um `sku_id` por instante ou intervalo de vigência                                          |
+| Integridade         | Todo SKU referencia um `product_id` e uma categoria válidos                                |
+| Completude          | Nome, marca, categoria e atividade preenchidos nos SKUs em escopo                          |
+| Temporalidade       | Intervalos não se sobrepõem para o mesmo SKU                                               |
+| Relação com pedidos | SKUs vendidos no período são encontrados no catálogo ou registrados como exceção conhecida |
+| Relação com estoque | A mesma chave de SKU é usada em catálogo e disponibilidade                                 |
+
+## Casos que precisam de decisão
+
+- kits, combos e brindes;
+- produtos de marketplace com seller externo;
+- variações sem estoque próprio;
+- reclassificação de categoria;
+- múltiplas listas de preço por canal, região ou cluster;
+- atributos livres, unidades de medida e conversões de embalagem.
+
+Registre a decisão no dicionário de dados antes da primeira carga recorrente. Quando houver dúvida, preserve o valor original e publique uma normalização separada.

@@ -1,9 +1,66 @@
 ---
 title: Conecte com ChatGPT
-description: Guia para conectar o ChatGPT ao servidor MCP da plataforma Audt.
+description: Configure o MCP privado da Audt no modo de desenvolvedor do ChatGPT.
+summary: Use o fluxo de app em modo de desenvolvedor para um piloto controlado, sem publicação pública.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 3
 ---
 
-Esta página reunirá os requisitos e as etapas de configuração para conectar o ChatGPT ao servidor MCP da plataforma Audt.
+O fluxo atual serve para **teste privado controlado**. Ele usa uma URL secreta gerada pela Audt e não substitui OAuth nem a revisão necessária para distribuir um app público com dados de clientes.
+
+::::caution[Confirme a política da organização]
+O modo de desenvolvedor pode ser bloqueado pelo administrador. Não contorne a política corporativa e não use a URL em uma conta pessoal sem aprovação.
+::::
+
+## Gere a URL na Audt
+
+1. Entre no portal Audt.
+2. Selecione a loja correta.
+3. Abra **Conectar IA**.
+4. Gere a URL da conexão e copie imediatamente.
+5. Trate a URL como senha; não publique, encaminhe ou coloque em screenshot.
+
+## Crie o app de teste
+
+Os nomes podem mudar conforme a interface do ChatGPT, mas o fluxo atual é:
+
+1. Abra **Configurações**.
+2. Em **Segurança e login**, habilite o **Modo de desenvolvedor** quando disponível.
+3. Abra **Plugins** ou acesse `chatgpt.com/plugins`.
+4. Use **+** para criar um app em modo de desenvolvedor.
+5. Informe o nome `Audt MCP`, uma descrição curta e a URL completa gerada.
+6. Crie o app e revise as ferramentas detectadas antes de confirmar.
+
+As seis capacidades esperadas são contexto, desempenho, diagnóstico, rankings, visão de produtos e exploração da hierarquia de produtos. Se aparecer uma ferramenta de escrita, SQL livre ou troca de loja, não conclua a conexão e avise a Audt.
+
+## Use em uma conversa
+
+1. Inicie uma nova conversa.
+2. Abra **+**, depois **Mais**.
+3. Selecione **Audt MCP**.
+4. Peça: `Informe a loja vinculada e o escopo da conexão.`
+5. Só então faça a pergunta analítica.
+
+Exemplos:
+
+- `Mostre o desempenho geral e a distância para a meta aprovada.`
+- `Diagnostique a variação de receita e diferencie fato, inferência e hipótese.`
+- `Compare campanhas por receita aprovada e mostre o período usado.`
+- `Quais categorias lideram as vendas aprovadas?`
+
+## Solução de problemas
+
+| Sintoma                            | Ação                                                                |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| Modo de desenvolvedor indisponível | Verifique plano e política do workspace com o administrador         |
+| App não aparece no chat            | Abra uma nova conversa e procure em **+ → Mais**                    |
+| Ferramentas incompletas            | Remova o app e adicione novamente com a URL completa                |
+| Acesso não autorizado              | Confirme usuário e loja ativos; rotacione se a URL estiver inválida |
+| Loja incorreta                     | Revogue, selecione a loja certa e gere outra conexão                |
+| URL exposta                        | Rotacione imediatamente e remova a conexão antiga do ChatGPT        |
+
+Uma rotação revoga a URL anterior para todos os clientes que a utilizam.
+
+Consulte o guia oficial de [conexão de um servidor MCP ao ChatGPT](https://developers.openai.com/apps-sdk/deploy/connect-chatgpt).

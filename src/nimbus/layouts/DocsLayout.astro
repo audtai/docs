@@ -106,9 +106,11 @@ const sectionTitle = await getSectionTitle(
 );
 // Link the product (seg0) crumb to the product root when the tree leaves it
 // non-interactive (a section landing with no resolvable page entry).
-const breadcrumbItems = (breadcrumbs ?? []).map((c, i) =>
-	i === 1 && !c.href && productSlug ? { ...c, href: `/${productSlug}/` } : c,
-);
+const breadcrumbItems = (breadcrumbs ?? []).map((c, i) => ({
+	...c,
+	label: c.label === "Home" ? "Início" : c.label,
+	...(i === 1 && !c.href && productSlug ? { href: `/${productSlug}/` } : {}),
+}));
 const product = productSlug
 	? {
 			title: sectionTitle?.rail ?? breadcrumbItems[1]?.label ?? productSlug,
@@ -263,7 +265,7 @@ const showFeedback = PAGE_FEEDBACK_ENABLED && feedback !== false && !isCustom;
 														</h1>
 														{draft && (
 															<Badge
-																text="Draft"
+																text="Rascunho"
 																variant="warning"
 																size="medium"
 															/>
@@ -291,7 +293,7 @@ const showFeedback = PAGE_FEEDBACK_ENABLED && feedback !== false && !isCustom;
 															>
 																<div class="bg-border h-px flex-1" />
 																<Badge
-																	text="For humans"
+																	text="Para pessoas"
 																	variant="success"
 																	size="small"
 																	class="border-success/15 border font-mono uppercase"
@@ -391,7 +393,7 @@ const showFeedback = PAGE_FEEDBACK_ENABLED && feedback !== false && !isCustom;
 				data-mobile-sidebar
 				data-state="closed"
 				class="group fixed inset-0 m-0 h-full max-h-full w-full max-w-full border-0 bg-transparent p-0 data-[state=closing]:bg-black/40 data-[state=open]:bg-black/40"
-				aria-label="Site navigation"
+				aria-label="Navegação do site"
 			>
 				<div
 					data-mobile-sidebar-panel
@@ -401,14 +403,14 @@ const showFeedback = PAGE_FEEDBACK_ENABLED && feedback !== false && !isCustom;
 						<a
 							href="/"
 							class="flex items-center no-underline"
-							aria-label="Audt Platform Docs home"
+							aria-label="Página inicial da documentação Audt"
 						>
 							<AudtLogo label="" />
 						</a>
 						<button
 							data-close-sidebar
 							class="text-muted-foreground hover:bg-accent hover:text-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors"
-							aria-label="Close sidebar"
+							aria-label="Fechar navegação"
 						>
 							<Icon name="ph:x" class="h-5 w-5" />
 						</button>

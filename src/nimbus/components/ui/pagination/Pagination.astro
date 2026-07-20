@@ -15,7 +15,7 @@ const { prev, next } = prevNext;
 {
 	(prev || next) && (
 		<nav
-			aria-label="Pagination"
+			aria-label="Paginação"
 			class={cn(
 				"border-border mt-12 flex items-center justify-between border-t pt-6",
 				className,
@@ -32,7 +32,9 @@ const { prev, next } = prevNext;
 						class="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
 					/>
 					<span>
-						<span class="text-muted-foreground block text-xs">Previous</span>
+						<span class="text-muted-foreground block text-xs">
+							Página anterior
+						</span>
 						<span class="text-foreground font-medium">{prev.label}</span>
 					</span>
 				</a>
@@ -45,7 +47,9 @@ const { prev, next } = prevNext;
 					class="group text-muted-foreground hover:text-foreground flex items-center gap-2 text-right text-sm transition-colors"
 				>
 					<span>
-						<span class="text-muted-foreground block text-xs">Next</span>
+						<span class="text-muted-foreground block text-xs">
+							Próxima página
+						</span>
 						<span class="text-foreground font-medium">{next.label}</span>
 					</span>
 					<Icon

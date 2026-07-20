@@ -15,14 +15,14 @@ interface Props extends HTMLAttributes<"div"> {
 const { headings, class: className, ...attrs } = Astro.props;
 
 const items: TOCItem[] = [
-	{ depth: 2, text: "Overview", slug: "_top" },
+	{ depth: 2, text: "Visão geral", slug: "_top" },
 	...headings,
 ];
 ---
 
 <div data-nb-toc class={cn("toc-container", className)} {...attrs}>
 	<h2 id="nb-on-this-page" class="text-foreground mb-2 text-sm font-semibold">
-		On this page
+		Nesta página
 	</h2>
 	<nav aria-labelledby="nb-on-this-page" class="relative">
 		<svg

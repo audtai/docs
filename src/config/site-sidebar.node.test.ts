@@ -26,21 +26,20 @@ describe("customer site sidebar", () => {
 		}
 	});
 
-	test("recognizes mounted products and preserves fallback collections", () => {
+	test("recognizes only the curated Audt collections", () => {
 		expect(isSiteSidebarProduct("e-commerce")).toBe(true);
 		expect(isSiteSidebarProduct("conectores")).toBe(true);
 		expect(isSiteSidebarProduct("governanca-e-lgpd")).toBe(true);
 		expect(isSiteSidebarProduct("mcp")).toBe(true);
-		expect(isSiteSidebarProduct("browser-run")).toBe(true);
-		expect(isSiteSidebarProduct("email-service")).toBe(true);
+		expect(isSiteSidebarProduct("browser-run")).toBe(false);
+		expect(isSiteSidebarProduct("email-service")).toBe(false);
 		expect(isSiteSidebarProduct("fundamentals")).toBe(false);
 	});
 
-	test("places the Audt platform section immediately above Build", () => {
-		const platformIndex = siteSidebarSections.findIndex(
-			(section) => section.heading === "Plataforma Audt",
-		);
-		expect(platformIndex).toBeGreaterThan(-1);
-		expect(siteSidebarSections[platformIndex + 1]?.heading).toBe("Build");
+	test("keeps onboarding before the Audt platform navigation", () => {
+		expect(siteSidebarSections.map((section) => section.heading)).toEqual([
+			"Comece aqui",
+			"Plataforma Audt",
+		]);
 	});
 });

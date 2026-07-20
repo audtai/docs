@@ -1,0 +1,83 @@
+---
+title: VTEX
+description: Requisitos para integrar pedidos, catálogo e estoque VTEX à plataforma Audt.
+summary: Conecte os principais domínios de comércio por APIs VTEX ou por um produto de dados governado.
+pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
+sidebar:
+  order: 3
+---
+
+**Status:** disponível com implantação assistida.
+
+A Audt pode consumir dados VTEX por APIs de OMS, Catalog e Logistics ou por um produto de dados publicado pelo cliente. A escolha depende de licenças, histórico, volume, governança e necessidade de minimizar campos pessoais antes da saída do ambiente.
+
+## Defina a superfície
+
+| Superfície                  | Vantagem                                                                  | Decisão necessária                                                    |
+| --------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| APIs padrão                 | Ativação orientada aos domínios necessários                               | Recursos de leitura, paginação, janela histórica e rotina incremental |
+| VTEX Data Pipeline          | Cobertura e exportação com características próprias do produto licenciado | Confirmar licença, datasets, histórico, cadence e região              |
+| Visão ou arquivo do cliente | Controle total sobre campos e anonimização                                | Publicar o contrato lógico de pedidos, catálogo e estoque             |
+
+O VTEX Data Pipeline é diferente das APIs padrão. Não presuma que ele está contratado nem que oferece o mesmo histórico ou frequência.
+
+## Pré-requisitos
+
+- nome da conta e ambiente VTEX;
+- sellers, trade policies e armazéns em escopo;
+- domínios necessários: pedidos, itens, catálogo, categorias e estoque;
+- período histórico e frequência desejados;
+- política de correção de pedidos;
+- responsável por segurança e revogação;
+- confirmação de uso do VTEX Data Pipeline, quando aplicável.
+
+## Acesso
+
+Crie uma aplicação dedicada ou chave externa com recursos customizados e somente leitura para os domínios aprovados. Master Data só deve ser incluído quando existir finalidade explícita.
+
+::::caution[Minimize antes de persistir]
+Permissões de recurso controlam endpoints, mas respostas de OMS podem conter dados de cliente, entrega ou pagamento que não fazem parte do contrato padrão. Prefira uma visão governada ou aplique minimização antes da persistência. Não exponha nome, documento, endereço completo ou fragmentos de cartão à camada analítica.
+::::
+
+Chaves VTEX não expiram automaticamente em todos os fluxos. Registre dono, criação, rotação, armazenamento e procedimento de revogação. Nunca envie o segredo em documento ou canal não aprovado.
+
+## Domínios e mapeamento
+
+### Pedidos e itens
+
+Mapeie os campos de [Pedidos](/e-commerce/pedidos/), incluindo `order_id`, datas de criação, aprovação e atualização, status, canal, moeda, totais, itens e seller. Não presuma que o ID do pedido é o mesmo `transaction_id` publicado no GA4; valide a regra de ligação.
+
+O status aprovado deve ser acordado com o cliente. Uma lista interna de status da plataforma não deve virar regra universal de negócio.
+
+### Catálogo
+
+Publique um registro por SKU em cada fotografia completa, com produto, marca, categoria, referência, EAN, atributos, preços e disponibilidade comercial. Diferencie `is_active` de `is_available`: um SKU pode existir no catálogo e estar temporariamente indisponível.
+
+Consulte [Catálogo de produtos](/e-commerce/catalogo-de-produtos/).
+
+### Estoque
+
+Publique SKU × armazém × fotografia, com saldo físico, reservado e disponível. Preserve valores brutos e documente se negativos são válidos; a regra de apresentação pode limitar a zero, mas a anomalia precisa continuar observável.
+
+Consulte [Estoque de produtos](/e-commerce/estoque-de-produtos/).
+
+## Atualização e histórico
+
+- Catálogo e estoque funcionam melhor como fotografias completas, publicadas atomicamente.
+- Pedidos exigem janela de releitura suficiente para capturar mudanças tardias.
+- A frequência é configurada por projeto; não há promessa padrão de tempo real ou intraday.
+- Uma carga vazia ou incompleta não deve substituir a última publicação válida.
+- Mudanças antigas fora da janela ativa precisam de reprocessamento controlado.
+
+## Validação
+
+1. Compare contagens de pedidos, itens e SKUs com a origem.
+2. Reconcile valores diários por canal e status.
+3. Verifique integridade entre itens, catálogo e estoque.
+4. Confirme sellers, trade policies e armazéns em escopo.
+5. Teste paginação, throttling e reprocessamento.
+6. Revise o payload real para remover campos pessoais não aprovados.
+7. Registre frequência, histórico e exceções conhecidas antes da recorrência.
+
+Referências oficiais: [autenticação VTEX](https://developers.vtex.com/docs/guides/authentication), [chaves de API](https://developers.vtex.com/docs/guides/api-authentication-using-api-keys), [Orders API](https://developers.vtex.com/docs/api-reference/orders-api) e [VTEX Data Pipeline](https://www.vtex.com/en-us/data-pipeline/).

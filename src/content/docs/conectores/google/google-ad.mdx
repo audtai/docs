@@ -1,9 +1,83 @@
 ---
 title: Google Ads
-description: Guia para configurar a integração do Google Ads com a plataforma Audt.
+description: Requisitos e contrato de dados para integrar Google Ads à Audt.
+summary: Traga investimento e desempenho de campanhas com acesso somente leitura e escopo explícito.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 2
 ---
 
-Esta página reunirá os requisitos, as credenciais e as etapas de configuração da integração com o Google Ads.
+**Status:** disponível com implantação assistida.
+
+A integração usa uma identidade autorizada pela Audt para consultar os ativos de mídia aprovados. O cliente não precisa criar nem compartilhar um token de desenvolvedor, um projeto Google Cloud ou credenciais pessoais.
+
+## Antes de começar
+
+Separe:
+
+- IDs das contas anunciantes;
+- conta administradora, quando a concessão ocorrer por MCC;
+- moedas e fusos de cada conta;
+- campanhas e período histórico em escopo;
+- ações de conversão que devem ser preservadas;
+- responsável com permissão para conceder e revogar acesso.
+
+Conceda à identidade informada pela Audt acesso de leitura diretamente na conta anunciante ou por uma conta administradora vinculada. O nível exato é confirmado no onboarding e não deve permitir criação ou alteração de campanhas.
+
+## Dados esperados
+
+O contrato mínimo atual opera em nível diário de campanha.
+
+| Conceito lógico                 | Obrigatório              | Observação                                                   |
+| ------------------------------- | ------------------------ | ------------------------------------------------------------ |
+| `date`                          | Sim                      | Data na convenção da conta, com fuso documentado             |
+| `account_id`                    | Sim                      | ID da conta anunciante                                       |
+| `campaign_id` e `campaign_name` | Sim                      | Preserve o ID da plataforma mesmo quando o nome mudar        |
+| `currency`                      | Sim no contrato          | Deve ser confirmada; não converta sem taxa e regra aprovadas |
+| `spend`                         | Sim                      | Custo no nível e moeda informados                            |
+| `impressions` e `clicks`        | Sim                      | Métricas de entrega                                          |
+| `campaign_status`               | Recomendado              | Estado da campanha no período                                |
+| `device`                        | Recomendado              | Disponível quando o relatório adotado permite                |
+| conversão, valor e tipo         | Condicional              | Dependem das ações e da janela escolhidas                    |
+| `extracted_at`                  | Sim no produto publicado | Momento da coleta para rastreabilidade                       |
+
+Ad group, anúncio, criativo, placement, produto promovido e URL de destino são extensões de escopo. Não os trate como disponíveis até que a granularidade, o histórico e o volume tenham sido aprovados.
+
+## Atribuição
+
+Preserve, para cada métrica de conversão:
+
+- ação de conversão;
+- janela aplicável;
+- regra e data de competência;
+- valor e moeda;
+- origem nativa do número.
+
+Conversões fracionárias podem ocorrer em modelos de atribuição. Não arredonde antes da camada de apresentação.
+
+## Ativação
+
+1. Envie os IDs e a hierarquia de contas.
+2. A Audt fornece a identidade que receberá acesso.
+3. O administrador concede leitura nos ativos acordados.
+4. A Audt executa uma coleta controlada do período de amostra.
+5. As partes validam gasto, impressões e cliques contra a interface do provedor.
+6. Conversões e valores são aceitos separadamente, com a janela registrada.
+7. A frequência recorrente é habilitada conforme o acordo do projeto.
+
+## Controles de qualidade
+
+- soma de gasto por dia e conta;
+- cobertura de campanhas ativas e pausadas;
+- moeda e fuso corretos;
+- IDs estáveis mesmo após renomeação;
+- ausência de duplicidade no grão publicado;
+- tratamento de dados atrasados e reprocessamento;
+- diferenças de conversão explicadas pela janela ou ação selecionada.
+
+## Revogação e mudanças
+
+Revogue o acesso na conta ou no MCC quando a integração terminar. Avise a Audt ao alterar hierarquia, moeda, fuso, ações de conversão ou conta administradora.
+
+Consulte as referências oficiais sobre [modelos de acesso](https://developers.google.com/google-ads/api/docs/oauth/access-model) e [vinculação de conta administradora](https://support.google.com/google-ads/answer/6139186).

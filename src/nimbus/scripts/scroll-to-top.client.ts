@@ -7,7 +7,7 @@ const SHOW_AFTER_PX = 300;
 
 function initScrollToTop(btn: HTMLElement): () => void {
 	const progress = btn.querySelector<SVGCircleElement>(".nb-scroll-progress");
-	addTooltip(btn, "Back to top", { placement: "left" });
+	addTooltip(btn, "Voltar ao topo", { placement: "left" });
 
 	function update() {
 		const doc = document.documentElement;

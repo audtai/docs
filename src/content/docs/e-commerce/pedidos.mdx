@@ -1,9 +1,95 @@
 ---
 title: Pedidos
-description: Referência para integrar o ciclo de pedidos à plataforma Audt.
+description: Contrato lógico para integrar pedidos, itens, pagamentos e ajustes à Audt.
+summary: Defina a receita de autoridade e preserve todo o ciclo comercial, da captura ao resultado líquido.
 pcx_content_type: reference
+lastUpdated: 2026-07-20
 sidebar:
   order: 4
 ---
 
-Esta página reunirá os conceitos, campos e fluxos necessários para integrar pedidos à plataforma Audt.
+Pedidos são a fonte comercial usada para reconciliar conversões de analytics e mídia. A primeira decisão do onboarding é semântica: o que a sua operação chama de receita **capturada**, **aprovada**, **cancelada**, **devolvida**, **reembolsada** e **líquida**.
+
+## Dois conjuntos complementares
+
+| Conjunto        | Grão                                                          | Chave esperada                                          |
+| --------------- | ------------------------------------------------------------- | ------------------------------------------------------- |
+| Pedidos         | Um registro por pedido no estado atual ou por versão temporal | `order_id`                                              |
+| Itens de pedido | Um registro por linha comercial do pedido                     | `order_item_id` ou composição estável de pedido e linha |
+
+Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso evita repetir valores do pedido em cada produto e permite conciliar quantidades e totais.
+
+## Campos de pedido
+
+| Conceito lógico                | Obrigatório       | Descrição                                                                          |
+| ------------------------------ | ----------------- | ---------------------------------------------------------------------------------- |
+| `order_id`                     | Sim               | Identificador estável na plataforma comercial                                      |
+| `transaction_id`               | Sim quando existe | Identificador publicado em analytics; sua presença deve ser validada, não inferida |
+| `captured_at`                  | Sim               | Momento de criação ou captura comercial                                            |
+| `approved_at`                  | Recomendado       | Momento de aprovação financeira                                                    |
+| `updated_at`                   | Sim               | Marcador para correções e incrementais                                             |
+| `order_status`                 | Sim               | Estado comercial normalizado e valor original preservado                           |
+| `payment_status`               | Sim               | Estado financeiro independente do fulfillment                                      |
+| `sales_channel`                | Sim               | Site, app, marketplace, loja ou outro canal acordado                               |
+| `currency`                     | Sim               | Código de moeda aplicável aos valores                                              |
+| `items_gross_amount`           | Sim               | Soma bruta dos itens antes dos descontos                                           |
+| `discount_amount`              | Sim               | Desconto total conforme regra documentada                                          |
+| `shipping_amount`              | Sim               | Frete cobrado do cliente ou regra equivalente                                      |
+| `order_total_amount`           | Sim               | Total na definição da fonte de autoridade                                          |
+| `item_quantity`                | Sim               | Quantidade total de unidades ou linhas, conforme definição                         |
+| `seller_id` e `store_id`       | Recomendado       | Origem comercial ou seller responsável                                             |
+| `cancelled_at`, `delivered_at` | Recomendado       | Marcos do ciclo quando disponíveis                                                 |
+| `refund_amount`                | Recomendado       | Valor acumulado ou evento associado, com regra declarada                           |
+| UTMs e cupom                   | Opcional          | Contexto promocional presente no pedido, sem substituir a atribuição de mídia      |
+
+## Campos de item
+
+| Conceito lógico              | Obrigatório | Descrição                                                              |
+| ---------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `order_item_id`              | Sim         | Identificador estável da linha comercial                               |
+| `order_id`                   | Sim         | Relação com o cabeçalho do pedido                                      |
+| `product_id` e `sku_id`      | Sim         | Chaves compatíveis com o catálogo                                      |
+| `quantity`                   | Sim         | Quantidade vendida na linha                                            |
+| `list_unit_price`            | Sim         | Preço unitário de referência                                           |
+| `sale_unit_price`            | Sim         | Preço unitário efetivamente praticado                                  |
+| `discount_amount`            | Sim         | Desconto alocado à linha                                               |
+| `net_item_amount`            | Sim         | Valor líquido da linha segundo a fonte                                 |
+| `allocated_shipping_amount`  | Recomendado | Parcela de frete atribuída ao item                                     |
+| `seller_id`                  | Recomendado | Seller responsável quando houver marketplace                           |
+| marca, categoria e atributos | Recomendado | Podem vir do catálogo pelo `sku_id`; evite duplicar regras divergentes |
+
+## Ciclo de vida e correções
+
+Pedidos mudam depois da venda. A integração deve conseguir reaplicar o estado mais recente sem criar duplicatas.
+
+- Preserve o status original e forneça um mapeamento para o status normalizado.
+- Informe se a origem envia estado atual, histórico de versões ou eventos.
+- Use `updated_at` ou cursor equivalente para capturar mudanças tardias.
+- Não apague cancelamentos, devoluções e reembolsos: represente o efeito e a data de competência.
+- Para cancelamento ou devolução parcial, identifique item, quantidade e valor afetados.
+- Documente quando um valor é acumulado no pedido e quando representa um evento individual.
+
+## Reconciliação
+
+Antes de usar a fonte em indicadores, compare por dia e canal:
+
+1. contagem de pedidos capturados e aprovados;
+2. quantidade de itens;
+3. valor bruto, desconto, frete e total;
+4. cancelamentos, devoluções e reembolsos;
+5. pedidos ou itens sem chave de catálogo;
+6. duplicidades e mudanças recebidas fora da janela esperada.
+
+As tolerâncias são acordadas com o dono funcional. Diferenças conhecidas ficam registradas; não ajustamos valores silenciosamente para forçar igualdade.
+
+## Relação com analytics e mídia
+
+`transaction_id`, `order_id`, `sku_id`, UTMs e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
+
+Conversão atribuída por Google Ads, Meta Ads ou GA4 **não é receita financeira**. A Audt preserva as definições de cada plataforma e usa pedidos como referência comercial para reconciliação. Atribuição avançada depende de histórico, eventos em granularidade suficiente e metodologia aprovada.
+
+## Privacidade
+
+Nome, e-mail, telefone, CPF, endereço completo e dados de cartão não fazem parte do contrato padrão. Quando uma análise de jornada exigir identificação persistente, use apenas um identificador pseudônimo, não reversível e aprovado para a finalidade.
+
+Consulte [Segurança](/governanca-e-lgpd/seguranca/) antes de liberar cargas reais.

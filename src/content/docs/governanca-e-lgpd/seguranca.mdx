@@ -1,9 +1,99 @@
 ---
 title: Segurança
-description: Práticas de segurança para integrações e dados processados pela plataforma Audt.
+description: Baseline de segurança para acessos, integrações e dados processados com a Audt.
+summary: Aplique menor privilégio, segredos controlados e minimização desde o primeiro acesso.
 pcx_content_type: reference
+lastUpdated: 2026-07-20
 sidebar:
   order: 2
 ---
 
-Esta página reunirá os controles e as práticas de segurança recomendados para utilizar a plataforma Audt.
+Os controles abaixo orientam a aprovação de cada integração. A arquitetura real deve ser evidenciada no onboarding; não presuma isolamento físico, chave gerenciada pelo cliente, rede privada, retenção automática ou certificação sem confirmação específica.
+
+## Identidades e acesso
+
+- use uma identidade técnica dedicada por integração ou finalidade;
+- conceda somente leitura quando não houver ação de escrita aprovada;
+- limite o acesso a contas, propriedades, datasets, lojas e sellers em escopo;
+- exija MFA para usuários humanos;
+- revise permissões periodicamente e após mudança de equipe;
+- registre dono, data de criação, validade e procedimento de revogação;
+- encerre imediatamente acessos inativos ou ligados a usuários desligados.
+
+Não use a conta pessoal de um colaborador como dependência operacional.
+
+## Segredos
+
+Nunca coloque senha, token, chave JSON ou URL secreta em código, planilha, documento, ticket ou conversa. Prefira:
+
+1. concessão de ativo à identidade autorizada;
+2. federação ou impersonação de identidade;
+3. segredo entregue por canal aprovado, com rotação e revogação definidas.
+
+O mecanismo de armazenamento e rotação precisa ser validado antes da produção. O fato de uma origem aceitar token de longa duração não elimina a necessidade de governança.
+
+## Rede e criptografia
+
+O desenho deve registrar:
+
+- TLS e autenticação do canal;
+- origem e destino permitidos;
+- necessidade de allowlist, VPN, endpoint privado ou egress restrito;
+- criptografia em repouso e responsável pelas chaves;
+- região de processamento e transferência;
+- tratamento de ambientes temporários, caches e backups.
+
+Implantação em ambiente controlado pelo cliente pode ser avaliada quando a arquitetura exigir. Ela não é uma característica automática de todo projeto e precisa de desenho, responsabilidade operacional e aceite próprios.
+
+## Isolamento e escopo
+
+Segregação lógica por cliente e tenant deve ser aplicada em toda consulta. Quando o requisito for isolamento físico — bucket, banco, conta ou projeto dedicado — registre-o como decisão arquitetural e valide a evidência antes de afirmar que está ativo.
+
+No MCP, a conexão atual é vinculada a um usuário e uma loja ativa. As ferramentas não recebem tenant, loja, SQL ou endpoint arbitrário como parâmetro. Consulte [MCP](/mcp/) para os limites do beta.
+
+## Dados fora do escopo padrão
+
+Remova antes da camada analítica:
+
+- nome, e-mail, telefone, CPF ou outro documento;
+- endereço completo e geolocalização exata;
+- número, token, BIN, primeiros ou últimos dígitos de cartão;
+- credenciais e segredos;
+- texto livre de atendimento ou mensagens individuais;
+- IP persistente e identificador bruto de publicidade sem aprovação;
+- imagem, áudio, biometria ou trajetória individual.
+
+Um identificador pseudônimo só deve ser usado quando for estável, não reversível, limitado à finalidade e aprovado por Segurança/Privacidade.
+
+::::caution[Revise o payload real]
+Uma permissão de leitura em um endpoint pode devolver mais campos do que a análise precisa. Controle de endpoint não substitui minimização de coluna. Inspecione amostras e aplique remoção antes de persistir.
+::::
+
+## Retenção e exclusão
+
+Defina por fonte:
+
+- período de retenção do dado original e transformado;
+- política para partições temporárias e execuções com falha;
+- prazo e evidência de exclusão;
+- cobertura de backup;
+- comportamento após revogação ou término contratual.
+
+Enquanto a automação não estiver comprovada, trate a exclusão como procedimento operacional com dono e evidência.
+
+## Provedores de IA
+
+Antes de disponibilizar dados a um modelo, confirme:
+
+- provedor, região, modelo e versão;
+- política de treinamento com dados do cliente;
+- retenção de prompt e resposta;
+- conteúdo permitido e mascaramento;
+- autorização do usuário e da loja;
+- registro e revisão do uso.
+
+Não aplique “zero retention” à plataforma inteira sem um contrato e uma configuração comprovados no provedor específico.
+
+## Incidentes
+
+O plano do projeto deve indicar severidade, responsáveis, canal, preservação de evidências, contenção, notificação e aprendizado posterior. Um incidente ou exposição de segredo exige revogação/rotação imediata e avaliação do período de uso.

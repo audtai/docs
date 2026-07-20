@@ -5,8 +5,6 @@
  * Pagination/EditLink/Feedback bits are dropped since DocsLayout owns those.
  * Rendered once in BaseLayout, so it appears on every page.
  */
-import { Icon } from "astro-icon/components";
-
 interface Props {
 	/** Extra classes on the <footer> — e.g. a top margin on pages without a
 	 *  decorative backdrop, where the footer isn't meant to sit flush. */
@@ -28,60 +26,27 @@ const innerClass =
 		? `mx-auto w-full px-4 lg:px-6 py-12 ${wide ? "max-w-[1400px]" : "max-w-(--nb-content-max)"}`
 		: "mx-auto w-full max-w-[1120px] px-[max(1.5rem,4vw)] py-12";
 
-type FooterLink = { text: string; href: string; icon?: string };
+type FooterLink = { text: string; href: string };
 
 const groups: [string, FooterLink[]][] = Object.entries({
-	Resources: [
-		{ text: "API", href: "/api/" },
-		{ text: "New to Cloudflare?", href: "/fundamentals/" },
-		{ text: "Directory", href: "/directory/" },
-		{ text: "Sponsorships", href: "/sponsorships/" },
-		{ text: "Open Source", href: "https://github.com/cloudflare" },
-		{ text: "Cloudflare Research", href: "https://research.cloudflare.com/" },
+	Documentação: [
+		{ text: "E-commerce", href: "/e-commerce/" },
+		{ text: "Conectores", href: "/conectores/" },
+		{ text: "Governança e LGPD", href: "/governanca-e-lgpd/" },
+		{ text: "MCP", href: "/mcp/" },
 	],
-	Support: [
-		{ text: "Help Center", href: "https://support.cloudflare.com/" },
-		{ text: "System Status", href: "https://www.cloudflarestatus.com/" },
+	Integrações: [
+		{ text: "Google Ads", href: "/conectores/google/google-ad/" },
 		{
-			text: "Compliance",
-			href: "https://www.cloudflare.com/trust-hub/compliance-resources/",
+			text: "Google Analytics 4",
+			href: "/conectores/google/google-analytics/",
 		},
-		{ text: "GDPR", href: "https://www.cloudflare.com/trust-hub/gdpr/" },
+		{ text: "Meta Ads", href: "/conectores/meta-ads/facebook-ads/" },
+		{ text: "VTEX", href: "/conectores/vtex/" },
 	],
-	Company: [
-		{ text: "cloudflare.com", href: "https://www.cloudflare.com/" },
-		{ text: "Our team", href: "https://www.cloudflare.com/people/" },
-		{ text: "Careers", href: "https://www.cloudflare.com/careers/" },
-	],
-	Tools: [
-		{ text: "Cloudflare Radar", href: "https://radar.cloudflare.com/" },
-		{ text: "Cloudflare Labs", href: "https://labs.cloudflare.dev/" },
-		{ text: "Speed Test", href: "https://speed.cloudflare.com/" },
-		{ text: "Is BGP Safe Yet?", href: "https://isbgpsafeyet.com/" },
-		{ text: "Certificate Transparency", href: "https://ct.cloudflare.com/" },
-	],
-	Community: [
-		{
-			text: "Community forum",
-			href: "https://community.cloudflare.com/",
-			icon: "simple-icons:cloudflare",
-		},
-		{ text: "X", href: "https://x.com/cloudflare", icon: "simple-icons:x" },
-		{
-			text: "Discord",
-			href: "https://discord.cloudflare.com/",
-			icon: "simple-icons:discord",
-		},
-		{
-			text: "YouTube",
-			href: "https://www.youtube.com/cloudflare",
-			icon: "simple-icons:youtube",
-		},
-		{
-			text: "GitHub",
-			href: "https://github.com/cloudflare/cloudflare-docs",
-			icon: "simple-icons:github",
-		},
+	Audt: [
+		{ text: "Site institucional", href: "https://audt.ai/" },
+		{ text: "Entrar em contato", href: "https://audt.ai/" },
 	],
 });
 
@@ -94,7 +59,7 @@ const year = new Date().getFullYear();
       up with page content instead of running full-bleed. */
 	}
 	<div class={innerClass}>
-		<div class="grid grid-cols-2 gap-8 lg:grid-cols-5">
+		<div class="grid grid-cols-2 gap-8 md:grid-cols-3">
 			{
 				groups.map(([title, items]) => (
 					<ul class="m-0 flex list-none flex-col gap-3 pl-0">
@@ -105,13 +70,6 @@ const year = new Date().getFullYear();
 									href={link.href}
 									class="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm no-underline transition-colors"
 								>
-									{link.icon && (
-										<Icon
-											name={link.icon}
-											class="h-4 w-4 shrink-0"
-											aria-hidden="true"
-										/>
-									)}
 									{link.text}
 								</a>
 							</li>

@@ -74,7 +74,7 @@ export function resolveSocialImagePath({
 			? "/opengraph.png"
 			: exists("logo.png")
 				? "/logo.png"
-				: "/cf-twitter-card.png")
+				: "/audt-thumbnail.png")
 	);
 }
 

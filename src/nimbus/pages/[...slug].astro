@@ -73,7 +73,8 @@ const markdownPath = `/${entry.id}/index.md`;
 const markdownUrl = Astro.site
 	? new URL(markdownPath, Astro.site).href
 	: markdownPath;
-const socialImage = entry.data.socialImage ?? (await getOgImage(entry));
+const socialImage =
+	entry.data.socialImage ?? config.socialImage ?? (await getOgImage(entry));
 
 // `external_link` pages (e.g. the per-product "REST API" stubs pointing to
 // `/api/`) build at their own path but redirect to the target. The sidebar

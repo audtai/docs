@@ -1,9 +1,86 @@
 ---
-title: Google Analytics
-description: Guia para configurar a integração do Google Analytics com a plataforma Audt.
+title: Google Analytics 4
+description: Requisitos e contrato de dados para integrar GA4 à Audt.
+summary: Escolha entre relatórios agregados da Data API e eventos brutos exportados para BigQuery.
 pcx_content_type: integration-guide
+lastUpdated: 2026-07-20
 sidebar:
   order: 3
 ---
 
-Esta página reunirá os requisitos, as credenciais e as etapas de configuração da integração com o Google Analytics.
+**Status:** disponível com implantação assistida.
+
+A integração com GA4 possui duas superfícies complementares. A escolha depende da pergunta que o projeto precisa responder.
+
+| Superfície               | Use para                                                                          | Limites importantes                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Data API                 | Aquisição, sessões, engajamento, funil e comércio em relatórios agregados         | Dimensões e métricas precisam ser compatíveis; não entrega uma sequência bruta de eventos |
+| Exportação para BigQuery | Eventos, itens, sequências e análises que dependem de identificadores pseudônimos | Começa após a vinculação e não faz backfill dos eventos anteriores                        |
+
+## Acesso pela Data API
+
+Forneça:
+
+- ID da propriedade GA4;
+- streams e plataformas em escopo;
+- fuso e moeda configurados;
+- histórico necessário;
+- lista de eventos e parâmetros comerciais relevantes.
+
+Adicione a identidade indicada pela Audt no nível da propriedade. A função de **Visualizador** costuma atender relatórios, mas restrições de dados de receita ou custo não podem bloquear as métricas que fizerem parte do escopo.
+
+## Contrato agregado
+
+| Grupo       | Campos e métricas esperados                                             |
+| ----------- | ----------------------------------------------------------------------- |
+| Identidade  | data, propriedade, stream e plataforma quando disponíveis               |
+| Aquisição   | source, medium, campaign ID/nome e grupo de canais                      |
+| Conteúdo    | landing page ou página de entrada conforme o relatório                  |
+| Tecnologia  | dispositivo e sistema operacional quando necessários                    |
+| Engajamento | sessões, sessões engajadas, duração e taxa aplicável                    |
+| Comércio    | transações, receita, visualização de item e adição ao carrinho          |
+| Chaves      | `transaction_id` e `item_id` somente quando corretamente instrumentados |
+
+Os nomes de evento `view_item`, `add_to_cart`, `begin_checkout` e `purchase` formam um mínimo útil para o funil de comércio. A existência da métrica no GA4 não garante que parâmetros e IDs estejam completos.
+
+## Exportação para BigQuery
+
+Para eventos brutos, confirme:
+
+1. projeto e dataset de destino;
+2. região e decisão de faturamento;
+3. streams e filtros da exportação;
+4. data de ativação;
+5. permissões temporárias para configurar o vínculo;
+6. identidade de leitura e projeto que executará as consultas.
+
+::::caution[Sem backfill automático]
+O vínculo GA4 → BigQuery é prospectivo. Eventos anteriores à ativação não são preenchidos pelo Google. Para o período passado, use apenas o histórico disponível em relatórios agregados ou outra fonte aprovada.
+::::
+
+Eventos brutos podem incluir `event_timestamp`, parâmetros, `user_pseudo_id`, sessão e itens. Esses campos pertencem ao contrato do BigQuery, não ao da Data API agregada.
+
+## Validação da instrumentação
+
+Antes de reconciliar com pedidos, meça:
+
+- compras com `transaction_id` preenchido e único;
+- itens com `item_id` compatível com o SKU comercial;
+- valor, moeda e quantidade coerentes;
+- eventos duplicados ou enviados fora de ordem;
+- cobertura por stream, plataforma e consentimento;
+- diferença entre receita registrada no GA4 e pedidos aprovados.
+
+APIs não reconstroem IDs ausentes. A Audt registra a cobertura possível e não força uma ligação quando a evidência é insuficiente.
+
+## O que pode causar diferenças
+
+- consentimento e bloqueio de tracking;
+- fuso e data de competência;
+- pedido capturado versus aprovado;
+- cancelamento, devolução e reembolso posteriores;
+- filtros, modelagem e identidade do GA4;
+- janela e modelo de atribuição;
+- eventos duplicados ou incompletos.
+
+Consulte a documentação oficial de [acesso e funções no Google Analytics](https://support.google.com/analytics/answer/9356045) e de [configuração da exportação para BigQuery](https://support.google.com/analytics/answer/9823238).

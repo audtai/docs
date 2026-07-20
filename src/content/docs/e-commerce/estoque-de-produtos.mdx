@@ -1,9 +1,80 @@
 ---
-title: Estoque de Produtos
-description: Referência para sincronizar o estoque de produtos com a plataforma Audt.
+title: Estoque de produtos
+description: Contrato lógico para integrar disponibilidade por SKU e local à Audt.
+summary: Relacione demanda, mídia e venda com a disponibilidade real de cada SKU.
 pcx_content_type: reference
+lastUpdated: 2026-07-20
 sidebar:
   order: 3
 ---
 
-Esta página reunirá os conceitos, campos e fluxos necessários para sincronizar o estoque de produtos com a plataforma Audt.
+O estoque é tratado como uma série temporal. Uma fotografia atual responde “o que está disponível agora”; o histórico de fotografias permite explicar ruptura, cobertura e campanhas que promoveram itens indisponíveis.
+
+## Grão recomendado
+
+Uma linha por **SKU × local de estoque × instante da fotografia**.
+
+O local pode representar centro de distribuição, loja, seller, dark store ou outro nó logístico. Use um identificador estável e declare se o saldo é físico, vendável ou calculado por canal.
+
+## Campos mínimos
+
+| Conceito lógico         | Obrigatório | Descrição                                                  |
+| ----------------------- | ----------- | ---------------------------------------------------------- |
+| `sku_id`                | Sim         | Chave compatível com catálogo e itens de pedido            |
+| `location_id`           | Sim         | Armazém, loja, seller ou nó logístico                      |
+| `snapshot_at`           | Sim         | Data e hora da fotografia, com fuso documentado            |
+| `on_hand_quantity`      | Sim         | Quantidade física conhecida pela origem                    |
+| `reserved_quantity`     | Sim         | Quantidade comprometida e ainda não baixada                |
+| `available_quantity`    | Sim         | Quantidade vendável segundo a regra da origem              |
+| `in_transit_quantity`   | Recomendado | Quantidade em movimentação ou recebimento                  |
+| `next_replenishment_at` | Opcional    | Previsão disponível na fonte, sem inferência da Audt       |
+| `lead_time`             | Opcional    | Prazo e unidade definidos pelo sistema de origem           |
+| `inventory_status`      | Recomendado | Estado normalizado, como disponível, baixo ou indisponível |
+
+::::note[Documente a equação]
+Não presumimos que `available_quantity = on_hand_quantity - reserved_quantity`. Bloqueios, segurança, avaria, estoque de seller e regras de canal podem alterar o cálculo. Publique a fórmula ou a regra funcional usada pela origem.
+::::
+
+## Fotografias ou movimentos
+
+**Fotografias** são preferidas para o primeiro onboarding porque simplificam reconciliação e reprocessamento. Preserve pelo menos uma fotografia diária; operações sensíveis à ruptura podem usar intervalos menores.
+
+**Movimentos** podem complementar a análise quando trazem identificador, tipo, quantidade, data de competência e referência do evento. Se apenas movimentos estiverem disponíveis, precisamos também de um saldo inicial confiável e de uma política para eventos atrasados ou cancelados.
+
+## Cadastro de locais
+
+Para cada `location_id`, informe:
+
+- tipo e nome do local;
+- estado, região ou cluster operacional quando necessário;
+- status de atividade;
+- canais e modalidades de fulfillment atendidos;
+- seller responsável, quando aplicável.
+
+Endereço completo não é necessário para o escopo padrão. Use localização agregada suficiente para a análise aprovada.
+
+## Controles de qualidade
+
+| Controle      | O que validar                                                              |
+| ------------- | -------------------------------------------------------------------------- |
+| Unicidade     | Uma linha por SKU, local e instante                                        |
+| Completude    | Todos os SKUs ativos e locais em escopo aparecem na carga                  |
+| Domínio       | Quantidades seguem a regra de sinal e casas decimais acordada              |
+| Atualidade    | A fotografia chega dentro do SLA definido                                  |
+| Catálogo      | Todo SKU possui correspondência no catálogo ou exceção registrada          |
+| Reconciliação | Totais por local e data correspondem ao relatório da origem                |
+| Continuidade  | Lacunas e quedas abruptas são sinalizadas, não preenchidas silenciosamente |
+
+## Decisões de onboarding
+
+Antes da primeira carga, confirme:
+
+1. quais locais e sellers entram no escopo;
+2. qual saldo representa disponibilidade comercial;
+3. frequência e horário de fechamento;
+4. retenção histórica disponível;
+5. tratamento de saldo negativo, bloqueado ou de segurança;
+6. comportamento de itens inativos e locais fechados;
+7. reprocessamento de fotografias corrigidas.
+
+Com essas decisões registradas, a Audt pode relacionar disponibilidade com [Catálogo de produtos](/e-commerce/catalogo-de-produtos/), [Pedidos](/e-commerce/pedidos/) e investimentos de mídia sem criar uma definição paralela de estoque.

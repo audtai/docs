@@ -1,9 +1,61 @@
 ---
 title: Governança e LGPD
-description: Referências de segurança, governança e auditoria para a plataforma Audt.
+description: Diretrizes de governança, segurança, privacidade e auditoria para integrações Audt.
+summary: Defina acesso, finalidade, retenção e evidências antes de liberar dados reais.
 pcx_content_type: overview
+lastUpdated: 2026-07-20
 sidebar:
   order: 1
 ---
 
-Encontre nesta seção as práticas e referências de governança, segurança e auditoria aplicadas à plataforma Audt.
+Esta seção descreve o baseline de governança usado no onboarding. A configuração efetiva, as responsabilidades contratuais e as evidências disponíveis são confirmadas por projeto; a documentação não substitui o contrato, o DPA ou a avaliação de Segurança e Privacidade.
+
+## Princípios
+
+| Princípio               | Aplicação                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| Finalidade              | Cada fonte e campo deve estar ligado a um resultado aprovado                         |
+| Minimização             | Somente dados necessários entram no contrato; PII não faz parte do escopo padrão     |
+| Menor privilégio        | Identidades técnicas dedicadas e, sempre que possível, somente leitura               |
+| Fonte de autoridade     | A Audt não substitui ERP, plataforma comercial, analytics ou mídia                   |
+| Rastreabilidade         | Origem, regra, versão, processamento e qualidade devem ser identificáveis            |
+| Separação de semânticas | Receita financeira, analytics e atribuição de mídia permanecem distinguíveis         |
+| Revogabilidade          | Acessos, conexões e segredos precisam de dono e procedimento de revogação            |
+| Portabilidade           | O cliente mantém dicionários, regras e produtos de dados compreensíveis fora da Audt |
+
+## Classificação inicial
+
+| Classe                        | Exemplos                                             | Tratamento padrão                                                                |
+| ----------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Comercial agregado            | gasto, impressões, pedidos por dia, estoque por SKU  | Permitido conforme escopo e acesso aprovado                                      |
+| Operacional detalhado         | item de pedido, SKU, campanha, local de estoque      | Permitido com finalidade, retenção e controle de acesso                          |
+| Identificador pseudônimo      | ID estável e não reversível de jornada               | Somente quando necessário e aprovado por Privacidade                             |
+| Dado pessoal identificável    | nome, e-mail, telefone, documento, endereço completo | Fora do escopo padrão; deve ser removido ou minimizado antes da camada analítica |
+| Dado sensível ou de pagamento | biometria, cartão, credencial, conteúdo individual   | Proibido no fluxo padrão                                                         |
+
+## Decisões obrigatórias
+
+Antes de usar dados reais, registre:
+
+1. controlador, operadores e finalidade;
+2. donos funcional, técnico, Segurança/Privacidade e operação;
+3. fontes, campos e ambientes em escopo;
+4. mecanismo de acesso e revogação;
+5. região, transferência e residência quando aplicável;
+6. retenção, exclusão e tratamento de backup;
+7. logs e evidências que serão mantidos;
+8. resposta a incidente e canais de escalonamento;
+9. uso de provedores de IA, política de treinamento e retenção;
+10. critérios de aceite e reconciliação.
+
+## Responsabilidade compartilhada
+
+O cliente aprova a finalidade, publica produtos de dados governados quando esse for o modelo, concede os ativos necessários e valida as regras de negócio. A Audt implementa o mapeamento acordado, restringe o consumo ao escopo, documenta transformações e apresenta qualidade e limitações.
+
+Controles não comprovados no desenho do projeto devem ser tratados como pendência — nunca como garantia implícita.
+
+## Continue
+
+- [Segurança](/governanca-e-lgpd/seguranca/): acessos, segredos, rede, retenção e IA.
+- [Auditoria](/governanca-e-lgpd/auditoria/): eventos, lineage, qualidade e evidências.
+- [Contrato de e-commerce](/e-commerce/): dados necessários por domínio.

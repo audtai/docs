@@ -78,6 +78,7 @@ const nimbusConfig = defineNimbusConfig({
 	description:
 		"Explore guias, documentações e referências para integração com a plataforma Audt.",
 	locale: "pt-BR",
+	socialImage: "/audt-thumbnail.png",
 	github: "https://github.com/audtai/docs",
 	editPattern: "https://github.com/audtai/docs/edit/production/{path}",
 	socialImageAlt: "Documentação da plataforma Audt",
@@ -86,7 +87,7 @@ const nimbusConfig = defineNimbusConfig({
 	search: DOCSEARCH_ENABLED ? { provider: "custom" } : false,
 	sidebar: {
 		items: sidebarItems,
-		overviewLabel: "Overview",
+		overviewLabel: "Visão geral",
 		indexDisplay: "overview-leaf",
 		scope: "section",
 		isolate: { boundaries: ["learning-paths/*"] },

@@ -1,9 +1,71 @@
 ---
 title: MCP
-description: Visão geral do Model Context Protocol na plataforma Audt.
+description: Conecte assistentes compatíveis com MCP às ferramentas de análise da Audt.
+summary: Consulte desempenho e produtos da loja ativa com ferramentas somente leitura e escopo controlado.
 pcx_content_type: overview
+lastUpdated: 2026-07-20
 sidebar:
   order: 1
 ---
 
-Use o MCP para conectar assistentes de IA às ferramentas e aos dados disponibilizados pela plataforma Audt.
+O Model Context Protocol (MCP) permite que um assistente compatível use ferramentas autorizadas da Audt. A conexão atual opera como **beta privado controlado**: ela é gerada no portal, vinculada ao usuário e à loja ativa e deve ser tratada como uma credencial.
+
+::::caution[Não é uma integração pública de marketplace]
+O fluxo atual usa uma URL secreta de compatibilidade. Ele é adequado para pilotos privados em clientes que aceitam esse modelo, mas não representa publicação pública no diretório do ChatGPT nem um fluxo OAuth self-service.
+::::
+
+## O que está disponível
+
+As ferramentas atuais são somente leitura:
+
+| Capacidade             | O que responde                                                      |
+| ---------------------- | ------------------------------------------------------------------- |
+| Contexto Audt          | Escopo da conexão e metodologia analítica                           |
+| Visão de desempenho    | Meta de receita aprovada e KPIs principais                          |
+| Diagnóstico            | Waterfall de receita capturada, evidências, inferências e hipóteses |
+| Ranking                | Parceiros, canais, campanhas e dispositivos                         |
+| Visão de produtos      | Vendas aprovadas por produto e categoria principal                  |
+| Exploração de produtos | Busca e hierarquia por grade, categoria ou parceiro                 |
+
+Não há consulta arbitrária de SQL, pedidos individuais, schema do lake ou endpoints livres. As ferramentas também não criam campanhas, alteram configuração ou executam ativação.
+
+## Escopo e segurança
+
+- a conexão é vinculada à loja ativa no momento da geração;
+- tenant e loja não podem ser trocados pelo prompt;
+- cada requisição revalida usuário, tenant e loja;
+- o token bruto é exibido uma vez e apenas seu hash é mantido no serviço de conexão;
+- referências temporárias de produto expiram e são protegidas;
+- respostas usam diretrizes de não cache e a aplicação evita registrar credenciais;
+- a conexão continua válida até rotação ou revogação, salvo política específica.
+
+URLs ainda podem aparecer em histórico, screenshot ou infraestrutura intermediária. Não publique, encaminhe ou cole a URL fora do cliente autorizado.
+
+## Gere a conexão
+
+1. Entre na Audt.
+2. Selecione a loja correta.
+3. Abra **Conectar IA**.
+4. Gere a URL de conexão.
+5. Copie imediatamente e armazene apenas no cliente confiável.
+6. Verifique o nome da loja e as ferramentas antes de usar dados reais.
+
+Uma conexão ativa é compartilhada por usuário e loja. Se a mesma URL estiver no Claude e no ChatGPT, rotacionar ou revogar afeta os dois clientes.
+
+## Escolha o cliente
+
+- [Conecte com Claude](/mcp/conecte-com-claude/)
+- [Conecte com ChatGPT](/mcp/conecte-com-chatgpt/)
+
+## Rotação e revogação
+
+Rotacione quando a URL for perdida, exposta, compartilhada com o cliente errado ou quando o dispositivo mudar de responsável. A rotação revoga a URL anterior. Revogue a conexão quando o piloto terminar ou quando o usuário não precisar mais do acesso.
+
+## Limites atuais
+
+- o fluxo ainda não usa OAuth público por usuário;
+- a URL não expira por padrão;
+- não há escolha de loja dentro do chat;
+- há uma conexão ativa por usuário e loja;
+- o registro de último uso não equivale a auditoria completa por ferramenta;
+- disponibilidade no cliente depende das políticas do plano e da organização.

@@ -1,9 +1,41 @@
 ---
 title: Google
-description: Visão geral das integrações da plataforma Audt com produtos Google.
+description: Visão geral das integrações da Audt com Google Ads, Google Analytics 4 e BigQuery.
+summary: Combine investimento, comportamento digital e dados governados sem misturar as definições de cada fonte.
 pcx_content_type: overview
+lastUpdated: 2026-07-20
 sidebar:
   order: 1
 ---
 
-Consulte os guias para conectar produtos Google à plataforma Audt e organizar o fluxo de dados de cada integração.
+As fontes Google respondem a perguntas diferentes. A Audt mantém cada semântica separada e reconcilia os resultados quando existem chaves e granularidade suficientes.
+
+| Fonte                                                      | Papel                                                    | Granularidade típica                                             |
+| ---------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Google Ads](/conectores/google/google-ad/)                | Investimento, entrega e conversões atribuídas pela mídia | Dia × conta × campanha; dispositivo quando disponível            |
+| [Google Analytics 4](/conectores/google/google-analytics/) | Aquisição e comportamento no site ou app                 | Relatórios agregados pela Data API ou eventos brutos no BigQuery |
+| [BigQuery](/conectores/google/bigquery/)                   | Produto de dados governado ou exportação bruta do GA4    | Tabelas, visões autorizadas ou eventos exportados                |
+
+## Chaves de reconciliação
+
+As chaves mais úteis são:
+
+- identificadores de conta, campanha e anúncio;
+- `source`, `medium`, `campaign` e UTMs normalizadas;
+- identificadores de clique aprovados;
+- `transaction_id` e `item_id` instrumentados no comércio e no GA4;
+- data, fuso e moeda documentados.
+
+A API não reconstrói identificadores que não foram instrumentados. A cobertura entre mídia, analytics e pedidos é medida e apresentada como parte da qualidade da análise.
+
+## Ordem recomendada
+
+1. Conecte a fonte de receita comercial.
+2. Valide propriedades, contas e campanhas em escopo.
+3. Integre Google Ads e relatórios agregados do GA4.
+4. Adicione a exportação do GA4 para BigQuery quando o caso exigir eventos, sequências ou análise em nível de item.
+5. Reconcilie totais e documente diferenças de janela, modelo e status.
+
+::::caution[Não compare números sem contexto]
+Uma conversão atribuída pelo Google Ads, uma compra registrada no GA4 e um pedido aprovado são medidas diferentes. Elas podem divergir por janela de atribuição, fuso, consentimento, bloqueio de tracking, cancelamento e regra de receita.
+::::

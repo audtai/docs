@@ -32,10 +32,10 @@ function readPref(): Pref {
 // is meaningful to screen readers as it cycles.
 function labelFor(pref: Pref): string {
 	return pref === "light"
-		? "Theme: light. Activate to switch to dark."
+		? "Tema claro. Ative para usar o tema escuro."
 		: pref === "dark"
-			? "Theme: dark. Activate to switch to system."
-			: "Theme: system. Activate to switch to light.";
+			? "Tema escuro. Ative para acompanhar o sistema."
+			: "Tema do sistema. Ative para usar o tema claro.";
 }
 
 function initThemeToggle(button: HTMLElement): () => void {

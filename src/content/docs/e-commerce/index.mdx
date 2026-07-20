@@ -1,11 +1,81 @@
 ---
 title: E-commerce
-description: Guias e referências para integrar operações de e-commerce à plataforma Audt.
+description: Contrato lógico para integrar pedidos, catálogo e estoque à plataforma Audt.
+summary: Prepare os dados comerciais que sustentam a reconciliação entre receita, produto, estoque, analytics e mídia.
 pcx_content_type: overview
+lastUpdated: 2026-07-20
 sidebar:
   order: 1
 ---
 
-Encontre nesta seção a documentação para integrar catálogo, estoque e pedidos à plataforma Audt.
+A Audt funciona como uma camada de inteligência sobre os sistemas que já operam o seu negócio. O ERP, a plataforma de comércio e o data warehouse continuam sendo as fontes de autoridade; a Audt recebe os produtos de dados aprovados, normaliza as regras e torna os resultados comparáveis.
 
-O conteúdo detalhado será organizado conforme cada fluxo da integração for documentado.
+::::note[Um contrato lógico, não um schema imposto]
+Os nomes desta documentação descrevem o significado de cada campo. Durante o onboarding, eles são mapeados para a nomenclatura, os tipos e as regras do seu ambiente. Não é necessário reproduzir um modelo interno da Audt.
+::::
+
+## Domínios essenciais
+
+| Domínio                                                   | Grão recomendado                               | O que habilita                                                    |
+| --------------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
+| [Pedidos](/e-commerce/pedidos/)                           | Um registro por pedido e um por item comercial | Receita capturada, aprovada, cancelada, devolvida e líquida       |
+| [Catálogo de produtos](/e-commerce/catalogo-de-produtos/) | Um registro por SKU ou variante e vigência     | Análises por produto, marca, categoria, coleção e atributo        |
+| [Estoque de produtos](/e-commerce/estoque-de-produtos/)   | SKU × local de estoque × instante              | Disponibilidade, ruptura e relação entre demanda, mídia e estoque |
+
+Preços, promoções, devoluções, custos, lojas, POS e calendário comercial podem ser adicionados em ondas posteriores. O escopo inicial deve refletir as decisões que o projeto precisa melhorar — não apenas os dados que estão mais fáceis de exportar.
+
+## Formas de entrega
+
+Escolha o mecanismo que preserva a governança do seu ambiente e permite repetição operacional.
+
+| Forma                     | Use quando                                                              | Responsabilidade do cliente                                                   |
+| ------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Conector de plataforma    | A fonte possui API compatível e a conexão direta foi aprovada           | Conceder acesso à identidade técnica autorizada e definir os ativos em escopo |
+| Visão ou tabela governada | O cliente publica produtos de dados em warehouse ou lakehouse           | Manter schema, permissões, SLA e política de correção                         |
+| Arquivo CSV ou Parquet    | O intercâmbio em lote é a opção mais simples ou controlada              | Publicar em armazenamento aprovado com partição e convenção estáveis          |
+| API do cliente            | Regras de acesso e filtragem precisam permanecer na aplicação de origem | Disponibilizar contrato, autenticação, paginação e limites operacionais       |
+| Transferência gerenciada  | A infraestrutura exige um fluxo específico                              | Aprovar canal, criptografia, frequência, retenção e responsáveis              |
+
+## Contrato transversal
+
+Cada conjunto de dados deve chegar acompanhado destas decisões:
+
+| Decisão             | O que registrar                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| Responsáveis        | Dono funcional, publicador técnico e canal de suporte                                 |
+| Grão e chave        | O que cada linha representa e qual identificador é estável                            |
+| Fonte de autoridade | Sistema que prevalece para cada conceito                                              |
+| Frequência          | Horário de conclusão, fuso, atraso tolerado e janela de reprocessamento               |
+| Histórico           | Data inicial, profundidade do backfill e limitações conhecidas                        |
+| Incremental         | Campo de atualização, partição ou cursor; política para exclusões e correções tardias |
+| Valores             | Moeda, escala, impostos, frete, desconto, arredondamento e valor líquido              |
+| Enumerações         | Status, canais, tipos e respectivas traduções de negócio                              |
+| Privacidade         | Classificação, finalidade, retenção e campos proibidos                                |
+| Qualidade           | Regras de completude, unicidade, reconciliação e tolerância                           |
+
+## Sequência de onboarding
+
+1. **Defina o resultado.** Registre até três decisões ou indicadores que provarão valor.
+2. **Aprove o acesso.** Escolha a forma de entrega, os ativos em escopo e os responsáveis.
+3. **Envie dicionário e amostra.** Use dados sintéticos ou controlados enquanto o acesso real é liberado.
+4. **Mapeie as regras.** Confirme grão, chaves, status, datas, moeda e política de correção.
+5. **Valide uma primeira carga.** Reconcilie contagens e valores com a fonte de autoridade.
+6. **Automatize e monitore.** Ative a recorrência somente após a aceitação dos controles de qualidade.
+
+## Critérios de aceite
+
+Uma fonte está pronta para uso quando:
+
+- as chaves obrigatórias são preenchidas e únicas no grão combinado;
+- totais e contagens reconciliam com a origem dentro da tolerância acordada;
+- fuso, moeda, status e datas de vigência estão documentados;
+- correções tardias podem ser reaplicadas sem duplicação;
+- o histórico cobre o período necessário para a análise acordada;
+- os dados pessoais foram removidos, minimizados ou pseudonimizados conforme a finalidade.
+
+## Próximos passos
+
+- Comece por [Pedidos](/e-commerce/pedidos/) para definir receita e ciclo comercial.
+- Conecte [Catálogo de produtos](/e-commerce/catalogo-de-produtos/) para enriquecer cada item.
+- Adicione [Estoque de produtos](/e-commerce/estoque-de-produtos/) para relacionar demanda e disponibilidade.
+- Revise [Governança e LGPD](/governanca-e-lgpd/) antes de liberar dados reais.

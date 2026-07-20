@@ -4,32 +4,25 @@ import SectionHeading from "./SectionHeading.astro";
 
 const cards = [
 	{
-		label: "Community",
-		heading: "Join the conversation",
-		desc: "Share ideas, answers, and code with the Cloudflare community.",
+		label: "Conectores",
+		heading: "Integração assistida",
+		desc: "A Audt configura o acesso, valida o histórico e monitora a coleta com o seu time. Ideal para APIs de comércio, analytics e mídia.",
+		links: [{ label: "Ver conectores", href: "/conectores/" }],
+	},
+	{
+		label: "Dados governados",
+		heading: "Entrega controlada pelo cliente",
+		desc: "Consuma apenas visões, tabelas ou arquivos aprovados. O contrato lógico da Audt é mapeado sem expor o seu modelo interno.",
 		links: [
-			{ label: "Discord", href: "https://discord.cloudflare.com/" },
-			{ label: "X", href: "https://x.com/cloudflare" },
-			{ label: "Forum", href: "https://community.cloudflare.com/" },
+			{ label: "Preparar os dados", href: "/e-commerce/" },
+			{ label: "Revisar segurança", href: "/governanca-e-lgpd/" },
 		],
 	},
 	{
-		label: "Open Source",
-		heading: "View the source",
-		desc: "Cloudflare contributes to the open-source ecosystem in a variety of ways, including:",
-		links: [
-			{ label: "GitHub", href: "https://github.com/cloudflare" },
-			{ label: "Sponsors", href: "https://github.com/sponsors/cloudflare" },
-			{ label: "Style guide", href: "/style-guide/" },
-		],
-	},
-	{
-		label: "Blog",
-		heading: "Read the latest",
-		desc: "Get the latest news on Cloudflare products, technologies, and culture.",
-		links: [
-			{ label: "blog.cloudflare.com", href: "https://blog.cloudflare.com/" },
-		],
+		label: "MCP",
+		heading: "Contexto para os seus assistentes",
+		desc: "Use ferramentas autorizadas da Audt em clientes compatíveis com MCP, mantendo o escopo e as permissões da sua organização.",
+		links: [{ label: "Conhecer o MCP", href: "/mcp/" }],
 	},
 ];
 ---
@@ -41,12 +34,13 @@ const cards = [
 >
 	<div class="mb-6 sm:mb-8">
 		<SectionHeading id="community-heading" class="mb-2">
-			Connect with Cloudflare
+			Escolha a rota de integração
 		</SectionHeading>
 		<p
 			class="text-muted-foreground max-w-[600px] text-sm leading-relaxed text-pretty md:text-lg"
 		>
-			Find community, read the blog, and explore open source projects.
+			Comece pela forma de acesso que melhor se encaixa na arquitetura, na
+			governança e no ritmo da sua operação.
 		</p>
 	</div>
 
