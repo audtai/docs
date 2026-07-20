@@ -73,6 +73,7 @@ jobs:
         run: pnpm run build
         env:
           AUDT_TWK_WEBFONT_LICENSE_CONFIRMED: "1"
+          BUILD_TARGET: nimbus
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
@@ -80,7 +81,7 @@ jobs:
         continue-on-error: true
         with:
           name: site-html
-          path: dist
+          path: dist-nimbus
 
       - name: Deploy to Cloudflare Workers
         run: pnpm exec wrangler deploy --env production

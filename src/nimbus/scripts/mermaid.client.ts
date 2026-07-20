@@ -8,6 +8,33 @@ let themeObserver: MutationObserver | null = null;
 // Per-<pre> guard: capture source text once, before mermaid replaces innerHTML.
 const captured = new WeakSet<HTMLPreElement>();
 
+/**
+ * Mermaid only accepts legacy sRGB color syntax, so this is the compact sRGB
+ * projection of Judit's default Cobalt Ink theme. The values map to Judit's
+ * default text, tint, interact, and danger tokens. Primary tints are derived
+ * from kumo-button-primary over kumo-canvas (10% light / 20% dark).
+ */
+const JUDIT_MERMAID_PALETTE = {
+	light: {
+		background: "#fcf9fc",
+		primaryTint: "#ece0fa",
+		foreground: "#1f1a1f",
+		surface: "#eee9ee",
+		border: "#cec8ce",
+		errorSurface: "#fdedec",
+		errorText: "#9e2225",
+	},
+	dark: {
+		background: "#080608",
+		primaryTint: "#190536",
+		foreground: "#f6f2f6",
+		surface: "#2f292f",
+		border: "#494349",
+		errorSurface: "#4b1315",
+		errorText: "#f0a9a2",
+	},
+} as const;
+
 function uniqueMermaidId(): string {
 	const random =
 		globalThis.crypto?.randomUUID?.() ??
@@ -106,7 +133,9 @@ function getPageBackground(): string {
 	const style = getComputedStyle(document.documentElement);
 	const bg = style.getPropertyValue("--nb-background").trim();
 	if (isMermaidSupportedColor(bg)) return bg;
-	return isLightTheme() ? "#ffffff" : "#1d1d1d";
+	return isLightTheme()
+		? JUDIT_MERMAID_PALETTE.light.background
+		: JUDIT_MERMAID_PALETTE.dark.background;
 }
 
 function getThemeColor(name: string, fallback: string): string {
@@ -201,51 +230,31 @@ async function render() {
 	const isLight = isLightTheme();
 	const fontFamily = getFontFamily();
 	const pageBg = getPageBackground();
-	const accent = getThemeColor("--nb-primary", "#ff4801");
-	const accentBg = isLight ? "#fff1e8" : "#3a1708";
+	const accent = getThemeColor("--nb-primary", "#5c00ec");
+	const palette = isLight
+		? JUDIT_MERMAID_PALETTE.light
+		: JUDIT_MERMAID_PALETTE.dark;
 
-	const lightThemeVars = {
+	const themeVariables = {
 		fontFamily,
-		primaryColor: accentBg,
+		primaryColor: palette.primaryTint,
 		primaryBorderColor: accent,
-		primaryTextColor: "#1d1d1d",
-		secondaryColor: "#f2f2f2",
-		secondaryBorderColor: "#999999",
-		secondaryTextColor: "#1d1d1d",
-		tertiaryColor: "#f2f2f2",
-		tertiaryBorderColor: "#999999",
-		tertiaryTextColor: "#1d1d1d",
+		primaryTextColor: palette.foreground,
+		secondaryColor: palette.surface,
+		secondaryBorderColor: palette.border,
+		secondaryTextColor: palette.foreground,
+		tertiaryColor: palette.surface,
+		tertiaryBorderColor: palette.border,
+		tertiaryTextColor: palette.foreground,
 		lineColor: accent,
-		textColor: "#1d1d1d",
-		mainBkg: accentBg,
-		errorBkgColor: "#ffefee",
-		errorTextColor: "#3c0501",
+		textColor: palette.foreground,
+		mainBkg: palette.primaryTint,
+		background: pageBg,
+		errorBkgColor: palette.errorSurface,
+		errorTextColor: palette.errorText,
 		edgeLabelBackground: pageBg,
 		labelBackground: pageBg,
 	};
-
-	const darkThemeVars = {
-		fontFamily,
-		primaryColor: accentBg,
-		primaryBorderColor: accent,
-		primaryTextColor: "#f2f2f2",
-		secondaryColor: "#313131",
-		secondaryBorderColor: "#797979",
-		secondaryTextColor: "#f2f2f2",
-		tertiaryColor: "#313131",
-		tertiaryBorderColor: "#797979",
-		tertiaryTextColor: "#f2f2f2",
-		lineColor: accent,
-		textColor: "#f2f2f2",
-		mainBkg: accentBg,
-		background: "#1d1d1d",
-		errorBkgColor: "#3c0501",
-		errorTextColor: "#ffefee",
-		edgeLabelBackground: pageBg,
-		labelBackground: pageBg,
-	};
-
-	const themeVariables = isLight ? lightThemeVars : darkThemeVars;
 
 	try {
 		mermaid.initialize({

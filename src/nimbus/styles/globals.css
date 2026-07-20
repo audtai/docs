@@ -44,12 +44,14 @@
 	 * (code-title bar, package-manager tabs). */
 	--nb-surface-sunken: oklch(0.975 0 0);
 
-	/* Primary action / brand — mode-invariant (dark overrides only -hover). */
-	--nb-primary: oklch(0.663 0.227 35.9);
-	--nb-primary-foreground: oklch(0.99 0.009 78.3);
-	--nb-primary-hover: oklch(0.612 0.211 35.8);
+	/* Judit Cobalt Ink primary button: a mode-invariant filled action. Judit's
+	 * Button uses white text and brightness-90 on hover in both color modes. */
+	--nb-primary: oklch(0.47 0.28 284.98);
+	--nb-primary-foreground: #fff;
+	--nb-primary-hover: color-mix(in oklch, var(--nb-primary) 90%, black);
 
-	--nb-link: var(--nb-primary);
+	/* Judit text-link is deliberately calmer than the filled primary action. */
+	--nb-link: oklch(0.47 0.155 258);
 
 	/* Borders / focus */
 	--nb-border: oklch(0.92 0 0);
@@ -136,8 +138,8 @@ html[data-audt-font="twk-lausanne-pan"] {
 	/* Darker than `card` (0.168) so the inverted header recedes below the body. */
 	--nb-surface-sunken: oklch(0.13 0 0);
 
-	/* --nb-primary / --nb-primary-foreground inherit from :root (identical). */
-	--nb-primary-hover: oklch(0.696 0.201 40.2);
+	/* Filled primary colors inherit from :root and remain mode-invariant. */
+	--nb-link: oklch(0.69 0.12 258);
 
 	--nb-border: oklch(0.285 0 0);
 	--nb-border-strong: oklch(0.371 0 0);

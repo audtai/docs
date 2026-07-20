@@ -9,6 +9,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 ---
 
 <r2-local-uploads-diagram
+	data-nb-diagram
 	data-mode={mode}
 	data-autoplay={autoPlay}
 	data-loop={loop}
@@ -281,6 +282,9 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 <style>
 	r2-local-uploads-diagram {
+		--r2-active: var(--diagram-accent, rgb(249 115 22));
+		--r2-active-soft: color-mix(in oklch, var(--r2-active) 10%, transparent);
+
 		display: block;
 		width: 100%;
 		margin: 1.5rem 0;
@@ -348,7 +352,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.toggle-input:checked + .toggle-slider {
-		background-color: rgb(249 115 22);
+		background-color: var(--r2-active);
 	}
 
 	.toggle-input:checked + .toggle-slider::before {
@@ -394,7 +398,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	/* Active state for connector */
 	.connector.active {
-		background-color: rgb(249 115 22) !important;
+		background-color: var(--r2-active) !important;
 	}
 
 	.node-card {
@@ -419,22 +423,22 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	/* Active state for node card */
 	.flow-node.active .node-card {
-		border-color: rgb(249 115 22);
-		box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+		border-color: var(--r2-active);
+		box-shadow: 0 0 0 3px var(--r2-active-soft);
 	}
 
 	.flow-node.active .node-badge {
-		color: rgb(249 115 22) !important;
+		color: var(--r2-active) !important;
 	}
 
 	.node-card.highlight {
-		border-color: rgb(249 115 22);
-		background: rgb(255 251 247);
+		border-color: var(--r2-active);
+		background: color-mix(in oklch, var(--r2-active) 4%, white);
 	}
 
 	:root[data-theme="dark"] .node-card.highlight {
-		background: rgb(30 25 20);
-		border-color: rgb(249 115 22);
+		background: color-mix(in oklch, var(--r2-active) 8%, rgb(23 23 23));
+		border-color: var(--r2-active);
 	}
 
 	.node-badge {
@@ -454,7 +458,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	.node-badge.gateway,
 	.node-badge.storage {
-		color: rgb(249 115 22);
+		color: var(--r2-active);
 	}
 
 	.node-badge svg {
@@ -494,7 +498,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	.node-note {
 		font-size: 0.625rem;
 		font-weight: 500;
-		color: rgb(249 115 22);
+		color: var(--r2-active);
 		margin-top: 0.125rem;
 	}
 
@@ -524,7 +528,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	/* Active state for split lines - metadata lights up when metadata-active class is added */
 	.split-area.metadata-active .split-line.metadata-path {
-		stroke: rgb(249 115 22) !important;
+		stroke: var(--r2-active) !important;
 	}
 
 	/* Object data path animates slowly over 3 seconds when data-animating class is added */
@@ -536,7 +540,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 			stroke: rgb(212 212 212);
 		}
 		100% {
-			stroke: rgb(249 115 22);
+			stroke: var(--r2-active);
 		}
 	}
 
@@ -548,7 +552,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 			stroke: rgb(64 64 64);
 		}
 		100% {
-			stroke: rgb(249 115 22);
+			stroke: var(--r2-active);
 		}
 	}
 
@@ -571,7 +575,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.split-svg .svg-label.replication {
-		fill: rgb(139 92 246);
+		fill: var(--r2-active);
 	}
 
 	/* Bucket group */
@@ -593,7 +597,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.bucket-group.active {
-		border-color: rgb(249 115 22) !important;
+		border-color: var(--r2-active) !important;
 	}
 
 	.group-label {
@@ -654,12 +658,12 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	/* Active state for bucket components */
 	.bucket-component.active {
-		border-color: rgb(249 115 22);
-		box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+		border-color: var(--r2-active) !important;
+		box-shadow: 0 0 0 3px var(--r2-active-soft);
 	}
 
 	.bucket-component.active .component-icon {
-		color: rgb(249 115 22) !important;
+		color: var(--r2-active) !important;
 	}
 
 	.component-icon {
@@ -710,7 +714,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.region-box.active {
-		border-color: rgb(249 115 22) !important;
+		border-color: var(--r2-active) !important;
 	}
 
 	/* Region content uses flex instead of grid for the arrow layout */
@@ -755,20 +759,20 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.region-line.active {
-		background-color: rgb(249 115 22) !important;
+		background-color: var(--r2-active) !important;
 	}
 
-	/* Component icon colors for gateway/storage - only orange when active */
+	/* Component icon colors for gateway/storage when active. */
 	.bucket-component.active .component-icon.gateway,
 	.bucket-component.active .component-icon.storage {
-		color: rgb(249 115 22);
+		color: var(--r2-active);
 	}
 
 	/* Note text under component name */
 	.component-note {
 		font-size: 0.5rem;
 		font-weight: 500;
-		color: rgb(249 115 22);
+		color: var(--r2-active);
 		margin-top: 0.125rem;
 	}
 
@@ -813,8 +817,8 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	.v-connector.replication-line {
 		background: repeating-linear-gradient(
 			to bottom,
-			rgb(139 92 246) 0,
-			rgb(139 92 246) 4px,
+			var(--r2-active) 0,
+			var(--r2-active) 4px,
 			transparent 4px,
 			transparent 8px
 		);
@@ -822,10 +826,10 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	.local-split-columns.active .v-connector.meta-line,
 	.v-connector.meta-line.active {
-		background-color: rgb(249 115 22) !important;
+		background-color: var(--r2-active) !important;
 	}
 
-	/* Purple replication line animation - flows downward */
+	/* Replication line animation — flows downward in the diagram accent. */
 	@keyframes flow-down {
 		from {
 			background-position: 0 0;
@@ -838,13 +842,13 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	.v-connector.replication-line.animating {
 		background: repeating-linear-gradient(
 			to bottom,
-			rgb(167 139 250) 0,
-			rgb(167 139 250) 4px,
+			var(--r2-active) 0,
+			var(--r2-active) 4px,
 			transparent 4px,
 			transparent 8px
 		);
 		animation: flow-down 0.3s linear infinite;
-		box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+		box-shadow: 0 0 6px color-mix(in oklch, var(--r2-active) 50%, transparent);
 	}
 
 	.split-col-label {
@@ -860,7 +864,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 	}
 
 	.split-col-label.replication {
-		color: rgb(139 92 246);
+		color: var(--r2-active);
 	}
 
 	/* Label row for split columns - ensures alignment */
@@ -882,13 +886,13 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 
 	.progress-ring-bg {
 		fill: none;
-		stroke: rgba(139, 92, 246, 0.2);
+		stroke: color-mix(in oklch, var(--r2-active) 20%, transparent);
 		stroke-width: 2;
 	}
 
 	.progress-ring-fill {
 		fill: none;
-		stroke: rgb(139 92 246);
+		stroke: var(--r2-active);
 		stroke-width: 2;
 		stroke-linecap: round;
 		stroke-dasharray: 50.26; /* 2 * PI * 8 */
@@ -1226,7 +1230,7 @@ const { mode = "comparison", autoPlay = true, loop = true } = Astro.props;
 				statusIndicator?.classList.add("active");
 			}
 
-			// Step 8: Purple replication line animates downward + progress ring fills
+			// Step 8: Accent replication line animates downward + progress ring fills
 			if (this.currentStep >= 8) {
 				const replicationLines = this.querySelectorAll(
 					".right-col .v-connector.replication-line",
