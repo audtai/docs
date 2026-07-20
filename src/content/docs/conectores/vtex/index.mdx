@@ -36,9 +36,9 @@ O VTEX Data Pipeline é diferente das APIs padrão. Não presuma que ele está c
 
 Crie uma aplicação dedicada ou chave externa com recursos customizados e somente leitura para os domínios aprovados. Master Data só deve ser incluído quando existir finalidade explícita.
 
-::::caution[Minimize antes de persistir]
+:::caution[Minimize antes de persistir]
 Permissões de recurso controlam endpoints, mas respostas de OMS podem conter dados de cliente, entrega ou pagamento que não fazem parte do contrato padrão. Prefira uma visão governada ou aplique minimização antes da persistência. Não exponha nome, documento, endereço completo ou fragmentos de cartão à camada analítica.
-::::
+:::
 
 Chaves VTEX não expiram automaticamente em todos os fluxos. Registre dono, criação, rotação, armazenamento e procedimento de revogação. Nunca envie o segredo em documento ou canal não aprovado.
 

@@ -14,9 +14,9 @@ O catálogo transforma identificadores transacionais em contexto comercial. A Au
 
 Publique uma linha por **SKU e período de vigência** ou uma fotografia completa por SKU em cada `snapshot_at`. Se produto e SKU estiverem em conjuntos separados, mantenha a relação `product_id` → `sku_id` estável e documentada.
 
-::::caution[Não reutilize identificadores]
+:::caution[Não reutilize identificadores]
 Um `sku_id` não deve passar a representar outra variante. Quando um item for descontinuado, preserve o identificador e altere o estado de atividade; isso mantém o histórico de pedidos interpretável.
-::::
+:::
 
 ## Campos mínimos
 

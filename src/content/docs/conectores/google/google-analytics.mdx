@@ -54,9 +54,9 @@ Para eventos brutos, confirme:
 5. permissões temporárias para configurar o vínculo;
 6. identidade de leitura e projeto que executará as consultas.
 
-::::caution[Sem backfill automático]
+:::caution[Sem backfill automático]
 O vínculo GA4 → BigQuery é prospectivo. Eventos anteriores à ativação não são preenchidos pelo Google. Para o período passado, use apenas o histórico disponível em relatórios agregados ou outra fonte aprovada.
-::::
+:::
 
 Eventos brutos podem incluir `event_timestamp`, parâmetros, `user_pseudo_id`, sessão e itens. Esses campos pertencem ao contrato do BigQuery, não ao da Data API agregada.
 
