@@ -3,8 +3,7 @@ import { Icon } from "astro-icon/components";
 import CornerMarks from "@/components/CornerMarks.astro";
 import SectionHeading from "./SectionHeading.astro";
 import { LinkButton } from "@/components/ui/link-button";
-
-const CONTACT_HREF = "https://audt.ai/";
+import { AUDT_CONTACT_HREF } from "../../../config/site";
 
 const providers = [
 	{ label: "Google Ads", light: "/integrations/google-ads.svg", scale: 0.92 },
@@ -75,18 +74,6 @@ const providers = [
 		dark: "/integrations/wake-dark.svg",
 		scale: 3.6,
 	},
-	{
-		label: "Tech Intelligence",
-		light: "/integrations/tech-intelligence-dark.avif",
-		dark: "/integrations/tech-intelligence-light.avif",
-		scale: 1.2,
-	},
-	{
-		label: "Caaqui",
-		light: "/integrations/caaqui.avif",
-		scale: 1.15,
-		darkFilter: "white",
-	},
 ];
 ---
 
@@ -111,7 +98,7 @@ const providers = [
 		<CornerMarks />
 
 		<div
-			class="provider-grid bg-primary/20 grid grid-cols-2 gap-px sm:grid-cols-3 lg:grid-cols-5"
+			class="provider-grid bg-primary/20 grid grid-cols-2 gap-px sm:grid-cols-3"
 		>
 			{
 				providers.map((provider) => (
@@ -128,8 +115,6 @@ const providers = [
 								class:list={[
 									"provider-logo",
 									provider.dark && "provider-logo--light",
-									provider.darkFilter === "white" &&
-										"provider-logo--white-on-dark",
 									provider.darkFilter === "preserve" &&
 										"provider-logo--preserve-on-dark",
 								]}
@@ -167,7 +152,7 @@ const providers = [
 				</p>
 			</div>
 			<LinkButton
-				href={CONTACT_HREF}
+				href={AUDT_CONTACT_HREF}
 				variant="primary"
 				class="shrink-0 sm:ml-auto"
 				size="lg"
@@ -197,14 +182,26 @@ const providers = [
 	.provider-logo--dark {
 		display: none;
 	}
+	@media (min-width: 1024px) {
+		.provider-grid {
+			grid-template-columns: repeat(20, minmax(0, 1fr));
+		}
+		.provider-card {
+			grid-column: span 4;
+		}
+		.provider-card:nth-child(n + 6) {
+			grid-column: span 5;
+		}
+		.provider-card:nth-child(6),
+		.provider-card:nth-child(10) {
+			grid-column: 1 / span 5;
+		}
+	}
 	:global(:root[data-mode="dark"]) .provider-logo--light {
 		display: none;
 	}
 	:global(:root[data-mode="dark"]) .provider-logo--dark {
 		display: block;
-	}
-	:global(:root[data-mode="dark"]) .provider-logo--white-on-dark {
-		filter: brightness(0) invert(1);
 	}
 	:global(:root[data-mode="dark"]) .provider-logo--preserve-on-dark {
 		filter: invert(1) hue-rotate(180deg) brightness(1.05);

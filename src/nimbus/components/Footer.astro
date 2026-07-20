@@ -5,6 +5,8 @@
  * Pagination/EditLink/Feedback bits are dropped since DocsLayout owns those.
  * Rendered once in BaseLayout, so it appears on every page.
  */
+import { AUDT_CONTACT_HREF, AUDT_SITE_HREF } from "../../config/site";
+
 interface Props {
 	/** Extra classes on the <footer> — e.g. a top margin on pages without a
 	 *  decorative backdrop, where the footer isn't meant to sit flush. */
@@ -45,10 +47,23 @@ const groups: [string, FooterLink[]][] = Object.entries({
 		{ text: "VTEX", href: "/conectores/vtex/" },
 	],
 	Audt: [
-		{ text: "Site institucional", href: "https://audt.ai/" },
-		{ text: "Entrar em contato", href: "https://audt.ai/" },
+		{ text: "Site institucional", href: AUDT_SITE_HREF },
+		{ text: "Entrar em contato", href: AUDT_CONTACT_HREF },
 	],
 });
+
+const ecosystemBrands = [
+	{
+		label: "Tech Intelligence",
+		light: "/integrations/tech-intelligence-dark.avif",
+		dark: "/integrations/tech-intelligence-light.avif",
+	},
+	{
+		label: "Caaqui",
+		light: "/integrations/caaqui.avif",
+		darkTreatment: "white",
+	},
+];
 
 const year = new Date().getFullYear();
 ---
@@ -79,10 +94,78 @@ const year = new Date().getFullYear();
 			}
 		</div>
 
-		<div class="border-border mt-10 border-t pt-6">
+		<div
+			class="border-border mt-10 flex flex-col gap-5 border-t pt-6 sm:flex-row sm:items-center sm:justify-between"
+		>
+			<p class="text-muted-foreground m-0 text-xs font-medium">
+				Ecossistema Audt
+			</p>
+			<div class="flex flex-wrap items-center gap-6 sm:justify-end">
+				{
+					ecosystemBrands.map((brand) => (
+						<div
+							class="ecosystem-logo-stage"
+							role="img"
+							aria-label={brand.label}
+						>
+							<img
+								src={brand.light}
+								alt=""
+								loading="lazy"
+								decoding="async"
+								class:list={[
+									"ecosystem-logo",
+									brand.dark && "ecosystem-logo--light",
+									brand.darkTreatment === "white" &&
+										"ecosystem-logo--white-on-dark",
+								]}
+							/>
+							{brand.dark && (
+								<img
+									src={brand.dark}
+									alt=""
+									loading="lazy"
+									decoding="async"
+									class="ecosystem-logo ecosystem-logo--dark"
+								/>
+							)}
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="border-border mt-6 border-t pt-6">
 			<p class="text-muted-foreground m-0 text-center text-xs">
 				© {year} Audt.AI
 			</p>
 		</div>
 	</div>
 </footer>
+
+<style>
+	.ecosystem-logo-stage {
+		display: grid;
+		inline-size: 8.5rem;
+		block-size: 2.75rem;
+		place-items: center;
+	}
+	.ecosystem-logo {
+		grid-area: 1 / 1;
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: contain;
+	}
+	.ecosystem-logo--dark {
+		display: none;
+	}
+	:global(:root[data-mode="dark"]) .ecosystem-logo--light {
+		display: none;
+	}
+	:global(:root[data-mode="dark"]) .ecosystem-logo--dark {
+		display: block;
+	}
+	:global(:root[data-mode="dark"]) .ecosystem-logo--white-on-dark {
+		filter: brightness(0) invert(1);
+	}
+</style>

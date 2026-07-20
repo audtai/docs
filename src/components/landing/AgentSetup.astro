@@ -5,8 +5,7 @@ import HalftoneBackground from "./HalftoneBackground.astro";
 import SectionHeading from "./SectionHeading.astro";
 import CopyPromptButton from "./CopyPromptButton.astro";
 import Button from "./Button.astro";
-
-const CONTACT_HREF = "https://audt.ai/";
+import { AUDT_CONTACT_HREF } from "../../config/site";
 ---
 
 <section
@@ -47,7 +46,12 @@ const CONTACT_HREF = "https://audt.ai/";
 					</span>
 				</div>
 
-				<Button href={CONTACT_HREF} variant="primary" class="ml-auto" size="md">
+				<Button
+					href={AUDT_CONTACT_HREF}
+					variant="primary"
+					class="ml-auto"
+					size="md"
+				>
 					Falar com especialista
 					<Icon name="right-arrow" size="1rem" />
 				</Button>

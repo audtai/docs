@@ -11,7 +11,7 @@ sidebar:
 Os conectores levam dados das fontes de autoridade para a camada de inteligência da Audt. A integração atual é **assistida**: nosso time confirma o caso de uso, configura a identidade técnica ou o canal de entrega, valida uma primeira carga e acompanha a ativação da recorrência.
 
 :::note[Marketplace em evolução]
-A experiência self-service — instalar um app, autorizar e começar a sincronizar — é a direção do produto, mas ainda não é o fluxo padrão. A presença de um provedor no ecossistema Audt não significa que todos os escopos estejam disponíveis sem configuração ou desenvolvimento.
+A experiência self-service — instalação, autorização e sincronização — é a direção do produto, mas ainda não é o fluxo padrão. A presença de um provedor no ecossistema Audt não significa que todos os escopos estejam disponíveis sem configuração ou desenvolvimento.
 :::
 
 ## Modelos de integração
@@ -46,22 +46,16 @@ Google Ads, Google Analytics 4, Meta Ads e VTEX possuem caminhos implementados c
 
 ## Responsabilidades
 
-### Cliente
+A tabela separa as responsabilidades de cada parte:
 
-- indicar donos funcional, técnico e de segurança;
-- conceder somente os ativos necessários;
-- confirmar definições de negócio e totais de controle;
-- comunicar mudanças de schema, conta, propriedade ou processo;
-- revogar acessos quando a integração for encerrada.
-
-### Audt
-
-- fornecer a identidade ou o canal técnico aprovado;
-- mapear a origem para o contrato lógico;
-- não solicitar senha pessoal, token de desenvolvedor do cliente ou segredo por documento;
-- registrar versão, escopo e regras da integração;
-- monitorar falhas e qualidade conforme o acordo do projeto;
-- separar limitações da origem de inferências produzidas pela plataforma.
+| Cliente                                                                             | Audt                                                                                    |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Indicar donos funcional, técnico e de segurança                                     | Fornecer a identidade ou o canal técnico aprovado                                       |
+| Conceder somente os ativos necessários                                              | Mapear a origem para o contrato lógico                                                  |
+| Confirmar definições de negócio e totais de controle                                | Registrar versão, escopo e regras da integração                                         |
+| Comunicar mudanças de schema, conta, propriedade ou processo                        | Monitorar falhas e qualidade conforme o acordo do projeto                               |
+| Usar canais oficiais e nunca compartilhar senhas pessoais ou segredos por documento | Não solicitar senha pessoal, token de desenvolvedor do cliente ou segredo por documento |
+| Revogar acessos quando a integração for encerrada                                   | Separar limitações da origem de inferências produzidas pela plataforma                  |
 
 ## Segurança de credenciais
 
