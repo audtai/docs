@@ -31,15 +31,15 @@ Adicione a identidade indicada pela Audt no nível da propriedade. A função de
 
 ## Contrato agregado
 
-| Grupo       | Campos e métricas esperados                                             |
-| ----------- | ----------------------------------------------------------------------- |
-| Identidade  | data, propriedade, stream e plataforma quando disponíveis               |
-| Aquisição   | source, medium, campaign ID/nome e grupo de canais                      |
-| Conteúdo    | landing page ou página de entrada conforme o relatório                  |
-| Tecnologia  | dispositivo e sistema operacional quando necessários                    |
-| Engajamento | sessões, sessões engajadas, duração e taxa aplicável                    |
-| Comércio    | transações, receita, visualização de item e adição ao carrinho          |
-| Chaves      | `transaction_id` e `item_id` somente quando corretamente instrumentados |
+| Grupo       | Campos e métricas esperados                                    |
+| ----------- | -------------------------------------------------------------- |
+| Identidade  | data, propriedade, stream e plataforma quando disponíveis      |
+| Aquisição   | source, medium, campaign ID/nome e grupo de canais             |
+| Conteúdo    | landing page ou página de entrada conforme o relatório         |
+| Tecnologia  | dispositivo e sistema operacional quando necessários           |
+| Engajamento | sessões, sessões engajadas, duração e taxa aplicável           |
+| Comércio    | transações, receita, visualização de item e adição ao carrinho |
+| Chaves      | `transaction_id` e `item_id`                                   |
 
 Os nomes de evento `view_item`, `add_to_cart`, `begin_checkout` e `purchase` formam um mínimo útil para o funil de comércio. A existência da métrica no GA4 não garante que parâmetros e IDs estejam completos.
 
