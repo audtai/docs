@@ -23,18 +23,16 @@ O local pode representar CD, loja, seller, dark store ou entreposto logístico. 
 | `sku_id`                | Sim         | Chave compatível com catálogo e itens de pedido              |
 | `location_id`           | Sim         | CD, loja, seller ou entreposto logístico                     |
 | `snapshot_at`           | Sim         | Data e hora da fotografia, com fuso documentado              |
-| `on_hand_quantity`      | Sim         | Quantidade física conhecida pela origem                      |
 | `reserved_quantity`     | Sim         | Quantidade comprometida e ainda não baixada                  |
 | `available_quantity`    | Sim         | Quantidade vendável exata, calculada ou estimada pela origem |
 | `in_transit_quantity`   | Recomendado | Quantidade em movimentação ou recebimento                    |
 | `next_replenishment_at` | Opcional    | Previsão disponível na fonte, sem inferência da Audt         |
 | `lead_time`             | Opcional    | Prazo e unidade definidos pelo sistema de origem             |
-| `inventory_status`      | Recomendado | Estado normalizado, como disponível, baixo ou indisponível   |
 
 :::note[Defina o significado da disponibilidade]
 `available_quantity` pode representar disponibilidade física exata, vendável, calculada por política comercial ou estimada para a vitrine. Documente a origem, a regra e o contexto usado.
 
-Não presumimos que `available_quantity = on_hand_quantity - reserved_quantity`. Bloqueios, segurança, avaria, estoque de seller e regras de canal podem alterar o cálculo.
+Bloqueios, segurança, avaria, estoque de seller e regras de canal podem fazer a disponibilidade comercial divergir dos demais saldos informados pela origem.
 :::
 
 ## Fotografias ou movimentos

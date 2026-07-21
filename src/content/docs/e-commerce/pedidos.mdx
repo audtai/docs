@@ -26,7 +26,7 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 | Conceito lógico      | Obrigatório | Descrição                                                                    |
 | -------------------- | ----------- | ---------------------------------------------------------------------------- |
 | `order_id`           | Sim         | Identificador estável na plataforma comercial                                |
-| `order_sequence`     | Opcional    | Sequência do pedido informada pela plataforma comercial                      |
+| `order_sequence`     | Recomendado | Sequência do pedido informada pela plataforma comercial                      |
 | `captured_at`        | Sim         | Momento de criação ou captura comercial                                      |
 | `approved_at`        | Recomendado | Momento de aprovação financeira                                              |
 | `updated_at`         | Sim         | Marcador para correções e incrementais                                       |
@@ -72,8 +72,8 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 | `quantity`                  | Sim         | Quantidade vendida na linha                                      |
 | `list_unit_price`           | Sim         | Preço DE unitário no instante do pedido                          |
 | `selling_unit_price`        | Sim         | Preço unitário efetivamente vendido após os descontos aplicáveis |
-| `discount_amount`           | Sim         | Desconto total alocado à linha                                   |
-| `net_item_amount`           | Sim         | Valor líquido da linha segundo a fonte                           |
+| `discount_amount`           | Sim         | Desconto total alocado ao item                                   |
+| `net_item_amount`           | Recomendado | Valor líquido do item após descontos e acréscimo de frete        |
 | `allocated_shipping_amount` | Recomendado | Parcela de frete atribuída ao item                               |
 | `seller_id`                 | Recomendado | Seller responsável quando houver marketplace                     |
 | `brand_id`                  | Sim         | Identificador da marca no instante da venda                      |
