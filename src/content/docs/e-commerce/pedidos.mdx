@@ -3,12 +3,14 @@ title: Pedidos
 description: Contrato lógico para integrar pedidos, itens, pagamentos e ajustes à Audt.
 summary: Defina a receita de autoridade e preserve todo o ciclo comercial, da captura ao resultado líquido.
 pcx_content_type: reference
-lastUpdated: 2026-07-20
+lastUpdated: 2026-07-21
 sidebar:
   order: 4
 ---
 
 Pedidos são a fonte comercial usada para reconciliar conversões de analytics e mídia. A primeira decisão do onboarding é semântica: o que a sua operação chama de receita **capturada**, **aprovada**, **cancelada**, **devolvida**, **reembolsada** e **líquida**.
+
+Os campos formam uma referência para o onboarding. A origem não precisa renomear sua estrutura de dados. A Audt confirma o mapeamento com o cliente e preserva os identificadores e significados originais.
 
 ## Dois conjuntos complementares
 
@@ -21,42 +23,68 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 
 ## Campos de pedido
 
-| Conceito lógico                | Obrigatório       | Descrição                                                                          |
-| ------------------------------ | ----------------- | ---------------------------------------------------------------------------------- |
-| `order_id`                     | Sim               | Identificador estável na plataforma comercial                                      |
-| `transaction_id`               | Sim quando existe | Identificador publicado em analytics; sua presença deve ser validada, não inferida |
-| `captured_at`                  | Sim               | Momento de criação ou captura comercial                                            |
-| `approved_at`                  | Recomendado       | Momento de aprovação financeira                                                    |
-| `updated_at`                   | Sim               | Marcador para correções e incrementais                                             |
-| `order_status`                 | Sim               | Estado comercial normalizado e valor original preservado                           |
-| `payment_status`               | Sim               | Estado financeiro independente do fulfillment                                      |
-| `sales_channel`                | Sim               | Site, app, marketplace, loja ou outro canal acordado                               |
-| `currency`                     | Sim               | Código de moeda aplicável aos valores                                              |
-| `items_gross_amount`           | Sim               | Soma bruta dos itens antes dos descontos                                           |
-| `discount_amount`              | Sim               | Desconto total conforme regra documentada                                          |
-| `shipping_amount`              | Sim               | Frete cobrado do cliente ou regra equivalente                                      |
-| `order_total_amount`           | Sim               | Total na definição da fonte de autoridade                                          |
-| `item_quantity`                | Sim               | Quantidade total de unidades ou linhas, conforme definição                         |
-| `seller_id` e `store_id`       | Recomendado       | Origem comercial ou seller responsável                                             |
-| `cancelled_at`, `delivered_at` | Recomendado       | Marcos do ciclo quando disponíveis                                                 |
-| `refund_amount`                | Recomendado       | Valor acumulado ou evento associado, com regra declarada                           |
-| UTMs e cupom                   | Opcional          | Contexto promocional presente no pedido, sem substituir a atribuição de mídia      |
+| Conceito lógico      | Obrigatório       | Descrição                                                                          |
+| -------------------- | ----------------- | ---------------------------------------------------------------------------------- |
+| `order_id`           | Sim               | Identificador estável na plataforma comercial                                      |
+| `transaction_id`     | Sim quando existe | Identificador publicado em analytics; sua presença deve ser validada, não inferida |
+| `captured_at`        | Sim               | Momento de criação ou captura comercial                                            |
+| `approved_at`        | Recomendado       | Momento de aprovação financeira                                                    |
+| `updated_at`         | Sim               | Marcador para correções e incrementais                                             |
+| `order_status`       | Sim               | Estado comercial normalizado e valor original preservado                           |
+| `payment_status`     | Sim               | Estado financeiro independente do fulfillment                                      |
+| `trade_policy_id`    | Sim               | Política comercial aplicada; em VTEX, corresponde ao campo `salesChannel`          |
+| `price_table_id`     | Recomendado       | Tabela de preços selecionada quando exposta separadamente                          |
+| `order_origin`       | Sim               | Origem da venda, como site, app, marketplace ou loja                               |
+| `affiliate_id`       | Recomendado       | Afiliado ou integração que originou o pedido                                       |
+| `store_id`           | Recomendado       | Loja, operação ou contexto comercial de origem                                     |
+| `marketplace_name`   | Recomendado       | Marketplace de origem quando houver intermediação                                  |
+| `seller_id`          | Recomendado       | Seller responsável pela venda                                                      |
+| `currency`           | Sim               | Código de moeda aplicável aos valores                                              |
+| `items_gross_amount` | Sim               | Soma bruta dos itens antes dos descontos                                           |
+| `discount_amount`    | Sim               | Desconto total conforme regra documentada                                          |
+| `shipping_amount`    | Sim               | Frete cobrado do cliente ou regra equivalente                                      |
+| `order_total_amount` | Sim               | Total na definição da fonte de autoridade                                          |
+| `item_quantity`      | Sim               | Quantidade total de unidades ou linhas, conforme definição                         |
+| `cancelled_at`       | Recomendado       | Momento do cancelamento quando disponível                                          |
+| `delivered_at`       | Recomendado       | Momento da entrega quando disponível                                               |
+| `refund_amount`      | Recomendado       | Valor acumulado ou evento associado, com regra declarada                           |
+| `utm_source`         | Opcional          | Origem externa registrada no contexto promocional                                  |
+| `utm_medium`         | Opcional          | Meio externo registrado no contexto promocional                                    |
+| `utm_campaign`       | Opcional          | Campanha externa registrada no contexto promocional                                |
+| `coupon_code`        | Opcional          | Código de cupom aplicado ao pedido                                                 |
+| `marketing_tags`     | Opcional          | Marcadores promocionais preservados como lista                                     |
+| `utmi_campaign`      | Opcional          | Campanha interna registrada pela plataforma                                        |
+| `utmi_part`          | Opcional          | Parte interna da campanha registrada pela plataforma                               |
+| `utmi_page`          | Opcional          | Página interna associada à campanha                                                |
+| `order_attributes`   | Opcional          | Pares de chave e valor, como versão do app, sistema operacional e plataforma       |
 
 ## Campos de item
 
-| Conceito lógico              | Obrigatório | Descrição                                                              |
-| ---------------------------- | ----------- | ---------------------------------------------------------------------- |
-| `order_item_id`              | Sim         | Identificador estável da linha comercial                               |
-| `order_id`                   | Sim         | Relação com o cabeçalho do pedido                                      |
-| `product_id` e `sku_id`      | Sim         | Chaves compatíveis com o catálogo                                      |
-| `quantity`                   | Sim         | Quantidade vendida na linha                                            |
-| `list_unit_price`            | Sim         | Preço unitário de referência                                           |
-| `sale_unit_price`            | Sim         | Preço unitário efetivamente praticado                                  |
-| `discount_amount`            | Sim         | Desconto alocado à linha                                               |
-| `net_item_amount`            | Sim         | Valor líquido da linha segundo a fonte                                 |
-| `allocated_shipping_amount`  | Recomendado | Parcela de frete atribuída ao item                                     |
-| `seller_id`                  | Recomendado | Seller responsável quando houver marketplace                           |
-| marca, categoria e atributos | Recomendado | Podem vir do catálogo pelo `sku_id`; evite duplicar regras divergentes |
+| Conceito lógico             | Obrigatório | Descrição                                                        |
+| --------------------------- | ----------- | ---------------------------------------------------------------- |
+| `order_item_id`             | Sim         | Identificador estável da linha comercial                         |
+| `order_id`                  | Sim         | Relação com o cabeçalho do pedido                                |
+| `product_id`                | Sim         | Identificador do produto agrupador no instante da venda          |
+| `product_ref_id`            | Recomendado | Código de referência comercial do produto                        |
+| `sku_id`                    | Sim         | Identificador da variante vendida                                |
+| `sku_ref_id`                | Recomendado | Código de referência comercial do SKU                            |
+| `sku_name`                  | Sim         | Nome da variante no instante da venda                            |
+| `quantity`                  | Sim         | Quantidade vendida na linha                                      |
+| `list_unit_price`           | Sim         | Preço DE unitário no instante do pedido                          |
+| `selling_unit_price`        | Sim         | Preço unitário efetivamente vendido após os descontos aplicáveis |
+| `discount_amount`           | Sim         | Desconto total alocado à linha                                   |
+| `net_item_amount`           | Sim         | Valor líquido da linha segundo a fonte                           |
+| `allocated_shipping_amount` | Recomendado | Parcela de frete atribuída ao item                               |
+| `seller_id`                 | Recomendado | Seller responsável quando houver marketplace                     |
+| `brand_id`                  | Sim         | Identificador da marca no instante da venda                      |
+| `brand_name`                | Sim         | Nome da marca no instante da venda                               |
+| `primary_category_id`       | Sim         | Identificador da categoria principal no instante da venda        |
+| `primary_category_name`     | Sim         | Nome da categoria principal no instante da venda                 |
+| `category_path_ids`         | Sim         | Caminho hierárquico por identificadores no instante da venda     |
+| `category_path_names`       | Sim         | Caminho hierárquico por nomes no instante da venda               |
+| `item_attributes`           | Recomendado | Atributos comerciais preservados como pares de chave e valor     |
+
+Preserve marca, categoria, nomes e atributos no contexto da venda. Se a origem não enviar esses dados no pedido, enriqueça o item com a fotografia de catálogo correspondente a `captured_at`. Não relacione pedidos históricos apenas com o catálogo atual.
 
 ## Ciclo de vida e correções
 
@@ -84,7 +112,7 @@ As tolerâncias são acordadas com o dono funcional. Diferenças conhecidas fica
 
 ## Relação com analytics e mídia
 
-`transaction_id`, `order_id`, `sku_id`, UTMs e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
+`transaction_id`, `order_id`, `sku_id`, campos UTM e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
 
 Conversão atribuída por Google Ads, Meta Ads ou GA4 **não é receita financeira**. A Audt preserva as definições de cada plataforma e usa pedidos como referência comercial para reconciliação. Atribuição avançada depende de histórico, eventos em granularidade suficiente e metodologia aprovada.
 

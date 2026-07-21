@@ -1,73 +1,99 @@
 ---
 title: Catálogo de produtos
-description: Contrato lógico para integrar produtos, SKUs, categorias e atributos à Audt.
-summary: Organize a dimensão de produto usada para explicar vendas, mídia, disponibilidade e sortimento.
+description: Referência para integrar produtos no nível de SKU, categorias, atributos e preços à Audt.
+summary: Organize o produto no nível de SKU para explicar vendas, mídia, disponibilidade e sortimento.
 pcx_content_type: reference
-lastUpdated: 2026-07-20
+lastUpdated: 2026-07-21
 sidebar:
   order: 2
 ---
 
-O catálogo transforma identificadores transacionais em contexto comercial. A Audt diferencia **produto** — o agrupador conceitual — de **SKU ou variante**, que representa uma combinação vendável de atributos como cor e tamanho.
+O catálogo transforma identificadores transacionais em contexto comercial. Para a integração, cada produto é representado no nível de **SKU ou variante**. O registro combina a variante vendável com os dados herdados do produto, da marca, da categoria principal e da política comercial.
+
+Os campos formam uma referência para o onboarding. A origem não precisa renomear sua estrutura de dados. A Audt confirma o mapeamento com o cliente e preserva os identificadores e significados originais.
 
 ## Grão recomendado
 
-Publique uma linha por **SKU e período de vigência** ou uma fotografia completa por SKU em cada `snapshot_at`. Se produto e SKU estiverem em conjuntos separados, mantenha a relação `product_id` → `sku_id` estável e documentada.
+Publique uma linha por **SKU × política comercial × instante da fotografia** quando preço ou sortimento variarem por contexto comercial. Se houver uma única política, publique uma linha por SKU em cada `snapshot_at`.
+
+Mantenha a relação `product_id` → `sku_id` estável. Os dados do produto agrupador devem acompanhar cada SKU derivado.
 
 :::caution[Não reutilize identificadores]
 Um `sku_id` não deve passar a representar outra variante. Quando um item for descontinuado, preserve o identificador e altere o estado de atividade; isso mantém o histórico de pedidos interpretável.
 :::
 
-## Campos mínimos
+## Campos do produto no nível de SKU
 
-Os nomes abaixo são uma referência semântica. Eles podem ser mapeados para campos equivalentes da sua fonte.
+Mapeie os campos equivalentes disponíveis na fonte:
 
-| Conceito lógico             | Obrigatório | Descrição                                                   |
-| --------------------------- | ----------- | ----------------------------------------------------------- |
-| `product_id`                | Sim         | Identificador estável do produto agrupador                  |
-| `sku_id`                    | Sim         | Identificador estável da variante vendável                  |
-| `product_name`              | Sim         | Nome comercial legível do produto                           |
-| `brand`                     | Sim         | Marca normalizada ou identificador de marca                 |
-| `primary_category_id`       | Sim         | Categoria principal usada para agregação                    |
-| `is_active`                 | Sim         | Indica se o SKU pode participar do sortimento atual         |
-| `snapshot_at` ou vigência   | Sim         | Instante da fotografia ou intervalo de validade do registro |
-| `category_path`             | Recomendado | Caminho hierárquico completo da categoria                   |
-| `ean_gtin`                  | Recomendado | Código comercial quando disponível e validado               |
-| `variant_attributes`        | Recomendado | Pares de atributo e valor, como cor e tamanho               |
-| `list_price` e `sale_price` | Recomendado | Preços vigentes, com moeda e regra tributária documentadas  |
-| `image_url`                 | Opcional    | URL estável da imagem principal, sem credencial embutida    |
+| Conceito lógico         | Obrigatório                   | Descrição                                                      |
+| ----------------------- | ----------------------------- | -------------------------------------------------------------- |
+| `product_id`            | Sim                           | Identificador estável do produto agrupador                     |
+| `product_ref_id`        | Recomendado                   | Código de referência comercial do produto                      |
+| `sku_id`                | Sim                           | Identificador estável da variante vendável                     |
+| `sku_ref_id`            | Recomendado                   | Código de referência comercial do SKU                          |
+| `product_name`          | Sim                           | Nome comercial do produto agrupador                            |
+| `sku_name`              | Sim                           | Nome comercial específico da variante vendável                 |
+| `brand_id`              | Sim                           | Identificador estável da marca                                 |
+| `brand_name`            | Sim                           | Nome da marca apresentado aos usuários                         |
+| `primary_category_id`   | Sim                           | Identificador da categoria principal                           |
+| `primary_category_name` | Sim                           | Nome da categoria principal                                    |
+| `primary_category_slug` | Recomendado                   | Slug da categoria principal, quando exposto pela origem        |
+| `category_path_ids`     | Sim                           | Caminho hierárquico ordenado por identificadores               |
+| `category_path_names`   | Sim                           | Caminho hierárquico ordenado por nomes                         |
+| `ean_gtin`              | Recomendado                   | Código comercial quando disponível e validado                  |
+| `is_active`             | Sim                           | Indica se o SKU participa do sortimento atual                  |
+| `is_kit`                | Sim                           | Indica se o SKU representa um kit ou conjunto comercial        |
+| `measurement_unit`      | Sim                           | Unidade usada para interpretar quantidade e preço              |
+| `unit_multiplier`       | Sim                           | Multiplicador aplicado à unidade de medida                     |
+| `variant_attributes`    | Recomendado                   | Pares de atributo e valor, como cor e tamanho                  |
+| `release_date`          | Recomendado                   | Data de lançamento herdada do produto                          |
+| `trade_policy_id`       | Sim                           | Política comercial que define o contexto de sortimento e preço |
+| `price_table_id`        | Recomendado                   | Tabela de preços associada quando exposta separadamente        |
+| `list_price`            | Sim                           | Preço DE da tabela ou política comercial, antes dos descontos  |
+| `selling_price`         | Sim                           | Preço POR vigente no catálogo para o contexto comercial        |
+| `image_url`             | Opcional                      | URL estável da imagem principal, sem credencial embutida       |
+| `snapshot_at`           | Sim                           | Data e hora em que o estado do registro foi observado          |
+| `partition_date`        | Recomendado para cargas       | Data operacional da partição ou do arquivo entregue            |
+| `updated_at`            | Recomendado para incrementais | Data e hora da última alteração informada pela origem          |
 
-## Taxonomia de categorias
+O `selling_price` do catálogo não representa o valor líquido de uma venda. O item de pedido preserva o preço efetivamente praticado e os descontos aplicados.
 
-Quando possível, publique a hierarquia em um conjunto próprio:
+## Árvore de categorias (taxonomia)
 
-| Campo                | Finalidade                                 |
-| -------------------- | ------------------------------------------ |
-| `category_id`        | Chave estável da categoria                 |
-| `category_name`      | Nome apresentado aos usuários              |
-| `parent_category_id` | Relação com o nível imediatamente superior |
-| `category_path`      | Caminho completo e ordenado                |
-| `category_level`     | Profundidade na hierarquia                 |
-| `is_active`          | Estado atual sem apagar o histórico        |
-| vigência             | Período em que a classificação foi válida  |
+Publique a hierarquia de categorias em um conjunto próprio:
 
-Um SKU pode participar de várias categorias. Identifique explicitamente a categoria principal para evitar dupla contagem em relatórios consolidados.
+| Campo                 | Finalidade                                                |
+| --------------------- | --------------------------------------------------------- |
+| `category_id`         | Chave estável da categoria                                |
+| `category_name`       | Nome apresentado aos usuários                             |
+| `category_slug`       | Slug apresentado nas rotas, quando disponível             |
+| `parent_category_id`  | Relação com o nível imediatamente superior                |
+| `category_path_ids`   | Caminho completo e ordenado por identificadores           |
+| `category_path_names` | Caminho completo e ordenado por nomes                     |
+| `category_level`      | Profundidade na hierarquia                                |
+| `is_active`           | Estado atual sem apagar o histórico                       |
+| `snapshot_at`         | Data e hora em que o estado da árvore foi observado       |
+| `updated_at`          | Última alteração informada pela origem, quando disponível |
+
+Um SKU pode participar de várias categorias. Identifique a categoria principal no registro do produto. Quando outras associações forem relevantes, preserve `sku_id`, `category_id`, `is_primary` e `snapshot_at`.
 
 ## Atualizações e histórico
 
-- Para fotografias completas, inclua `snapshot_at` e publique todas as linhas da partição.
+- Para fotografias completas, inclua `snapshot_at` em todas as linhas.
+- Use `partition_date` apenas para organizar a entrega ou o armazenamento.
 - Para incrementais, inclua `updated_at` e uma forma explícita de representar inativação ou exclusão.
 - Preserve mudanças relevantes de marca, categoria, atributos e status quando análises históricas precisarem refletir o contexto da época.
-- Não substitua silenciosamente uma categoria antiga; informe a vigência ou uma tabela de relacionamento.
+- Não substitua silenciosamente uma categoria antiga. Preserve a fotografia da árvore correspondente.
 
 ## Controles de qualidade
 
 | Controle            | Aceite recomendado                                                                         |
 | ------------------- | ------------------------------------------------------------------------------------------ |
-| Unicidade           | Um `sku_id` por instante ou intervalo de vigência                                          |
+| Unicidade           | Um `sku_id` por política comercial e `snapshot_at`                                         |
 | Integridade         | Todo SKU referencia um `product_id` e uma categoria válidos                                |
-| Completude          | Nome, marca, categoria e atividade preenchidos nos SKUs em escopo                          |
-| Temporalidade       | Intervalos não se sobrepõem para o mesmo SKU                                               |
+| Completude          | Nomes, marca, categoria, unidade e preços preenchidos nos SKUs em escopo                   |
+| Temporalidade       | Fotografias e incrementais preservam o instante informado pela origem                      |
 | Relação com pedidos | SKUs vendidos no período são encontrados no catálogo ou registrados como exceção conhecida |
 | Relação com estoque | A mesma chave de SKU é usada em catálogo e disponibilidade                                 |
 

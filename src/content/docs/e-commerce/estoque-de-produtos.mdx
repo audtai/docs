@@ -3,7 +3,7 @@ title: Estoque de produtos
 description: Contrato lógico para integrar disponibilidade por SKU e local à Audt.
 summary: Relacione demanda, mídia e venda com a disponibilidade real de cada SKU.
 pcx_content_type: reference
-lastUpdated: 2026-07-20
+lastUpdated: 2026-07-21
 sidebar:
   order: 3
 ---
@@ -14,25 +14,27 @@ O estoque é tratado como uma série temporal. Uma fotografia atual responde “
 
 Uma linha por **SKU × local de estoque × instante da fotografia**.
 
-O local pode representar centro de distribuição, loja, seller, dark store ou outro nó logístico. Use um identificador estável e declare se o saldo é físico, vendável ou calculado por canal.
+O local pode representar CD, loja, seller, dark store ou entreposto logístico. Use um identificador estável e declare se o saldo é físico, vendável ou calculado por política comercial.
 
 ## Campos mínimos
 
-| Conceito lógico         | Obrigatório | Descrição                                                  |
-| ----------------------- | ----------- | ---------------------------------------------------------- |
-| `sku_id`                | Sim         | Chave compatível com catálogo e itens de pedido            |
-| `location_id`           | Sim         | Armazém, loja, seller ou nó logístico                      |
-| `snapshot_at`           | Sim         | Data e hora da fotografia, com fuso documentado            |
-| `on_hand_quantity`      | Sim         | Quantidade física conhecida pela origem                    |
-| `reserved_quantity`     | Sim         | Quantidade comprometida e ainda não baixada                |
-| `available_quantity`    | Sim         | Quantidade vendável segundo a regra da origem              |
-| `in_transit_quantity`   | Recomendado | Quantidade em movimentação ou recebimento                  |
-| `next_replenishment_at` | Opcional    | Previsão disponível na fonte, sem inferência da Audt       |
-| `lead_time`             | Opcional    | Prazo e unidade definidos pelo sistema de origem           |
-| `inventory_status`      | Recomendado | Estado normalizado, como disponível, baixo ou indisponível |
+| Conceito lógico         | Obrigatório | Descrição                                                    |
+| ----------------------- | ----------- | ------------------------------------------------------------ |
+| `sku_id`                | Sim         | Chave compatível com catálogo e itens de pedido              |
+| `location_id`           | Sim         | CD, loja, seller ou entreposto logístico                     |
+| `snapshot_at`           | Sim         | Data e hora da fotografia, com fuso documentado              |
+| `on_hand_quantity`      | Sim         | Quantidade física conhecida pela origem                      |
+| `reserved_quantity`     | Sim         | Quantidade comprometida e ainda não baixada                  |
+| `available_quantity`    | Sim         | Quantidade vendável exata, calculada ou estimada pela origem |
+| `in_transit_quantity`   | Recomendado | Quantidade em movimentação ou recebimento                    |
+| `next_replenishment_at` | Opcional    | Previsão disponível na fonte, sem inferência da Audt         |
+| `lead_time`             | Opcional    | Prazo e unidade definidos pelo sistema de origem             |
+| `inventory_status`      | Recomendado | Estado normalizado, como disponível, baixo ou indisponível   |
 
-:::note[Documente a equação]
-Não presumimos que `available_quantity = on_hand_quantity - reserved_quantity`. Bloqueios, segurança, avaria, estoque de seller e regras de canal podem alterar o cálculo. Publique a fórmula ou a regra funcional usada pela origem.
+:::note[Defina o significado da disponibilidade]
+`available_quantity` pode representar disponibilidade física exata, vendável, calculada por política comercial ou estimada para a vitrine. Documente a origem, a regra e o contexto usado.
+
+Não presumimos que `available_quantity = on_hand_quantity - reserved_quantity`. Bloqueios, segurança, avaria, estoque de seller e regras de canal podem alterar o cálculo.
 :::
 
 ## Fotografias ou movimentos
