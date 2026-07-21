@@ -23,40 +23,40 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 
 ## Campos de pedido
 
-| Conceito lógico      | Obrigatório       | Descrição                                                                          |
-| -------------------- | ----------------- | ---------------------------------------------------------------------------------- |
-| `order_id`           | Sim               | Identificador estável na plataforma comercial                                      |
-| `transaction_id`     | Sim quando existe | Identificador publicado em analytics; sua presença deve ser validada, não inferida |
-| `captured_at`        | Sim               | Momento de criação ou captura comercial                                            |
-| `approved_at`        | Recomendado       | Momento de aprovação financeira                                                    |
-| `updated_at`         | Sim               | Marcador para correções e incrementais                                             |
-| `order_status`       | Sim               | Estado comercial normalizado e valor original preservado                           |
-| `payment_status`     | Sim               | Estado financeiro independente do fulfillment                                      |
-| `trade_policy_id`    | Sim               | Política comercial aplicada; em VTEX, corresponde ao campo `salesChannel`          |
-| `price_table_id`     | Recomendado       | Tabela de preços selecionada quando exposta separadamente                          |
-| `order_origin`       | Sim               | Origem da venda, como site, app, marketplace ou loja                               |
-| `affiliate_id`       | Recomendado       | Afiliado ou integração que originou o pedido                                       |
-| `store_id`           | Recomendado       | Loja, operação ou contexto comercial de origem                                     |
-| `marketplace_name`   | Recomendado       | Marketplace de origem quando houver intermediação                                  |
-| `seller_id`          | Recomendado       | Seller responsável pela venda                                                      |
-| `currency`           | Sim               | Código de moeda aplicável aos valores                                              |
-| `items_gross_amount` | Sim               | Soma bruta dos itens antes dos descontos                                           |
-| `discount_amount`    | Sim               | Desconto total conforme regra documentada                                          |
-| `shipping_amount`    | Sim               | Frete cobrado do cliente ou regra equivalente                                      |
-| `order_total_amount` | Sim               | Total na definição da fonte de autoridade                                          |
-| `item_quantity`      | Sim               | Quantidade total de unidades ou linhas, conforme definição                         |
-| `cancelled_at`       | Recomendado       | Momento do cancelamento quando disponível                                          |
-| `delivered_at`       | Recomendado       | Momento da entrega quando disponível                                               |
-| `refund_amount`      | Recomendado       | Valor acumulado ou evento associado, com regra declarada                           |
-| `utm_source`         | Opcional          | Origem externa registrada no contexto promocional                                  |
-| `utm_medium`         | Opcional          | Meio externo registrado no contexto promocional                                    |
-| `utm_campaign`       | Opcional          | Campanha externa registrada no contexto promocional                                |
-| `coupon_code`        | Opcional          | Código de cupom aplicado ao pedido                                                 |
-| `marketing_tags`     | Opcional          | Marcadores promocionais preservados como lista                                     |
-| `utmi_campaign`      | Opcional          | Campanha interna registrada pela plataforma                                        |
-| `utmi_part`          | Opcional          | Parte interna da campanha registrada pela plataforma                               |
-| `utmi_page`          | Opcional          | Página interna associada à campanha                                                |
-| `order_attributes`   | Opcional          | Pares de chave e valor, como versão do app, sistema operacional e plataforma       |
+| Conceito lógico      | Obrigatório | Descrição                                                                    |
+| -------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `order_id`           | Sim         | Identificador estável na plataforma comercial                                |
+| `order_sequence`     | Opcional    | Sequência do pedido informada pela plataforma comercial                      |
+| `captured_at`        | Sim         | Momento de criação ou captura comercial                                      |
+| `approved_at`        | Recomendado | Momento de aprovação financeira                                              |
+| `updated_at`         | Sim         | Marcador para correções e incrementais                                       |
+| `order_status`       | Sim         | Estado comercial normalizado e valor original preservado                     |
+| `payment_status`     | Sim         | Estado financeiro independente do fulfillment                                |
+| `trade_policy_id`    | Recomendado | Política comercial aplicada; em VTEX, corresponde ao campo `salesChannel`    |
+| `price_table_id`     | Recomendado | Tabela de preços selecionada quando exposta separadamente                    |
+| `order_origin`       | Sim         | Origem da venda, como site, app, marketplace ou loja                         |
+| `affiliate_id`       | Recomendado | Afiliado ou integração que originou o pedido                                 |
+| `store_id`           | Recomendado | Loja, operação ou contexto comercial de origem                               |
+| `marketplace_name`   | Recomendado | Marketplace de origem quando houver intermediação                            |
+| `seller_id`          | Recomendado | Seller responsável pela venda                                                |
+| `currency`           | Sim         | Código de moeda aplicável aos valores                                        |
+| `items_gross_amount` | Sim         | Soma bruta dos itens antes dos descontos                                     |
+| `discount_amount`    | Sim         | Desconto total conforme regra documentada                                    |
+| `shipping_amount`    | Sim         | Frete cobrado do cliente ou regra equivalente                                |
+| `order_total_amount` | Sim         | Total na definição da fonte de autoridade                                    |
+| `item_quantity`      | Sim         | Quantidade total de unidades ou linhas, conforme definição                   |
+| `cancelled_at`       | Recomendado | Momento do cancelamento quando disponível                                    |
+| `delivered_at`       | Recomendado | Momento da entrega quando disponível                                         |
+| `refund_amount`      | Recomendado | Valor acumulado ou evento associado, com regra declarada                     |
+| `utm_source`         | Opcional    | Origem externa registrada no contexto promocional                            |
+| `utm_medium`         | Opcional    | Meio externo registrado no contexto promocional                              |
+| `utm_campaign`       | Opcional    | Campanha externa registrada no contexto promocional                          |
+| `coupon_code`        | Opcional    | Código de cupom aplicado ao pedido                                           |
+| `marketing_tags`     | Opcional    | Marcadores promocionais preservados como lista                               |
+| `utmi_campaign`      | Opcional    | Campanha interna registrada pela plataforma                                  |
+| `utmi_part`          | Opcional    | Parte interna da campanha registrada pela plataforma                         |
+| `utmi_page`          | Opcional    | Página interna associada à campanha                                          |
+| `order_attributes`   | Opcional    | Pares de chave e valor, como versão do app, sistema operacional e plataforma |
 
 ## Campos de item
 
@@ -112,7 +112,7 @@ As tolerâncias são acordadas com o dono funcional. Diferenças conhecidas fica
 
 ## Relação com analytics e mídia
 
-`transaction_id`, `order_id`, `sku_id`, campos UTM e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
+`order_id`, `sku_id`, campos UTM e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
 
 Conversão atribuída por Google Ads, Meta Ads ou GA4 **não é receita financeira**. A Audt preserva as definições de cada plataforma e usa pedidos como referência comercial para reconciliação. Atribuição avançada depende de histórico, eventos em granularidade suficiente e metodologia aprovada.
 
