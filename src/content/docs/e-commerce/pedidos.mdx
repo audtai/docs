@@ -14,7 +14,7 @@ Os campos formam uma referência para o onboarding. A origem não precisa renome
 
 ## Dois conjuntos complementares
 
-| Conjunto        | Grão                                                          | Chave esperada                                          |
+| Conjunto        | Grain                                                         | Chave esperada                                          |
 | --------------- | ------------------------------------------------------------- | ------------------------------------------------------- |
 | Pedidos         | Um registro por pedido no estado atual ou por versão temporal | `order_id`                                              |
 | Itens de pedido | Um registro por linha comercial do pedido                     | `order_item_id` ou composição estável de pedido e linha |
@@ -84,7 +84,7 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 | `category_path_names`       | Sim         | Caminho hierárquico por nomes no instante da venda               |
 | `item_attributes`           | Recomendado | Atributos comerciais preservados como pares de chave e valor     |
 
-Preserve marca, categoria, nomes e atributos no contexto da venda. Se a origem não enviar esses dados no pedido, enriqueça o item com a fotografia de catálogo correspondente a `captured_at`. Não relacione pedidos históricos apenas com o catálogo atual.
+Preserve marca, categoria, nomes e atributos no contexto da venda. Se a origem não enviar esses dados no pedido, enriqueça o item com o snapshot de catálogo correspondente a `captured_at`. Não relacione pedidos históricos apenas com o catálogo atual.
 
 ## Ciclo de vida e correções
 

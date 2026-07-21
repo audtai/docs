@@ -16,7 +16,7 @@ Os nomes desta documentação descrevem o significado de cada campo. Durante o o
 
 ## Domínios essenciais
 
-| Domínio                                                   | Grão recomendado                               | O que habilita                                                    |
+| Domínio                                                   | Grain recomendado                              | O que habilita                                                    |
 | --------------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
 | [Pedidos](/e-commerce/pedidos/)                           | Um registro por pedido e um por item comercial | Receita capturada, aprovada, cancelada, devolvida e líquida       |
 | [Catálogo de produtos](/e-commerce/catalogo-de-produtos/) | Um registro por SKU ou variante e vigência     | Análises por produto, marca, categoria, coleção e atributo        |
@@ -43,7 +43,7 @@ Cada conjunto de dados deve chegar acompanhado destas decisões:
 | Decisão             | O que registrar                                                                       |
 | ------------------- | ------------------------------------------------------------------------------------- |
 | Responsáveis        | Dono funcional, publicador técnico e canal de suporte                                 |
-| Grão e chave        | O que cada linha representa e qual identificador é estável                            |
+| Grain e chave       | O que cada linha representa e qual identificador é estável                            |
 | Fonte de autoridade | Sistema que prevalece para cada conceito                                              |
 | Frequência          | Horário de conclusão, fuso, atraso tolerado e janela de reprocessamento               |
 | Histórico           | Data inicial, profundidade do backfill e limitações conhecidas                        |
@@ -58,7 +58,7 @@ Cada conjunto de dados deve chegar acompanhado destas decisões:
 1. **Defina o resultado.** Registre até três decisões ou indicadores que provarão valor.
 2. **Aprove o acesso.** Escolha a forma de entrega, os ativos em escopo e os responsáveis.
 3. **Envie dicionário e amostra.** Use dados sintéticos ou controlados enquanto o acesso real é liberado.
-4. **Mapeie as regras.** Confirme grão, chaves, status, datas, moeda e política de correção.
+4. **Mapeie as regras.** Confirme grain, chaves, status, datas, moeda e política de correção.
 5. **Valide uma primeira carga.** Reconcilie contagens e valores com a fonte de autoridade.
 6. **Automatize e monitore.** Ative a recorrência somente após a aceitação dos controles de qualidade.
 
@@ -66,7 +66,7 @@ Cada conjunto de dados deve chegar acompanhado destas decisões:
 
 Uma fonte está pronta para uso quando:
 
-- as chaves obrigatórias são preenchidas e únicas no grão combinado;
+- as chaves obrigatórias são preenchidas e únicas no grain combinado;
 - totais e contagens reconciliam com a origem dentro da tolerância acordada;
 - fuso, moeda, status e datas de vigência estão documentados;
 - correções tardias podem ser reaplicadas sem duplicação;

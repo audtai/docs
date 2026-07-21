@@ -12,15 +12,11 @@ O catálogo transforma identificadores transacionais em contexto comercial. Para
 
 Os campos formam uma referência para o onboarding. A origem não precisa renomear sua estrutura de dados. A Audt confirma o mapeamento com o cliente e preserva os identificadores e significados originais.
 
-## Grão recomendado
+## Grain recomendado
 
-Publique uma linha por **SKU × política comercial × instante da fotografia** quando preço ou sortimento variarem por contexto comercial. Se houver uma única política, publique uma linha por SKU em cada `snapshot_at`.
+Publique uma linha por **SKU × política comercial × instante do snapshot** quando preço ou sortimento variarem por contexto comercial. Se houver uma única política, publique uma linha por SKU em cada `snapshot_at`.
 
 Mantenha a relação `product_id` → `sku_id` estável. Os dados do produto agrupador devem acompanhar cada SKU derivado.
-
-:::caution[Não reutilize identificadores]
-Um `sku_id` não deve passar a representar outra variante. Quando um item for descontinuado, preserve o identificador e altere o estado de atividade; isso mantém o histórico de pedidos interpretável.
-:::
 
 ## Campos do produto no nível de SKU
 
@@ -79,10 +75,10 @@ Um SKU pode participar de várias categorias. Identifique a categoria principal 
 
 ## Atualizações e histórico
 
-- Para fotografias completas, inclua `snapshot_at` em todas as linhas.
+- Para snapshots completos, inclua `snapshot_at` em todas as linhas.
 - Use `partition_date` apenas para organizar a entrega ou o armazenamento.
 - Preserve mudanças relevantes de marca, categoria, atributos e status quando análises históricas precisarem refletir o contexto da época.
-- Não substitua silenciosamente uma categoria antiga. Preserve a fotografia da árvore correspondente.
+- Não substitua silenciosamente uma categoria antiga. Preserve o snapshot da árvore correspondente.
 
 ## Controles de qualidade
 
@@ -91,7 +87,7 @@ Um SKU pode participar de várias categorias. Identifique a categoria principal 
 | Unicidade           | Um `sku_id` por política comercial e `snapshot_at`                                         |
 | Integridade         | Todo SKU referencia um `product_id` e uma categoria válidos                                |
 | Completude          | Nomes, marca, categoria, unidade e preços preenchidos nos SKUs em escopo                   |
-| Temporalidade       | Fotografias e incrementais preservam o instante informado pela origem                      |
+| Temporalidade       | Snapshots e incrementais preservam o instante informado pela origem                        |
 | Relação com pedidos | SKUs vendidos no período são encontrados no catálogo ou registrados como exceção conhecida |
 | Relação com estoque | A mesma chave de SKU é usada em catálogo e disponibilidade                                 |
 

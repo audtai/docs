@@ -8,11 +8,11 @@ sidebar:
   order: 3
 ---
 
-O estoque é tratado como uma série temporal. Uma fotografia atual responde “o que está disponível agora”; o histórico de fotografias permite explicar ruptura, cobertura e campanhas que promoveram itens indisponíveis.
+O estoque é tratado como uma série temporal. Um snapshot atual responde “o que está disponível agora”; o histórico de snapshots permite explicar ruptura, cobertura e campanhas que promoveram itens indisponíveis.
 
-## Grão recomendado
+## Grain recomendado
 
-Uma linha por **SKU × local de estoque × instante da fotografia**.
+Uma linha por **SKU × local de estoque × instante do snapshot**.
 
 O local pode representar CD, loja, seller, dark store ou entreposto logístico. Use um identificador estável e declare se o saldo é físico, vendável ou calculado por política comercial.
 
@@ -22,7 +22,7 @@ O local pode representar CD, loja, seller, dark store ou entreposto logístico. 
 | ----------------------- | ----------- | ------------------------------------------------------------ |
 | `sku_id`                | Sim         | Chave compatível com catálogo e itens de pedido              |
 | `location_id`           | Sim         | CD, loja, seller ou entreposto logístico                     |
-| `snapshot_at`           | Sim         | Data e hora da fotografia, com fuso documentado              |
+| `snapshot_at`           | Sim         | Data e hora do snapshot, com fuso documentado                |
 | `reserved_quantity`     | Sim         | Quantidade comprometida e ainda não baixada                  |
 | `available_quantity`    | Sim         | Quantidade vendável exata, calculada ou estimada pela origem |
 | `in_transit_quantity`   | Recomendado | Quantidade em movimentação ou recebimento                    |
@@ -35,9 +35,9 @@ O local pode representar CD, loja, seller, dark store ou entreposto logístico. 
 Bloqueios, segurança, avaria, estoque de seller e regras de canal podem fazer a disponibilidade comercial divergir dos demais saldos informados pela origem.
 :::
 
-## Fotografias ou movimentos
+## Snapshots ou movimentos
 
-**Fotografias** são preferidas para o primeiro onboarding porque simplificam reconciliação e reprocessamento. Preserve pelo menos uma fotografia diária; operações sensíveis à ruptura podem usar intervalos menores.
+**Snapshots** são preferidos para o primeiro onboarding porque simplificam reconciliação e reprocessamento. Preserve pelo menos um snapshot diário; operações sensíveis à ruptura podem usar intervalos menores.
 
 **Movimentos** podem complementar a análise quando trazem identificador, tipo, quantidade, data de competência e referência do evento. Se apenas movimentos estiverem disponíveis, precisamos também de um saldo inicial confiável e de uma política para eventos atrasados ou cancelados.
 
@@ -60,7 +60,7 @@ Endereço completo não é necessário para o escopo padrão. Use localização 
 | Unicidade     | Uma linha por SKU, local e instante                                        |
 | Completude    | Todos os SKUs ativos e locais em escopo aparecem na carga                  |
 | Domínio       | Quantidades seguem a regra de sinal e casas decimais acordada              |
-| Atualidade    | A fotografia chega dentro do SLA definido                                  |
+| Atualidade    | O snapshot chega dentro do SLA definido                                    |
 | Catálogo      | Todo SKU possui correspondência no catálogo ou exceção registrada          |
 | Reconciliação | Totais por local e data correspondem ao relatório da origem                |
 | Continuidade  | Lacunas e quedas abruptas são sinalizadas, não preenchidas silenciosamente |
@@ -75,6 +75,6 @@ Antes da primeira carga, confirme:
 4. retenção histórica disponível;
 5. tratamento de saldo negativo, bloqueado ou de segurança;
 6. comportamento de itens inativos e locais fechados;
-7. reprocessamento de fotografias corrigidas.
+7. reprocessamento de snapshots corrigidos.
 
 Com essas decisões registradas, a Audt pode relacionar disponibilidade com [Catálogo de produtos](/e-commerce/catalogo-de-produtos/), [Pedidos](/e-commerce/pedidos/) e investimentos de mídia sem criar uma definição paralela de estoque.

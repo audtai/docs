@@ -48,19 +48,19 @@ O status aprovado deve ser acordado com o cliente. Uma lista interna de status d
 
 ### Catálogo
 
-Publique um registro por SKU em cada fotografia completa, com produto, marca, categoria, referência, EAN, atributos, preços e disponibilidade comercial. Diferencie `is_active` de `is_available`: um SKU pode existir no catálogo e estar temporariamente indisponível.
+Publique um registro por SKU em cada snapshot completo, com produto, marca, categoria, referência, EAN, atributos, preços e disponibilidade comercial. Diferencie `is_active` de `is_available`: um SKU pode existir no catálogo e estar temporariamente indisponível.
 
 Consulte [Catálogo de produtos](/e-commerce/catalogo-de-produtos/).
 
 ### Estoque
 
-Publique SKU × armazém × fotografia, com saldo físico, reservado e disponível. Preserve valores brutos e documente se negativos são válidos; a regra de apresentação pode limitar a zero, mas a anomalia precisa continuar observável.
+Publique SKU × armazém × snapshot, com saldo físico, reservado e disponível. Preserve valores brutos e documente se negativos são válidos; a regra de apresentação pode limitar a zero, mas a anomalia precisa continuar observável.
 
 Consulte [Estoque de produtos](/e-commerce/estoque-de-produtos/).
 
 ## Atualização e histórico
 
-- Catálogo e estoque funcionam melhor como fotografias completas, publicadas atomicamente.
+- Catálogo e estoque funcionam melhor como snapshots completos, publicados atomicamente.
 - Pedidos exigem janela de releitura suficiente para capturar mudanças tardias.
 - A frequência é configurada por projeto; não há promessa padrão de tempo real ou intraday.
 - Uma carga vazia ou incompleta não deve substituir a última publicação válida.

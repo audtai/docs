@@ -40,7 +40,7 @@ Para cada execução, associe:
 - status final e motivo da falha;
 - reprocessamentos e supersessões.
 
-Publicações em fotografia devem se tornar visíveis somente depois de a carga completa ser validada. Uma carga vazia ou incompleta não deve substituir a última versão aceita.
+Publicações em snapshot devem se tornar visíveis somente depois de a carga completa ser validada. Uma carga vazia ou incompleta não deve substituir a última versão aceita.
 
 ## Lineage e definição
 
@@ -48,7 +48,7 @@ Todo indicador importante precisa responder:
 
 1. qual sistema é a fonte de autoridade;
 2. qual conjunto e partição forneceram o dado;
-3. qual grão e chave foram usados;
+3. qual grain e chave foram usados;
 4. qual regra de status, fuso, moeda e valor foi aplicada;
 5. qual versão da transformação produziu o resultado;
 6. quais limitações ou diferenças conhecidas permanecem.
@@ -60,7 +60,7 @@ Receita de pedidos, compra do GA4 e conversão de mídia devem manter labels de 
 | Controle      | Evidência                                                 |
 | ------------- | --------------------------------------------------------- |
 | Completude    | registros esperados, presentes e ausentes por partição    |
-| Unicidade     | duplicidades no grão declarado                            |
+| Unicidade     | duplicidades no grain declarado                           |
 | Integridade   | chaves sem correspondência entre domínios                 |
 | Atualidade    | horário esperado, recebido e atraso                       |
 | Reconciliação | total da origem, total processado, diferença e tolerância |
