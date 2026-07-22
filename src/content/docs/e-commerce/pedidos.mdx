@@ -32,6 +32,11 @@ Separe cabeçalho e itens mesmo quando a origem entrega um único payload. Isso 
 | `updated_at`         | Sim         | Marcador para correções e incrementais                                       |
 | `order_status`       | Sim         | Estado comercial normalizado e valor original preservado                     |
 | `payment_status`     | Sim         | Estado financeiro independente do fulfillment                                |
+| `payment_id`         | Sim         | Identificador do meio de pagamento informado pela plataforma                 |
+| `payment_name`       | Sim         | Nome do meio de pagamento no instante da venda                               |
+| `installment_count`  | Sim         | Quantidade de parcelas da condição de pagamento                              |
+| `installment_value`  | Sim         | Valor de cada parcela na moeda do pedido                                     |
+| `interest_rate`      | Recomendado | Taxa de juros aplicada ao parcelamento, quando houver                        |
 | `trade_policy_id`    | Recomendado | Política comercial aplicada; em VTEX, corresponde ao campo `salesChannel`    |
 | `price_table_id`     | Recomendado | Tabela de preços selecionada quando exposta separadamente                    |
 | `order_origin`       | Sim         | Origem da venda, como site, app, marketplace ou loja                         |
@@ -115,9 +120,3 @@ As tolerâncias são acordadas com o dono funcional. Diferenças conhecidas fica
 `order_id`, `sku_id`, campos UTM e identificadores de clique aprovados ajudam a relacionar fontes. A qualidade dessas chaves determina a cobertura possível.
 
 Conversão atribuída por Google Ads, Meta Ads ou GA4 **não é receita financeira**. A Audt preserva as definições de cada plataforma e usa pedidos como referência comercial para reconciliação. Atribuição avançada depende de histórico, eventos em granularidade suficiente e metodologia aprovada.
-
-## Privacidade
-
-Nome, e-mail, telefone, CPF, endereço completo e dados de cartão não fazem parte do contrato padrão. Quando uma análise de jornada exigir identificação persistente, use apenas um identificador pseudônimo, não reversível e aprovado para a finalidade.
-
-Consulte [Segurança](/governanca-e-lgpd/seguranca/) antes de liberar cargas reais.
