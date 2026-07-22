@@ -124,7 +124,7 @@ html[data-audt-font="twk-lausanne-pan"] {
 	color-scheme: dark;
 
 	--nb-background: oklch(0.192 0 0);
-	--nb-foreground: oklch(0.925 0.016 42.4);
+	--nb-foreground: #fff;
 
 	--nb-card: oklch(0.168 0 0);
 	--nb-card-foreground: var(--nb-foreground);

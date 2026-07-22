@@ -280,7 +280,7 @@ describe("buildStructuredData", () => {
 			tags: ["t1"],
 		});
 		expect(out).toBe(
-			'{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://developers.cloudflare.com/changelog/x/#page","headline":"X · Changelog","description":"desc","url":"https://developers.cloudflare.com/changelog/x/","inLanguage":"en","image":"https://developers.cloudflare.com/og.png","dateModified":"2025-02-02","datePublished":"2025-01-01","publisher":{"@type":"Organization","name":"Audt","url":"https://audt.ai/"},"isPartOf":{"@type":"WebSite","@id":"https://docs.audt.work/#website","name":"Audt Platform Docs","url":"https://docs.audt.work/"},"keywords":["t1"]}',
+			'{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://developers.cloudflare.com/changelog/x/#page","headline":"X · Changelog","description":"desc","url":"https://developers.cloudflare.com/changelog/x/","inLanguage":"en","image":"https://developers.cloudflare.com/og.png","dateModified":"2025-02-02","datePublished":"2025-01-01","publisher":{"@type":"Organization","name":"Audt","url":"https://audtai.com/"},"isPartOf":{"@type":"WebSite","@id":"https://docs.audt.work/#website","name":"Audt Platform Docs","url":"https://docs.audt.work/"},"keywords":["t1"]}',
 		);
 	});
 });

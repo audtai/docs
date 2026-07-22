@@ -145,15 +145,17 @@ const year = new Date().getFullYear();
 
 <style>
 	.ecosystem-logo-stage {
-		display: grid;
+		position: relative;
+		display: block;
 		inline-size: 8.5rem;
 		block-size: 2.75rem;
-		place-items: center;
 	}
 	.ecosystem-logo {
-		grid-area: 1 / 1;
+		position: absolute;
+		inset: 0;
 		inline-size: 100%;
-		block-size: 100%;
+		block-size: 100% !important;
+		max-block-size: 100%;
 		object-fit: contain;
 	}
 	.ecosystem-logo--dark {

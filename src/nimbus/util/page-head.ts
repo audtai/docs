@@ -157,7 +157,7 @@ export function buildStructuredData({
 		publisher: {
 			"@type": "Organization",
 			name: "Audt",
-			url: "https://audt.ai/",
+			url: "https://audtai.com/",
 		},
 		isPartOf: {
 			"@type": "WebSite",
